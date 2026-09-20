@@ -3,54 +3,55 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>YK RECHARGE PORTAL</title>
+  <title>YK RECHARGE PORTAL - Chanduli, Raxaul</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-    body { background: linear-gradient(135deg, #0f172a, #1e1b4b, #0f172a); min-height: 100vh; color: #1e293b; padding-bottom: 50px; }
+    body { background: #0f172a; min-height: 100vh; color: #1e293b; padding-bottom: 60px; }
     
-    header { background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(255,255,255,0.2); box-shadow: 0 4px 15px rgba(0,0,0,0.12); }
-    .nav-container { max-width: 900px; margin: auto; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
-    .logo { font-size: 1.25rem; font-weight: 800; color: #4338ca; display: flex; align-items: center; gap: 8px; }
+    header { background: rgba(255,255,255,0.98); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 50; border-bottom: 1px solid #e2e8f0; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+    .nav-container { max-width: 980px; margin: auto; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 1.15rem; font-weight: 900; color: #4338ca; display: flex; align-items: center; gap: 8px; }
     .tab-pills { background: #1e293b; padding: 4px; border-radius: 12px; display: flex; gap: 4px; }
-    .tab-btn { background: transparent; border: none; color: #94a3b8; padding: 7px 15px; border-radius: 9px; font-weight: 700; font-size: 12px; cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
-    .tab-btn.active { background: #4f46e5; color: #fff; box-shadow: 0 3px 10px rgba(79,70,229,0.4); transform: scale(1.02); }
+    .tab-btn { background: transparent; border: none; color: #94a3b8; padding: 7px 14px; border-radius: 9px; font-weight: 700; font-size: 12px; cursor: pointer; transition: 0.2s; }
+    .tab-btn.active { background: #4f46e5; color: #fff; box-shadow: 0 3px 10px rgba(79,70,229,0.4); }
 
-    main { max-width: 900px; margin: 24px auto; padding: 0 16px; }
-    .glass-box { background: rgba(255, 255, 255, 0.98); border-radius: 20px; padding: 22px; box-shadow: 0 12px 32px rgba(0,0,0,0.22); margin-bottom: 20px; }
+    main { max-width: 980px; margin: 24px auto; padding: 0 16px; }
+    .glass-box { background: #ffffff; border-radius: 20px; padding: 24px; box-shadow: 0 12px 30px rgba(0,0,0,0.18); margin-bottom: 22px; }
     .hidden { display: none !important; }
 
-    .form-group { margin-bottom: 14px; position: relative; }
+    /* HERO & HOME */
+    .hero { text-align: center; padding: 35px 20px; background: linear-gradient(135deg, #4338ca, #312e81); border-radius: 22px; color: #fff; margin-bottom: 24px; }
+    .hero h1 { font-size: 24px; font-weight: 900; margin-bottom: 8px; }
+    .hero p { font-size: 13.5px; opacity: 0.9; max-width: 580px; margin: auto; line-height: 1.6; }
+    .service-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-top: 20px; }
+    .service-card { background: rgba(255,255,255,0.12); padding: 14px; border-radius: 14px; text-align: center; }
+    .service-card h4 { font-size: 15px; margin-bottom: 4px; }
+    .service-card p { font-size: 11.5px; opacity: 0.85; }
+
+    /* CONTACT & WHATSAPP */
+    .contact-card { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 18px; padding: 20px; display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 20px; }
+    @media (min-width: 640px) { .contact-card { grid-template-columns: 1fr 1fr; align-items: center; } }
+    .wa-btn { background: #25d366; color: #fff; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 18px; border-radius: 12px; font-weight: 700; font-size: 13.5px; box-shadow: 0 4px 12px rgba(37,211,102,0.3); transition: 0.2s; }
+    .wa-btn:hover { background: #1ebc59; }
+
+    /* FORMS & TABLES */
+    .form-group { margin-bottom: 14px; }
     label { display: block; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
-    input, select { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1.5px solid #cbd5e1; font-size: 14px; background: #fff; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+    input, select { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1.5px solid #cbd5e1; font-size: 14px; background: #fff; outline: none; transition: 0.2s; }
     input:focus, select:focus { border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79,70,229,0.18); }
     
-    .btn { width: 100%; padding: 13px; border: none; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; transition: all 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; user-select: none; }
+    .btn { width: 100%; padding: 13px; border: none; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; }
     .btn-primary { background: #4f46e5; color: #fff; box-shadow: 0 4px 14px rgba(79,70,229,0.35); }
-    .btn-primary:active { transform: scale(0.98); }
     .btn-success { background: #059669; color: #fff; }
     .btn-danger { background: #e11d48; color: #fff; }
     .btn-sm { width: auto; padding: 6px 12px; font-size: 11px; border-radius: 8px; }
     .btn:disabled { opacity: 0.65; cursor: not-allowed; }
 
     .chip-row { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
-    .chip { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 6px 13px; border-radius: 20px; font-size: 12px; font-weight: 700; color: #334155; cursor: pointer; transition: 0.15s; }
-    .chip:hover, .chip:active { background: #e0e7ff; border-color: #4f46e5; color: #4338ca; transform: scale(1.04); }
+    .chip { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 6px 13px; border-radius: 20px; font-size: 12px; font-weight: 700; cursor: pointer; }
+    .chip:hover { background: #e0e7ff; border-color: #4f46e5; color: #4338ca; }
 
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 20px; }
-    .stat-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 18px; }
-    .stat-val { font-size: 1.85rem; font-weight: 800; color: #0f172a; margin: 4px 0 12px; }
-    
-    .recharge-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-    @media (min-width: 640px) { .recharge-grid { grid-template-columns: 1fr 1fr; } }
-    
-    .plan-card { padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 12px; margin-bottom: 10px; cursor: pointer; transition: all 0.2s; background: #fff; display: flex; justify-content: space-between; align-items: center; }
-    .plan-card:hover { border-color: #4f46e5; background: #f5f3ff; transform: translateY(-2px); }
-
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); backdrop-filter: blur(6px); display: flex; justify-content: center; align-items: center; padding: 16px; z-index: 100; }
-    .modal-body { background: #fff; border-radius: 22px; width: 100%; max-width: 440px; padding: 24px; box-shadow: 0 24px 48px rgba(0,0,0,0.35); }
-    .warning-box { background: #fff1f2; border-left: 4px solid #f43f5e; padding: 12px; border-radius: 0 10px 10px 0; margin: 12px 0; font-size: 11.5px; color: #be123c; line-height: 1.45; }
-
-    .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .table-responsive { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: left; }
     th { background: #f1f5f9; padding: 10px; color: #64748b; font-weight: 700; white-space: nowrap; }
     td { padding: 10px; border-bottom: 1px solid #f1f5f9; white-space: nowrap; }
@@ -59,13 +60,13 @@
     .badge-success { background: #d1fae5; color: #065f46; }
     .badge-rejected { background: #ffe4e6; color: #9f1239; }
 
-    #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); opacity: 0; z-index: 200; background: #1e293b; color: #fff; padding: 12px 20px; border-radius: 30px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); pointer-events: none; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); backdrop-filter: blur(6px); display: flex; justify-content: center; align-items: center; padding: 16px; z-index: 100; }
+    .modal-body { background: #fff; border-radius: 22px; width: 100%; max-width: 440px; padding: 24px; box-shadow: 0 24px 48px rgba(0,0,0,0.35); }
+
+    #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); opacity: 0; z-index: 200; background: #1e293b; color: #fff; padding: 12px 20px; border-radius: 30px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: 0.3s; pointer-events: none; }
     #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
     #toast.success { background: #059669; }
     #toast.error { background: #e11d48; }
-
-    .spinner { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite; display: inline-block; }
-    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
@@ -76,64 +77,244 @@
     <div class="nav-container">
       <div class="logo">⚡ YK RECHARGE PORTAL</div>
       <div class="tab-pills">
-        <button id="navUser" class="tab-btn active" onclick="switchNav('user')">User Area</button>
+        <button id="navHome" class="tab-btn active" onclick="switchNav('home')">Home</button>
+        <button id="navUser" class="tab-btn" onclick="switchNav('user')">User Area</button>
         <button id="navAdmin" class="tab-btn" onclick="switchNav('admin')">Admin Hub</button>
       </div>
     </div>
   </header>
 
   <main>
-    <!-- 1. USER AUTH -->
-    <div id="authView" class="glass-box" style="max-width: 420px; margin: 30px auto;">
+    <!-- ================= 1. HOME VIEW ================= -->
+    <div id="homeView">
+      <div class="hero">
+        <h1>Fast & Secure Prepaid Mobile Recharge</h1>
+        <p>Instant mobile recharge for Jio, Airtel, Vi & BSNL. Smooth transactions with zero lag and direct email receipts.</p>
+        <div class="service-grid">
+          <div class="service-card"><h4>⚡ High Speed</h4><p>Optimized instant UI response</p></div>
+          <div class="service-card"><h4>🔐 Encrypted</h4><p>SHA-256 secure verification</p></div>
+          <div class="service-card"><h4>🧾 Official Receipts</h4><p>Instant PDF & print support</p></div>
+        </div>
+      </div>
+
+      <!-- ABOUT & CONTACT DETAILS -->
+      <div class="glass-box">
+        <h3 style="font-size: 18px; font-weight: 900; color: #4338ca; margin-bottom: 8px;">About YK RECHARGE PORTAL</h3>
+        <p style="font-size: 13.5px; color: #475569; line-height: 1.7;">
+          YK Recharge Portal is an authorized retail prepaid mobile service center located in Raxaul, Bihar. We provide reliable recharge top-ups, instant wallet balance management, and automatic digital receipts directly to users.
+        </p>
+
+        <div class="contact-card">
+          <div>
+            <h4 style="font-size: 15px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">📍 Office Address</h4>
+            <p style="font-size: 13px; color: #334155; line-height: 1.5;">
+              <b>YK RECHARGE PORTAL</b><br>
+              Chanduli, Raxaul, East Champaran, Bihar - 845305
+            </p>
+            <p style="font-size: 13px; color: #334155; margin-top: 6px;">
+              📞 Call / Helpline: <b>+91 99393-11744</b>
+            </p>
+          </div>
+          <div style="text-align: center;">
+            <a href="https://wa.me/919939311744?text=Hello%20YK%20Recharge%20Portal%2C%20I%20need%20support" target="_blank" class="wa-btn">
+              💬 Chat on WhatsApp (+91 99393-11744)
+            </a>
+            <p style="font-size: 11px; color: #64748b; margin-top: 8px;">Instant response on WhatsApp</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= 2. USER AUTH ================= -->
+    <div id="authView" class="glass-box hidden" style="max-width: 420px; margin: 30px auto;">
       <div style="display: flex; border-bottom: 2px solid #f1f5f9; margin-bottom: 20px;">
         <button id="tabLogin" onclick="toggleAuth('login')" style="flex: 1; border: none; background: none; font-weight: 700; padding: 10px; color: #4f46e5; border-bottom: 2px solid #4f46e5; cursor: pointer;">Login</button>
         <button id="tabReg" onclick="toggleAuth('reg')" style="flex: 1; border: none; background: none; font-weight: 700; padding: 10px; color: #94a3b8; cursor: pointer;">Register</button>
       </div>
 
       <div id="loginForm">
-        <div class="form-group"><label>Registered Mobile</label><input type="tel" id="lMobile" maxlength="10" placeholder="10-digit number" inputmode="numeric" /></div>
+        <div class="form-group"><label>Registered Mobile</label><input type="tel" id="lMobile" maxlength="10" placeholder="10-digit number" /></div>
         <div class="form-group"><label>Password</label><input type="password" id="lPass" placeholder="••••••••" /></div>
         <button class="btn btn-primary" id="btnLogin" onclick="loginAction()">Sign In</button>
       </div>
 
       <div id="regForm" class="hidden">
         <div class="form-group"><label>Full Name</label><input type="text" id="rName" placeholder="Enter full name" /></div>
-        <div class="form-group"><label>Mobile</label><input type="tel" id="rMobile" maxlength="10" placeholder="10-digit mobile" inputmode="numeric" /></div>
+        <div class="form-group"><label>Mobile</label><input type="tel" id="rMobile" maxlength="10" placeholder="10-digit mobile" /></div>
         <div class="form-group"><label>Email</label><input type="email" id="rEmail" placeholder="name@email.com" /></div>
         <div class="form-group"><label>Set Password</label><input type="password" id="rPass" placeholder="Set password" /></div>
-        <div class="warning-box" style="background:#fefce8; border-color:#eab308; color:#854d0e;">
-          ⚠️ Notice: Account requires Admin approval before you can log in.
-        </div>
         <button class="btn btn-primary" id="btnReg" onclick="registerAction()">Submit Registration</button>
       </div>
     </div>
 
-    <!-- 2. USER DASHBOARD -->
+    <!-- ================= 3. USER DASHBOARD ================= -->
     <div id="userDash" class="hidden">
-      <div class="stats-grid">
-        <div class="stat-card">
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 20px;">
+        <div class="glass-box" style="margin-bottom:0;">
           <label>Wallet Balance</label>
-          <div class="stat-val">₹<span id="uBal">0.00</span></div>
-          <button class="btn btn-primary" style="padding: 9px;" onclick="openAddMoneyModal()">+ Add Money</button>
+          <div style="font-size: 28px; font-weight: 900; color: #0f172a; margin: 4px 0 12px;">₹<span id="uBal">0.00</span></div>
+          <button class="btn btn-primary" style="padding: 10px;" onclick="openAddMoneyModal()">+ Add Money</button>
         </div>
-        <div class="stat-card" style="display:flex; flex-direction:column; justify-content:space-between;">
-          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div class="glass-box" style="margin-bottom:0; display:flex; flex-direction:column; justify-content:space-between;">
+          <div style="display:flex; justify-content:space-between;">
             <div>
               <span class="badge badge-success">Approved User</span>
-              <h3 id="uName" style="margin-top: 4px; font-weight: 800;">User Name</h3>
+              <h3 id="uName" style="font-weight: 800; margin-top:4px;">-</h3>
               <p id="uPhone" style="font-size: 12px; color: #64748b;">+91 ----------</p>
             </div>
             <button onclick="logoutAction()" style="border:none; background:#fee2e2; color:#ef4444; padding:6px 12px; border-radius:8px; font-weight:700; font-size:11px; cursor:pointer;">Logout</button>
           </div>
           <div style="display:flex; gap:6px; margin-top:12px;">
-            <button class="btn-sm" style="flex:1; background:#e0e7ff; color:#4338ca; font-weight:700; border:none; cursor:pointer;" onclick="openUserHistoryModal('recharges')">📜 Recharges</button>
-            <button class="btn-sm" style="flex:1; background:#e0e7ff; color:#4338ca; font-weight:700; border:none; cursor:pointer;" onclick="openUserHistoryModal('deposits')">💳 Deposits</button>
+            <button class="btn-sm" style="flex:1; background:#e0e7ff; color:#4338ca; border:none; cursor:pointer; font-weight:700;" onclick="openUserHistoryModal('recharges')">📜 Recharges</button>
+            <button class="btn-sm" style="flex:1; background:#e0e7ff; color:#4338ca; border:none; cursor:pointer; font-weight:700;" onclick="openUserHistoryModal('deposits')">💳 Deposits</button>
           </div>
         </div>
       </div>
 
       <div class="glass-box">
-        <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 16px;">Prepaid Mobile Recharge</h3>
+        <h3 style="font-size: 17px; font-weight: 800; margin-bottom: 14px;">Prepaid Recharge</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+          <div>
+            <div class="form-group">
+              <label>Mobile Number</label>
+              <input type="tel" id="recMobile" maxlength="10" placeholder="10-digit number" oninput="autoDetect(this.value)" />
+            </div>
+            <div class="form-group">
+              <label>Operator</label>
+              <select id="recOp" onchange="renderPlans()">
+                <option value="">Select Operator</option>
+                <option value="Jio">Jio</option>
+                <option value="Airtel">Airtel</option>
+                <option value="Vi">Vi</option>
+                <option value="BSNL">BSNL</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Amount (₹)</label>
+              <input type="number" id="recAmt" placeholder="Plan Amount" />
+              <div id="dynamicChips" class="chip-row"></div>
+            </div>
+            <button class="btn btn-primary" onclick="startRecharge()">Continue to Recharge</button>
+          </div>
+          <div>
+            <label>Available Plans</label>
+            <div id="plansList" style="max-height: 250px; overflow-y: auto;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= 4. ADMIN HUB ================= -->
+    <div id="adminArea" class="hidden">
+      <div id="adminAuthBox" class="glass-box" style="max-width: 380px; margin: 30px auto;">
+        <h3 style="font-weight: 800; text-align: center; margin-bottom: 14px;">🔐 Admin Hub</h3>
+        <div class="form-group"><label>Admin Username</label><input type="text" id="adminUser" placeholder="Enter username" /></div>
+        <div class="form-group"><label>Admin Password</label><input type="password" id="adminPass" placeholder="Enter password" /></div>
+        <button class="btn btn-primary" id="btnAdminLogin" onclick="adminLoginAction()">Login to Admin Hub</button>
+      </div>
+
+      <div id="adminControlPanel" class="hidden">
+        <div class="glass-box" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <h3 style="font-weight:800;">Logged in: <span id="adminUserDisplay">admin</span></h3>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-primary btn-sm" onclick="fetchAdminData(true)">🔄 Refresh</button>
+            <button class="btn btn-danger btn-sm" onclick="adminLogoutAction()">Logout</button>
+          </div>
+        </div>
+
+        <div class="glass-box">
+          <h3 style="font-size:15px; font-weight:800; margin-bottom:10px;">1. User Approvals</h3>
+          <div class="table-responsive"><table><thead><tr><th>ID</th><th>Name</th><th>Mobile</th><th>Email</th><th>Status</th><th>Action</th></tr></thead><tbody id="adminUserRows"></tbody></table></div>
+        </div>
+
+        <div class="glass-box">
+          <h3 style="font-size:15px; font-weight:800; margin-bottom:10px;">2. Wallet Deposit Slips</h3>
+          <div class="table-responsive"><table><thead><tr><th>Req ID</th><th>User</th><th>Amount</th><th>UTR</th><th>Date</th><th>Status</th><th>Action</th></tr></thead><tbody id="adminWalletRows"></tbody></table></div>
+        </div>
+
+        <div class="glass-box">
+          <h3 style="font-size:15px; font-weight:800; margin-bottom:10px;">3. Recharge Execution Queue</h3>
+          <div class="table-responsive"><table><thead><tr><th>Txn ID</th><th>User</th><th>Mobile</th><th>Operator</th><th>Amount</th><th>Op Txn ID</th><th>Status</th><th>Action</th></tr></thead><tbody id="adminRecRows"></tbody></table></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- RECEIPT MODAL -->
+  <div id="receiptModal" class="modal-overlay hidden">
+    <div class="modal-body" style="max-width: 440px;">
+      <div id="printableReceipt" style="border: 2px dashed #cbd5e1; padding: 18px; border-radius: 16px; background: #fafafa;">
+        <div style="text-align: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 12px;">
+          <h2 style="font-size: 18px; font-weight: 900; color: #4338ca; margin: 0;">YK RECHARGE PORTAL</h2>
+          <p style="font-size: 11px; color: #64748b; margin-top: 2px;">Official Transaction Receipt</p>
+        </div>
+        <div style="font-size: 12px; line-height: 1.8; color: #334155;">
+          <div style="display:flex; justify-content:space-between;"><span>User ID:</span><b id="rcpUserId">-</b></div>
+          <div style="display:flex; justify-content:space-between;"><span>Customer:</span><b id="rcpUserName">-</b></div>
+          <div style="display:flex; justify-content:space-between;"><span>Transaction ID:</span><b id="rcpTxnId" style="font-family:monospace; color:#4f46e5;">-</b></div>
+          <div style="display:flex; justify-content:space-between;"><span>Mobile:</span><b id="rcpMobile">-</b></div>
+          <div style="display:flex; justify-content:space-between;"><span>Operator:</span><b id="rcpOperator">-</b></div>
+          <div style="display:flex; justify-content:space-between;"><span>Date:</span><span id="rcpDate">-</span></div>
+          <div style="display:flex; justify-content:space-between;"><span>Status:</span><span id="rcpStatus" class="badge badge-success">Success</span></div>
+          <hr style="border:none; border-top: 1px dashed #cbd5e1; margin: 10px 0;" />
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size: 13px; font-weight:800;">Total Paid:</span>
+            <b id="rcpAmount" style="font-size: 18px; color: #059669; font-weight:900;">₹0.00</b>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex; gap: 8px; margin-top: 14px;">
+        <button class="btn" style="background:#e2e8f0; color:#334155;" onclick="toggleModal('receiptModal', false)">Close</button>
+        <button class="btn btn-primary" onclick="window.print()">🖨️ Print Receipt</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ==============================================================
+    // APNA GOOGLE APPS SCRIPT URL YAHAN CHECK KAREIN:
+    // ==============================================================
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz132Z77wS_yX9G6L.../exec"; 
+
+    let currentUser = JSON.parse(localStorage.getItem("qr_user_session") || "null");
+    let adminToken = sessionStorage.getItem("admin_bearer_token") || null;
+    let userHistoryData = { recharges: [], deposits: [] };
+
+    function showToast(msg, type = "info") {
+      const t = document.getElementById("toast");
+      t.innerText = msg; t.className = `show ${type}`;
+      setTimeout(() => { t.className = ""; }, 3000);
+    }
+
+    function toggleModal(id, show) {
+      document.getElementById(id).classList.toggle('hidden', !show);
+    }
+
+    function switchNav(tab) {
+      document.getElementById('navHome').classList.toggle('active', tab === 'home');
+      document.getElementById('navUser').classList.toggle('active', tab === 'user');
+      document.getElementById('navAdmin').classList.toggle('active', tab === 'admin');
+
+      document.getElementById('homeView').classList.toggle('hidden', tab !== 'home');
+      document.getElementById('adminArea').classList.toggle('hidden', tab !== 'admin');
+      
+      if (tab === 'user') {
+        if (currentUser) {
+          document.getElementById('userDash').classList.remove('hidden');
+          document.getElementById('authView').classList.add('hidden');
+          renderUserScreen();
+        } else {
+          document.getElementById('authView').classList.remove('hidden');
+          document.getElementById('userDash').classList.add('hidden');
+        }
+      } else {
+        document.getElementById('authView').classList.add('hidden');
+        document.getElementById('userDash').classList.add('hidden');
+      }
+    }
+
+    function toggleAuth(mode) {
+      document.getElementById('loginForm')ont-weight: 800; margin-bottom: 16px;">Prepaid Mobile Recharge</h3>
         <div class="recharge-grid">
           <div>
             <div class="form-group">

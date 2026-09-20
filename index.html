@@ -28,7 +28,7 @@
     .service-card h4 { font-size: 14px; margin-bottom: 3px; }
     .service-card p { font-size: 11px; opacity: 0.85; }
 
-    /* CONTACT CARD */
+    /* CONTACT */
     .contact-card { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 16px; padding: 18px; display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 18px; }
     @media (min-width: 640px) { .contact-card { grid-template-columns: 1fr 1fr; align-items: center; } }
     .wa-btn { background: #25d366; color: #fff; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 18px; border-radius: 12px; font-weight: 700; font-size: 13px; box-shadow: 0 4px 12px rgba(37,211,102,0.3); }
@@ -43,9 +43,10 @@
     .btn-primary { background: #4f46e5; color: #fff; box-shadow: 0 4px 14px rgba(79,70,229,0.35); }
     .btn-success { background: #059669; color: #fff; }
     .btn-danger { background: #e11d48; color: #fff; }
-    .btn-sm { width: auto; padding: 6px 12px; font-size: 11px; border-radius: 8px; }
+    .btn-warning { background: #d97706; color: #fff; }
+    .btn-sm { width: auto; padding: 5px 10px; font-size: 11px; border-radius: 7px; }
 
-    /* OPERATOR PILLS & CHIPS */
+    /* OPERATOR PILLS */
     .op-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
     .op-pill { background: #f1f5f9; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 10px 4px; text-align: center; cursor: pointer; font-size: 12px; font-weight: 800; color: #334155; }
     .op-pill.active { border-color: #4f46e5; background: #e0e7ff; color: #4338ca; }
@@ -65,7 +66,7 @@
     .badge { padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
     .badge-pending { background: #fef3c7; color: #b45309; }
     .badge-success { background: #d1fae5; color: #065f46; }
-    .badge-rejected { background: #ffe4e6; color: #9f1239; }
+    .badge-frozen { background: #fee2e2; color: #dc2626; }
 
     /* MODAL */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; padding: 16px; z-index: 100; }
@@ -97,7 +98,7 @@
         <h1>Fast & Secure Prepaid Mobile Recharge</h1>
         <p>Instant mobile recharge for Jio, Airtel, Vi & BSNL with zero lag, wallet sync and direct confirmation receipts.</p>
         <div class="service-grid">
-          <div class="service-card"><h4>⚡ High Speed</h4><p>Sub-second UI response</p></div>
+          <div class="service-card"><h4>⚡ High Speed</h4><p>Sub-second response</p></div>
           <div class="service-card"><h4>🔐 Encrypted</h4><p>SHA-256 session protection</p></div>
           <div class="service-card"><h4>🧾 Official Receipts</h4><p>PDF & Print supported</p></div>
         </div>
@@ -130,7 +131,7 @@
       </div>
     </div>
 
-    <!-- ================= 2. USER AUTH (LOGIN / REGISTER) ================= -->
+    <!-- ================= 2. USER AUTH ================= -->
     <div id="authView" class="glass-box hidden" style="max-width: 400px; margin: 30px auto;">
       <div style="display: flex; margin-bottom: 18px; border-bottom: 2px solid #f1f5f9;">
         <button id="tabLogin" onclick="toggleAuth('login')" style="flex:1; border:none; background:none; font-weight:700; padding:10px; color:#4f46e5; border-bottom:2px solid #4f46e5; cursor:pointer;">Login</button>
@@ -163,7 +164,7 @@
         <div class="glass-box" style="margin-bottom:0; display:flex; flex-direction:column; justify-content:space-between;">
           <div style="display:flex; justify-content:space-between; align-items:flex-start;">
             <div>
-              <span class="badge badge-success">Approved User</span>
+              <span id="uStatusBadge" class="badge badge-success">Approved User</span>
               <h3 id="uName" style="font-weight: 800; margin-top:3px; font-size:16px;">-</h3>
               <p id="uPhone" style="font-size: 11px; color: #64748b;">-</p>
             </div>
@@ -177,12 +178,12 @@
       </div>
 
       <!-- RECHARGE PANEL -->
-      <div class="glass-box">
+      <div id="userRechargeBox" class="glass-box">
         <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 12px;">Prepaid Mobile Recharge</h3>
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px;">
           <form onsubmit="event.preventDefault(); startRecharge();">
             <div class="form-group">
-              <label>Mobile Number (Auto Operator Detect)</label>
+              <label>Mobile Number (Auto Detect)</label>
               <input type="tel" id="recMobile" maxlength="10" placeholder="10-digit number" oninput="autoDetect(this.value)" enterkeyhint="next" />
             </div>
 
@@ -210,6 +211,12 @@
           </div>
         </div>
       </div>
+
+      <!-- FROZEN WARNING (HIDDEN BY DEFAULT) -->
+      <div id="frozenNotice" class="glass-box hidden" style="background:#fee2e2; border:1.5px solid #ef4444; color:#991b1b; text-align:center;">
+        <h3 style="font-size:16px; font-weight:900;">⚠️ Account Access Frozen</h3>
+        <p style="font-size:12.5px; margin-top:4px;">Aapka account admin dwara freeze kiya gaya hai. Transaction karne ke liye admin se sampark karein (+91 99393-11744).</p>
+      </div>
     </div>
 
     <!-- ================= 4. ADMIN HUB ================= -->
@@ -227,15 +234,17 @@
             <span class="badge badge-success">Admin Mode Active</span>
             <h3 style="font-weight:800; margin-top:2px;">Logged in: <span id="adminUserDisplay">admin</span></h3>
           </div>
+          <!-- Action Buttons: Set QR button right next to Logout -->
           <div style="display:flex; gap:6px;">
+            <button class="btn btn-primary btn-sm" onclick="openAdminQrModal()">💳 Set QR</button>
             <button class="btn btn-primary btn-sm" onclick="fetchAdminData()">🔄 Refresh</button>
             <button class="btn btn-danger btn-sm" onclick="adminLogoutAction()">Logout</button>
           </div>
         </div>
 
         <div class="glass-box">
-          <h3 style="font-size:14px; font-weight:800; margin-bottom:8px;">1. User Approvals</h3>
-          <div class="table-responsive"><table><thead><tr><th>ID</th><th>Name</th><th>Mobile</th><th>Email</th><th>Action</th></tr></thead><tbody id="adminUserRows"></tbody></table></div>
+          <h3 style="font-size:14px; font-weight:800; margin-bottom:8px;">1. User Approvals & Access Control</h3>
+          <div class="table-responsive"><table><thead><tr><th>ID</th><th>Name</th><th>Mobile</th><th>Status</th><th>Action</th><th>Access</th></tr></thead><tbody id="adminUserRows"></tbody></table></div>
         </div>
 
         <div class="glass-box">
@@ -284,19 +293,32 @@
     </div>
   </div>
 
-  <!-- ADD MONEY MODAL -->
+  <!-- ADD MONEY MODAL (DYNAMIC QR) -->
   <div id="addMoneyModal" class="modal-overlay hidden">
     <form class="modal-body" onsubmit="event.preventDefault(); submitDeposit();">
       <h3 style="font-weight: 800; font-size: 15px; text-align: center; margin-bottom: 8px;">Scan UPI QR to Add Money</h3>
       <div style="text-align: center; margin-bottom: 10px;">
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=upi://pay?pa=9939311744@paytm" style="width:135px; height:135px; border:1px solid #cbd5e1; border-radius:10px;" />
-        <p style="font-size: 11px; color: #475569; margin-top: 4px;">UPI ID: <b>9939311744@paytm</b></p>
+        <img id="uQrImg" src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=upi://pay?pa=9939311744@paytm" style="width:135px; height:135px; border:1px solid #cbd5e1; border-radius:10px;" />
+        <p style="font-size: 11px; color: #475569; margin-top: 4px;">UPI ID: <b id="uUpiText">9939311744@paytm</b></p>
       </div>
       <div class="form-group"><label>Amount Paid (₹)</label><input type="number" id="wAmt" placeholder="500" enterkeyhint="next" /></div>
       <div class="form-group"><label>UTR / Ref Number (12 Digits)</label><input type="text" id="wUtr" maxlength="12" placeholder="12-digit UTR" enterkeyhint="go" /></div>
       <div style="display:flex; gap:6px;">
         <button type="button" class="btn" style="background:#e2e8f0; color:#334155;" onclick="toggleModal('addMoneyModal', false)">Cancel</button>
         <button type="submit" class="btn btn-primary" id="btnDeposit">Submit Slip</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- ADMIN SET QR MODAL -->
+  <div id="adminQrModal" class="modal-overlay hidden">
+    <form class="modal-body" onsubmit="event.preventDefault(); saveAdminQrAction();">
+      <h3 style="font-weight:800; font-size:15px; margin-bottom:12px;">Set Live Payment QR / UPI</h3>
+      <div class="form-group"><label>Admin UPI ID</label><input type="text" id="setAdminUpi" placeholder="e.g. 9939311744@paytm" enterkeyhint="next" /></div>
+      <div class="form-group"><label>Direct QR Image Link (URL)</label><input type="text" id="setAdminQrUrl" placeholder="https://..." enterkeyhint="go" /></div>
+      <div style="display:flex; gap:6px; margin-top:12px;">
+        <button type="button" class="btn" style="background:#e2e8f0; color:#334155;" onclick="toggleModal('adminQrModal', false)">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="btnSaveQr">Save QR</button>
       </div>
     </form>
   </div>
@@ -342,6 +364,12 @@
     let selectedPlanDesc = "Standard Pack";
     let userHistoryData = { recharges: [], deposits: [] };
     let pendingApprovalTxn = null;
+    let balanceSyncTimer = null;
+
+    let liveQR = {
+      upiId: localStorage.getItem("yk_upi") || "9939311744@paytm",
+      qrUrl: localStorage.getItem("yk_qr") || "https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=upi://pay?pa=9939311744@paytm"
+    };
 
     const fallbackPlans = [
       { operator: "Jio", amount: 199, validity: "23 Days", desc: "1.5GB/Day + Calls" },
@@ -356,17 +384,48 @@
       { operator: "BSNL", amount: 197, validity: "70 Days", desc: "2GB/Day Pack" }
     ];
 
+    // AUDIO & LOCK-SCREEN PUSH NOTIFICATION
+    let audioCtx = null;
+    function playBeep() {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(750, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        osc.start();
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.45);
+        osc.stop(audioCtx.currentTime + 0.45);
+      } catch(e) {}
+    }
+
+    // Lock screen compatible browser notification
+    function triggerLockScreenNotification(title, message) {
+      playBeep();
+      showToast(message);
+
+      if ("Notification" in window) {
+        if (Notification.permission === "granted") {
+          navigator.serviceWorker && navigator.serviceWorker.ready ? 
+            navigator.serviceWorker.ready.then(reg => reg.showNotification(title, { body: message, icon: "https://api.qrserver.com/v1/create-qr-code/?size=128x128&data=YKRecharge", vibrate: [200, 100, 200] }))
+            : new Notification(title, { body: message, icon: "https://api.qrserver.com/v1/create-qr-code/?size=128x128&data=YKRecharge" });
+        }
+      }
+    }
+
     function showToast(msg) {
       const t = document.getElementById("toast");
       t.innerText = msg; t.className = "show";
-      setTimeout(() => { t.className = ""; }, 3000);
+      setTimeout(() => { t.className = ""; }, 3200);
     }
 
     function toggleModal(id, show) {
       document.getElementById(id).classList.toggle('hidden', !show);
     }
 
-    // ENTER-KEY AUTO-JUMP ENGINE
     function setupFormEnterNavigation() {
       document.querySelectorAll('form').forEach(f => {
         const inputs = Array.from(f.querySelectorAll('input:not([type="hidden"])'));
@@ -420,9 +479,19 @@
       document.getElementById('uName').innerText = currentUser.name;
       document.getElementById('uPhone').innerText = "+91 " + currentUser.mobile;
       document.getElementById('uBal').innerText = Number(currentUser.balance || 0).toFixed(2);
-      syncBalanceLive();
+
+      // Access Freezing Check
+      const isFrozen = currentUser.status === "Frozen";
+      document.getElementById('userRechargeBox').classList.toggle('hidden', isFrozen);
+      document.getElementById('frozenNotice').classList.toggle('hidden', !isFrozen);
+      const b = document.getElementById('uStatusBadge');
+      b.innerText = isFrozen ? "Account Frozen" : "Approved User";
+      b.className = `badge ${isFrozen ? 'badge-frozen' : 'badge-success'}`;
+
+      startLiveBalancePolling();
     }
 
+    // AUTO-BALANCE & APPROVAL SYNC (Triggers notification only when Admin approves)
     async function syncBalanceLive() {
       if (!currentUser || !currentUser.userId) return;
       try {
@@ -432,11 +501,35 @@
         });
         const data = await res.json();
         if (data.success && data.balance !== undefined) {
-          currentUser.balance = Number(data.balance);
-          localStorage.setItem("yk_user_session", JSON.stringify(currentUser));
-          document.getElementById('uBal').innerText = currentUser.balance.toFixed(2);
+          const liveBal = Number(data.balance);
+          const currentBal = Number(currentUser.balance);
+
+          if (liveBal > currentBal) {
+            const creditedAmt = (liveBal - currentBal).toFixed(2);
+            currentUser.balance = liveBal;
+            localStorage.setItem("yk_user_session", JSON.stringify(currentUser));
+            document.getElementById('uBal').innerText = liveBal.toFixed(2);
+            
+            // Push Notification to Lock Screen on Admin Approval
+            triggerLockScreenNotification("Payment Complete!", `Admin has approved your deposit! ₹${creditedAmt} added to wallet.`);
+          } else if (liveBal !== currentBal) {
+            currentUser.balance = liveBal;
+            localStorage.setItem("yk_user_session", JSON.stringify(currentUser));
+            document.getElementById('uBal').innerText = liveBal.toFixed(2);
+          }
+
+          if (data.status && data.status !== currentUser.status) {
+            currentUser.status = data.status;
+            localStorage.setItem("yk_user_session", JSON.stringify(currentUser));
+            renderUserData();
+          }
         }
       } catch(e) {}
+    }
+
+    function startLiveBalancePolling() {
+      if (balanceSyncTimer) clearInterval(balanceSyncTimer);
+      balanceSyncTimer = setInterval(syncBalanceLive, 5000);
     }
 
     // USER ACTIONS
@@ -455,6 +548,9 @@
         });
         const data = await res.json();
         if (data.success) {
+          if (data.user.status === "Frozen") {
+            showToast("Aapka account freeze hai! Admin se contact karein.");
+          }
           currentUser = data.user;
           localStorage.setItem("yk_user_session", JSON.stringify(currentUser));
           switchNav('user');
@@ -495,6 +591,7 @@
     }
 
     function logoutAction() {
+      if (balanceSyncTimer) clearInterval(balanceSyncTimer);
       currentUser = null;
       localStorage.removeItem("yk_user_session");
       switchNav('home');
@@ -530,13 +627,11 @@
 
       const filtered = fallbackPlans.filter(p => p.operator.toLowerCase() === op.toLowerCase());
       filtered.forEach(p => {
-        // Chip
         const c = document.createElement('span');
         c.className = "chip"; c.innerText = "₹" + p.amount;
         c.onclick = () => { document.getElementById('recAmt').value = p.amount; selectedPlanDesc = `${p.validity} | ${p.desc}`; };
         chips.appendChild(c);
 
-        // Card
         const card = document.createElement('div');
         card.className = "plan-card";
         card.onclick = () => { document.getElementById('recAmt').value = p.amount; selectedPlanDesc = `${p.validity} | ${p.desc}`; };
@@ -545,8 +640,12 @@
       });
     }
 
-    // RECHARGE SUBMISSION
+    // RECHARGE
     async function startRecharge() {
+      if (currentUser && currentUser.status === "Frozen") {
+        return showToast("Aapka account frozen hai!");
+      }
+
       const mobile = document.getElementById('recMobile').value.trim();
       const op = document.getElementById('recOp').value;
       const amt = Number(document.getElementById('recAmt').value);
@@ -579,6 +678,8 @@
 
     // ADD MONEY
     function openAddMoneyModal() {
+      document.getElementById('uUpiText').innerText = liveQR.upiId;
+      document.getElementById('uQrImg').src = liveQR.qrUrl;
       toggleModal('addMoneyModal', true);
     }
 
@@ -608,7 +709,7 @@
       }
     }
 
-    // USER HISTORY & RECEIPT
+    // USER HISTORY
     async function openHistory(tab) {
       toggleModal('historyModal', true);
       renderHistoryTab(tab);
@@ -720,11 +821,24 @@
         const data = await res.json();
         if (!data.success) return;
 
-        // Users
+        // Render Users with Freeze/Unfreeze button
         const uBody = document.getElementById('adminUserRows');
-        uBody.innerHTML = (data.users && data.users.length) ? "" : "<tr><td colspan='5'>No Users</td></tr>";
+        uBody.innerHTML = (data.users && data.users.length) ? "" : "<tr><td colspan='6'>No Users</td></tr>";
         data.users?.forEach(u => {
-          uBody.innerHTML += `<tr><td>${u.id}</td><td>${u.name}</td><td>${u.mobile}</td><td>${u.email}</td><td>${u.status === 'Pending' ? `<button class="btn-sm btn-success" onclick="resolveUser('${u.id}', 'Approved')">Approve</button>` : 'Done'}</td></tr>`;
+          const isFrz = u.status === 'Frozen';
+          uBody.innerHTML += `
+            <tr>
+              <td><b>${u.id}</b></td>
+              <td>${u.name}</td>
+              <td>${u.mobile}</td>
+              <td><span class="badge ${isFrz ? 'badge-frozen' : (u.status === 'Approved' ? 'badge-success' : 'badge-pending')}">${u.status}</span></td>
+              <td>${u.status === 'Pending' ? `<button class="btn-sm btn-success" onclick="resolveUser('${u.id}', 'Approved')">Approve</button>` : 'Done'}</td>
+              <td>
+                <button class="btn-sm ${isFrz ? 'btn-success' : 'btn-warning'}" onclick="toggleFreezeUser('${u.id}', '${isFrz ? 'Approved' : 'Frozen'}')">
+                  ${isFrz ? 'Unfreeze' : 'Freeze'}
+                </button>
+              </td>
+            </tr>`;
         });
 
         // Wallets
@@ -741,6 +855,13 @@
           rBody.innerHTML += `<tr><td>#${r.id}</td><td>${r.userId}</td><td>${r.mobile}</td><td>${r.op}</td><td>₹${r.amount}</td><td>${r.opTxnId || '-'}</td><td>${r.status === 'Pending' ? `<button class="btn-sm btn-success" onclick="promptAdminSuccess('${r.id}')">Approve</button>` : 'Done'}</td></tr>`;
         });
       } catch(e) {}
+    }
+
+    // Freeze / Unfreeze user account
+    async function toggleFreezeUser(userId, newStatus) {
+      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_approve_user", userId, status: newStatus, adminToken }) });
+      showToast(`User status: ${newStatus}!`);
+      fetchAdminData();
     }
 
     async function resolveUser(userId, status) {
@@ -767,6 +888,25 @@
       fetchAdminData();
     }
 
+    // QR Code Management
+    function openAdminQrModal() {
+      document.getElementById('setAdminUpi').value = liveQR.upiId;
+      document.getElementById('setAdminQrUrl').value = liveQR.qrUrl;
+      toggleModal('adminQrModal', true);
+    }
+
+    function saveAdminQrAction() {
+      const upi = document.getElementById('setAdminUpi').value.trim();
+      const qr = document.getElementById('setAdminQrUrl').value.trim();
+      if (!upi || !qr) return showToast("Dono fields bharein!");
+
+      liveQR = { upiId: upi, qrUrl: qr };
+      localStorage.setItem("yk_upi", upi);
+      localStorage.setItem("yk_qr", qr);
+      toggleModal('adminQrModal', false);
+      showToast("Payment QR updated!");
+    }
+
     function adminLogoutAction() {
       adminToken = null;
       sessionStorage.removeItem("yk_admin_token");
@@ -778,6 +918,14 @@
       setupFormEnterNavigation();
       selectOp('Jio');
       if (currentUser) renderUserData();
+
+      // Request Lock-Screen Notification permission on first user touch
+      document.body.addEventListener('click', () => {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if ("Notification" in window && Notification.permission === "default") {
+          Notification.requestPermission();
+        }
+      }, { once: true });
     });
   </script>
 </body>

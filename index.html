@@ -454,6 +454,62 @@
       setTimeout(() => { toast.className = ""; }, 3200);
     }
 
+    let balanceSyncTimer = null;
+
+// Background auto-fetch balance
+async function syncUserBalanceSilently() {
+  if (!currentUser || !currentUser.userId) return;
+
+  try {
+    const res = await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        action: "get_user_balance",
+        userId: currentUser.userId
+      })
+    });
+    const data = await res.json();
+
+    if (data.success && data.balance !== undefined) {
+      const liveBal = Number(data.balance);
+      const currentScreenBal = Number(currentUser.balance);
+
+      // Agar admin ne request approve ki aur balance badh gaya
+      if (liveBal > currentScreenBal) {
+        const added = (liveBal - currentScreenBal).toFixed(2);
+        currentUser.balance = liveBal;
+        localStorage.setItem("qr_user_session", JSON.stringify(currentUser));
+        
+        // Instant screen update
+        document.getElementById('uBal').innerText = liveBal.toFixed(2);
+        showToast(`🎉 Wallet Credited: ₹${added} added by Admin!`, "success");
+      } 
+      else if (liveBal !== currentScreenBal) {
+        currentUser.balance = liveBal;
+        localStorage.setItem("qr_user_session", JSON.stringify(currentUser));
+        document.getElementById('uBal').innerText = liveBal.toFixed(2);
+      }
+    }
+  } catch (e) {
+    // Silent fail without interrupting UI
+  }
+}
+
+// User Dashboard load hone par timer start karein (Har 5 second me check karega)
+function startLiveBalancePolling() {
+  if (balanceSyncTimer) clearInterval(balanceSyncTimer);
+  balanceSyncTimer = setInterval(syncUserBalanceSilently, 5000);
+}
+
+// Logout par timer band karein
+function stopLiveBalancePolling() {
+  if (balanceSyncTimer) {
+    clearInterval(balanceSyncTimer);
+    balanceSyncTimer = null;
+  }
+          }
+    
+
     function setBtnLoading(btnId, loading, originalText) {
       const btn = document.getElementById(btnId);
       if (!btn) return;

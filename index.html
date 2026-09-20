@@ -2,74 +2,49 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>YK RECHARGE PORTAL - Chanduli, Raxaul</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-    body { background: #0f172a; min-height: 100vh; color: #1e293b; padding-bottom: 60px; }
-    
-    header { background: rgba(255,255,255,0.98); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 50; border-bottom: 1px solid #e2e8f0; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
-    .nav-container { max-width: 980px; margin: auto; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
-    .logo { font-size: 1.15rem; font-weight: 900; color: #4338ca; display: flex; align-items: center; gap: 8px; }
-    .tab-pills { background: #1e293b; padding: 4px; border-radius: 12px; display: flex; gap: 4px; }
-    .tab-btn { background: transparent; border: none; color: #94a3b8; padding: 7px 14px; border-radius: 9px; font-weight: 700; font-size: 12px; cursor: pointer; transition: 0.2s; }
-    .tab-btn.active { background: #4f46e5; color: #fff; box-shadow: 0 3px 10px rgba(79,70,229,0.4); }
-
-    main { max-width: 980px; margin: 24px auto; padding: 0 16px; }
-    .glass-box { background: #ffffff; border-radius: 20px; padding: 24px; box-shadow: 0 12px 30px rgba(0,0,0,0.18); margin-bottom: 22px; }
-    .hidden { display: none !important; }
-
-    .hero { text-align: center; padding: 35px 20px; background: linear-gradient(135deg, #4338ca, #312e81); border-radius: 22px; color: #fff; margin-bottom: 24px; }
-    .hero h1 { font-size: 24px; font-weight: 900; margin-bottom: 8px; }
-    .hero p { font-size: 13.5px; opacity: 0.9; max-width: 580px; margin: auto; line-height: 1.6; }
-    .service-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-top: 20px; }
-    .service-card { background: rgba(255,255,255,0.12); padding: 14px; border-radius: 14px; text-align: center; }
-    .service-card h4 { font-size: 15px; margin-bottom: 4px; }
-    .service-card p { font-size: 11.5px; opacity: 0.85; }
-
-    .contact-card { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 18px; padding: 20px; display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 20px; }
-    @media (min-width: 640px) { .contact-card { grid-template-columns: 1fr 1fr; align-items: center; } }
-    .wa-btn { background: #25d366; color: #fff; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 18px; border-radius: 12px; font-weight: 700; font-size: 13.5px; box-shadow: 0 4px 12px rgba(37,211,102,0.3); }
-
-    .form-group { margin-bottom: 14px; }
-    label { display: block; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
-    input, select { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1.5px solid #cbd5e1; font-size: 14px; background: #fff; outline: none; transition: 0.2s; -webkit-appearance: none; }
-    input:focus, select:focus { border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79,70,229,0.18); }
-    
-    .btn { width: 100%; padding: 13px; border: none; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; }
-    .btn-primary { background: #4f46e5; color: #fff; box-shadow: 0 4px 14px rgba(79,70,229,0.35); }
-    .btn-success { background: #059669; color: #fff; }
-    .btn-danger { background: #e11d48; color: #fff; }
-    .btn-sm { width: auto; padding: 6px 12px; font-size: 11px; border-radius: 8px; }
-    .btn:disabled { opacity: 0.65; cursor: not-allowed; }
-
-    .chip-row { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
-    .chip { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 6px 13px; border-radius: 20px; font-size: 12px; font-weight: 700; cursor: pointer; }
-    .chip:hover { background: #e0e7ff; border-color: #4f46e5; color: #4338ca; }
-
-    .plan-card { padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 12px; margin-bottom: 10px; cursor: pointer; transition: all 0.2s; background: #fff; display: flex; justify-content: space-between; align-items: center; }
-    .plan-card:hover { border-color: #4f46e5; background: #f5f3ff; }
-
-    .table-responsive { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: left; }
-    th { background: #f1f5f9; padding: 10px; color: #64748b; font-weight: 700; white-space: nowrap; }
-    td { padding: 10px; border-bottom: 1px solid #f1f5f9; white-space: nowrap; }
-    .badge { padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
-    .badge-pending { background: #fef3c7; color: #b45309; }
-    .badge-success { background: #d1fae5; color: #065f46; }
-    .badge-rejected { background: #ffe4e6; color: #9f1239; }
-
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); backdrop-filter: blur(6px); display: flex; justify-content: center; align-items: center; padding: 16px; z-index: 100; }
-    .modal-body { background: #fff; border-radius: 22px; width: 100%; max-width: 440px; padding: 24px; box-shadow: 0 24px 48px rgba(0,0,0,0.35); }
-
-    #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); opacity: 0; z-index: 200; background: #1e293b; color: #fff; padding: 12px 20px; border-radius: 30px; font-size: 13px; font-weight: 600; transition: 0.3s; pointer-events: none; }
-    #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-    #toast.success { background: #059669; }
-    #toast.error { background: #e11d48; }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif;}
+    body{background:#0f172a;min-height:100vh;color:#1e293b;padding-bottom:50px;}
+    header{background:#fff;position:sticky;top:0;z-index:50;border-bottom:1px solid #e2e8f0;padding:10px 16px;}
+    .nav-container{max-width:900px;margin:auto;display:flex;justify-content:space-between;align-items:center;}
+    .logo{font-size:1.1rem;font-weight:900;color:#4338ca;}
+    .tab-pills{background:#1e293b;padding:3px;border-radius:10px;display:flex;gap:3px;}
+    .tab-btn{background:transparent;border:none;color:#94a3b8;padding:6px 12px;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer;}
+    .tab-btn.active{background:#4f46e5;color:#fff;}
+    main{max-width:900px;margin:18px auto;padding:0 14px;}
+    .glass-box{background:#fff;border-radius:16px;padding:20px;box-shadow:0 8px 20px rgba(0,0,0,0.15);margin-bottom:16px;}
+    .hidden{display:none !important;}
+    .hero{text-align:center;padding:24px 14px;background:linear-gradient(135deg,#4338ca,#312e81);border-radius:16px;color:#fff;margin-bottom:16px;}
+    .hero h1{font-size:20px;font-weight:900;margin-bottom:6px;}
+    .hero p{font-size:12px;opacity:0.9;}
+    .contact-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:14px;margin-top:14px;display:grid;gap:10px;}
+    .wa-btn{background:#25d366;color:#fff;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 14px;border-radius:10px;font-weight:700;font-size:12px;}
+    .form-group{margin-bottom:10px;}
+    label{display:block;font-size:11px;font-weight:800;color:#475569;margin-bottom:4px;text-transform:uppercase;}
+    input,select{width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid #cbd5e1;font-size:13px;outline:none;}
+    input:focus,select:focus{border-color:#4f46e5;}
+    .btn{width:100%;padding:11px;border:none;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;display:flex;justify-content:center;align-items:center;gap:6px;}
+    .btn-primary{background:#4f46e5;color:#fff;}
+    .btn-success{background:#059669;color:#fff;}
+    .btn-danger{background:#e11d48;color:#fff;}
+    .btn-sm{width:auto;padding:5px 10px;font-size:11px;border-radius:6px;}
+    .chip-row{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;}
+    .chip{background:#f1f5f9;border:1px solid #cbd5e1;padding:4px 10px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer;}
+    .table-responsive{overflow-x:auto;}
+    table{width:100%;border-collapse:collapse;font-size:12px;}
+    th,td{padding:8px;border-bottom:1px solid #f1f5f9;text-align:left;}
+    .badge{padding:3px 7px;border-radius:5px;font-size:10px;font-weight:700;}
+    .badge-success{background:#d1fae5;color:#065f46;}
+    .badge-pending{background:#fef3c7;color:#b45309;}
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.65);display:flex;justify-content:center;align-items:center;padding:14px;z-index:100;}
+    .modal-body{background:#fff;border-radius:16px;width:100%;max-width:400px;padding:18px;}
+    #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);opacity:0;z-index:200;background:#1e293b;color:#fff;padding:10px 18px;border-radius:25px;font-size:12px;font-weight:600;transition:0.3s;}
+    #toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
   </style>
 </head>
 <body>
-
   <div id="toast">🔔 Message</div>
 
   <header>
@@ -84,331 +59,209 @@
   </header>
 
   <main>
-    <!-- 1. HOME VIEW -->
+    <!-- HOME -->
     <div id="homeView">
       <div class="hero">
-        <h1>Fast & Secure Prepaid Mobile Recharge</h1>
-        <p>Instant mobile recharge for Jio, Airtel, Vi & BSNL. Smooth transactions with zero lag and direct email receipts.</p>
-        <div class="service-grid">
-          <div class="service-card"><h4>⚡ High Speed</h4><p>Instant UI with auto sync</p></div>
-          <div class="service-card"><h4>🔐 Encrypted</h4><p>Salted SHA-256 tokens</p></div>
-          <div class="service-card"><h4>🧾 Official Receipts</h4><p>PDF & Print supported</p></div>
-        </div>
+        <h1>Fast & Secure Mobile Recharge</h1>
+        <p>Prepaid recharge for Jio, Airtel, Vi & BSNL with zero lag & direct receipts.</p>
       </div>
-
       <div class="glass-box">
-        <h3 style="font-size: 18px; font-weight: 900; color: #4338ca; margin-bottom: 8px;">About YK RECHARGE PORTAL</h3>
-        <p style="font-size: 13.5px; color: #475569; line-height: 1.7;">
-          YK Recharge Portal is an authorized telecom recharge service provider based in Raxaul, Bihar. We offer digital prepaid recharge, instant wallet deposits, and automated official receipts delivered directly to your inbox with zero delay.
-        </p>
-
+        <h3 style="font-size:16px;font-weight:900;color:#4338ca;margin-bottom:6px;">About YK RECHARGE PORTAL</h3>
+        <p style="font-size:12.5px;color:#475569;line-height:1.5;">Authorized telecom recharge service provider based in Raxaul, Bihar.</p>
         <div class="contact-card">
           <div>
-            <h4 style="font-size: 15px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">📍 Office Address</h4>
-            <p style="font-size: 13px; color: #334155; line-height: 1.5;">
-              <b>YK RECHARGE PORTAL</b><br>
-              Chanduli, Raxaul, East Champaran, Bihar - 845305
-            </p>
-            <p style="font-size: 13px; color: #334155; margin-top: 6px;">
-              📞 Call / Helpline: <b>+91 99393-11744</b>
-            </p>
+            <h4 style="font-size:13px;font-weight:800;">📍 Office Address</h4>
+            <p style="font-size:12px;color:#334155;line-height:1.4;">Chanduli, Raxaul, East Champaran, Bihar - 845305<br>📞 Call: <b>+91 99393-11744</b></p>
           </div>
-          <div style="text-align: center;">
-            <a href="https://wa.me/919939311744?text=Hello%20YK%20Recharge%20Portal%2C%20I%20need%20support" target="_blank" class="wa-btn">
-              💬 Chat on WhatsApp (+91 99393-11744)
-            </a>
-            <p style="font-size: 11px; color: #64748b; margin-top: 8px;">Instant support & quick query</p>
-          </div>
+          <div><a href="https://wa.me/919939311744?text=Hello%20YK%20Recharge%20Portal" target="_blank" class="wa-btn">💬 Chat on WhatsApp</a></div>
         </div>
       </div>
     </div>
 
-    <!-- 2. USER AUTH -->
-    <div id="authView" class="glass-box hidden" style="max-width: 420px; margin: 30px auto;">
-      <div style="display: flex; border-bottom: 2px solid #f1f5f9; margin-bottom: 20px;">
-        <button id="tabLogin" onclick="toggleAuth('login')" style="flex: 1; border: none; background: none; font-weight: 700; padding: 10px; color: #4f46e5; border-bottom: 2px solid #4f46e5; cursor: pointer;">Login</button>
-        <button id="tabReg" onclick="toggleAuth('reg')" style="flex: 1; border: none; background: none; font-weight: 700; padding: 10px; color: #94a3b8; cursor: pointer;">Register</button>
+    <!-- USER AUTH -->
+    <div id="authView" class="glass-box hidden" style="max-width:380px;margin:20px auto;">
+      <div style="display:flex;margin-bottom:14px;border-bottom:2px solid #f1f5f9;">
+        <button id="tabLogin" onclick="toggleAuth('login')" style="flex:1;border:none;background:none;font-weight:700;padding:8px;color:#4f46e5;border-bottom:2px solid #4f46e5;cursor:pointer;">Login</button>
+        <button id="tabReg" onclick="toggleAuth('reg')" style="flex:1;border:none;background:none;font-weight:700;padding:8px;color:#94a3b8;cursor:pointer;">Register</button>
       </div>
-
       <form id="loginForm" onsubmit="event.preventDefault(); loginAction();">
-        <div class="form-group"><label>Registered Mobile</label><input type="tel" id="lMobile" maxlength="10" placeholder="10-digit number" enterkeyhint="next" /></div>
+        <div class="form-group"><label>Mobile</label><input type="tel" id="lMobile" maxlength="10" placeholder="10-digit mobile" enterkeyhint="next" /></div>
         <div class="form-group"><label>Password</label><input type="password" id="lPass" placeholder="••••••••" enterkeyhint="go" /></div>
         <button type="submit" class="btn btn-primary" id="btnLogin">Sign In</button>
       </form>
-
       <form id="regForm" class="hidden" onsubmit="event.preventDefault(); registerAction();">
-        <div class="form-group"><label>Full Name</label><input type="text" id="rName" placeholder="Enter full name" enterkeyhint="next" /></div>
+        <div class="form-group"><label>Name</label><input type="text" id="rName" placeholder="Full name" enterkeyhint="next" /></div>
         <div class="form-group"><label>Mobile</label><input type="tel" id="rMobile" maxlength="10" placeholder="10-digit mobile" enterkeyhint="next" /></div>
         <div class="form-group"><label>Email</label><input type="email" id="rEmail" placeholder="name@email.com" enterkeyhint="next" /></div>
-        <div class="form-group"><label>Set Password</label><input type="password" id="rPass" placeholder="Set password" enterkeyhint="go" /></div>
-        <button type="submit" class="btn btn-primary" id="btnReg">Submit Registration</button>
+        <div class="form-group"><label>Password</label><input type="password" id="rPass" placeholder="Set password" enterkeyhint="go" /></div>
+        <button type="submit" class="btn btn-primary" id="btnReg">Register</button>
       </form>
     </div>
 
-    <!-- 3. USER DASHBOARD -->
+    <!-- USER DASHBOARD -->
     <div id="userDash" class="hidden">
-      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 20px;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px;">
         <div class="glass-box" style="margin-bottom:0;">
           <label>Wallet Balance</label>
-          <div style="font-size: 28px; font-weight: 900; color: #0f172a; margin: 4px 0 12px;">₹<span id="uBal">0.00</span></div>
-          <button class="btn btn-primary" style="padding: 10px;" onclick="openAddMoneyModal()">+ Add Money</button>
+          <div style="font-size:24px;font-weight:900;color:#0f172a;margin:4px 0 8px;">₹<span id="uBal">0.00</span></div>
+          <button class="btn btn-primary btn-sm" onclick="openAddMoneyModal()">+ Add Money</button>
         </div>
-        <div class="glass-box" style="margin-bottom:0; display:flex; flex-direction:column; justify-content:space-between;">
-          <div style="display:flex; justify-content:space-between;">
+        <div class="glass-box" style="margin-bottom:0;display:flex;flex-direction:column;justify-content:space-between;">
+          <div style="display:flex;justify-content:space-between;">
             <div>
-              <span class="badge badge-success">Approved User</span>
-              <h3 id="uName" style="font-weight: 800; margin-top:4px;">-</h3>
-              <p id="uPhone" style="font-size: 12px; color: #64748b;">+91 ----------</p>
+              <span class="badge badge-success">Approved</span>
+              <h3 id="uName" style="font-weight:800;margin-top:2px;">-</h3>
+              <p id="uPhone" style="font-size:11px;color:#64748b;">-</p>
             </div>
-            <button onclick="logoutAction()" style="border:none; background:#fee2e2; color:#ef4444; padding:6px 12px; border-radius:8px; font-weight:700; font-size:11px; cursor:pointer;">Logout</button>
+            <button onclick="logoutAction()" style="border:none;background:#fee2e2;color:#ef4444;padding:4px 8px;border-radius:6px;font-size:11px;cursor:pointer;">Logout</button>
           </div>
-          <div style="display:flex; gap:6px; margin-top:12px;">
-            <button class="btn-sm" style="flex:1; background:#e0e7ff; color:#4338ca; border:none; cursor:pointer; font-weight:700;" onclick="openUserHistoryModal('recharges')">📜 Recharges</button>
-            <button class="btn-sm" style="flex:1; background:#e0e7ff; color:#4338ca; border:none; cursor:pointer; font-weight:700;" onclick="openUserHistoryModal('deposits')">💳 Deposits</button>
+          <div style="display:flex;gap:6px;margin-top:8px;">
+            <button class="btn-sm" style="flex:1;background:#e0e7ff;color:#4338ca;border:none;cursor:pointer;" onclick="openHistory('recharges')">📜 Recharges</button>
+            <button class="btn-sm" style="flex:1;background:#e0e7ff;color:#4338ca;border:none;cursor:pointer;" onclick="openHistory('deposits')">💳 Deposits</button>
           </div>
         </div>
       </div>
 
       <div class="glass-box">
-        <h3 style="font-size: 17px; font-weight: 800; margin-bottom: 14px;">Prepaid Mobile Recharge</h3>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
-          <form onsubmit="event.preventDefault(); startRecharge();">
-            <div class="form-group">
-              <label>Mobile Number (Auto Detect)</label>
-              <input type="tel" id="recMobile" maxlength="10" placeholder="Enter 10-digit number" oninput="autoDetect(this.value)" enterkeyhint="next" />
-            </div>
-            <div class="form-group">
-              <label>Operator</label>
-              <select id="recOp" onchange="renderPlans()" enterkeyhint="next">
-                <option value="">Select Operator</option>
-                <option value="Jio">Jio</option>
-                <option value="Airtel">Airtel</option>
-                <option value="Vi">Vi</option>
-                <option value="BSNL">BSNL</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Recharge Amount (₹)</label>
-              <input type="number" id="recAmt" placeholder="Plan Amount" enterkeyhint="go" />
-              <div id="dynamicChips" class="chip-row"></div>
-            </div>
-            <button type="submit" class="btn btn-primary" id="btnContinueRec">Continue to Recharge</button>
-          </form>
-          <div>
-            <label>Available Plans</label>
-            <div id="plansList" style="max-height: 250px; overflow-y: auto;">
-              <div style="text-align: center; color: #94a3b8; font-size: 12px; padding: 40px 0; border: 1.5px dashed #cbd5e1; border-radius: 12px;">
-                Enter mobile or select operator
-              </div>
-            </div>
+        <h3 style="font-size:15px;font-weight:800;margin-bottom:10px;">Mobile Recharge</h3>
+        <form onsubmit="event.preventDefault(); startRecharge();">
+          <div class="form-group"><label>Mobile</label><input type="tel" id="recMobile" maxlength="10" placeholder="10-digit number" oninput="autoDetect(this.value)" enterkeyhint="next" /></div>
+          <div class="form-group">
+            <label>Operator</label>
+            <select id="recOp" onchange="renderPlans()" enterkeyhint="next">
+              <option value="">Select Operator</option>
+              <option value="Jio">Jio</option>
+              <option value="Airtel">Airtel</option>
+              <option value="Vi">Vi</option>
+              <option value="BSNL">BSNL</option>
+            </select>
           </div>
-        </div>
+          <div class="form-group">
+            <label>Amount (₹)</label>
+            <input type="number" id="recAmt" placeholder="Amount" enterkeyhint="go" />
+            <div id="dynamicChips" class="chip-row"></div>
+          </div>
+          <button type="submit" class="btn btn-primary" id="btnRec">Recharge Now</button>
+        </form>
       </div>
     </div>
 
-    <!-- 4. ADMIN HUB -->
+    <!-- ADMIN HUB -->
     <div id="adminArea" class="hidden">
-      <form id="adminAuthBox" class="glass-box" style="max-width: 380px; margin: 30px auto;" onsubmit="event.preventDefault(); adminLoginAction();">
-        <h3 style="font-weight: 800; text-align: center; margin-bottom: 14px;">🔐 Admin Hub</h3>
-        <div class="form-group"><label>Admin Username</label><input type="text" id="adminUser" placeholder="Enter username" enterkeyhint="next" /></div>
-        <div class="form-group"><label>Admin Password</label><input type="password" id="adminPass" placeholder="Enter password" enterkeyhint="go" /></div>
-        <button type="submit" class="btn btn-primary" id="btnAdminLogin">Login to Admin Hub</button>
+      <form id="adminAuthBox" class="glass-box" style="max-width:340px;margin:20px auto;" onsubmit="event.preventDefault(); adminLoginAction();">
+        <h3 style="font-weight:800;text-align:center;margin-bottom:10px;">🔐 Admin Hub</h3>
+        <div class="form-group"><label>Username</label><input type="text" id="adminUser" placeholder="admin" enterkeyhint="next" /></div>
+        <div class="form-group"><label>Password</label><input type="password" id="adminPass" placeholder="password" enterkeyhint="go" /></div>
+        <button type="submit" class="btn btn-primary" id="btnAdm">Login</button>
       </form>
 
       <div id="adminControlPanel" class="hidden">
-        <div class="glass-box" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-          <div>
-            <span class="badge badge-success">Admin Mode Active</span>
-            <h3 style="font-weight:800; margin-top:4px;">Logged in: <span id="adminUserDisplay">admin</span></h3>
-          </div>
-          <div style="display:flex; gap:8px;">
-            <button class="btn btn-primary btn-sm" style="background:#059669;" onclick="openAdminQrModal()">💳 Set QR / UPI</button>
-            <button class="btn btn-primary btn-sm" onclick="fetchAdminData()">🔄 Refresh</button>
-            <button class="btn btn-danger btn-sm" onclick="adminLogoutAction()">Logout</button>
-          </div>
+        <div class="glass-box" style="display:flex;justify-content:space-between;align-items:center;">
+          <h3 style="font-weight:800;">Admin Mode</h3>
+          <button class="btn btn-danger btn-sm" onclick="adminLogoutAction()">Logout</button>
         </div>
-
         <div class="glass-box">
-          <h3 style="font-size:15px; font-weight:800; margin-bottom:10px;">1. User Registration Approvals</h3>
-          <div class="table-responsive"><table><thead><tr><th>ID</th><th>Name</th><th>Mobile</th><th>Email</th><th>Status</th><th style="text-align:right;">Action</th></tr></thead><tbody id="adminUserRows"></tbody></table></div>
+          <h3 style="font-size:13px;font-weight:800;margin-bottom:6px;">1. User Approvals</h3>
+          <div class="table-responsive"><table><thead><tr><th>ID</th><th>Name</th><th>Mobile</th><th>Action</th></tr></thead><tbody id="adminUserRows"></tbody></table></div>
         </div>
-
         <div class="glass-box">
-          <h3 style="font-size:15px; font-weight:800; margin-bottom:10px;">2. Wallet Deposit Slips</h3>
-          <div class="table-responsive"><table><thead><tr><th>Req ID</th><th>User</th><th>Amount</th><th>UTR</th><th>Date</th><th>Status</th><th style="text-align:right;">Action</th></tr></thead><tbody id="adminWalletRows"></tbody></table></div>
+          <h3 style="font-size:13px;font-weight:800;margin-bottom:6px;">2. Wallet Deposits</h3>
+          <div class="table-responsive"><table><thead><tr><th>User</th><th>Amt</th><th>UTR</th><th>Action</th></tr></thead><tbody id="adminWalletRows"></tbody></table></div>
         </div>
-
         <div class="glass-box">
-          <h3 style="font-size:15px; font-weight:800; margin-bottom:10px;">3. Recharge Execution Queue</h3>
-          <div class="table-responsive"><table><thead><tr><th>Txn ID</th><th>User</th><th>Mobile</th><th>Operator</th><th>Amount</th><th>Op Txn ID</th><th>Status</th><th style="text-align:right;">Action</th></tr></thead><tbody id="adminRecRows"></tbody></table></div>
+          <h3 style="font-size:13px;font-weight:800;margin-bottom:6px;">3. Recharges</h3>
+          <div class="table-responsive"><table><thead><tr><th>ID</th><th>Mobile</th><th>Operator</th><th>Amt</th><th>Action</th></tr></thead><tbody id="adminRecRows"></tbody></table></div>
         </div>
       </div>
     </div>
   </main>
 
-  <!-- MODALS -->
+  <!-- RECEIPT MODAL -->
   <div id="receiptModal" class="modal-overlay hidden">
-    <div class="modal-body" style="max-width: 440px;">
-      <div id="printableReceipt" style="border: 2px dashed #cbd5e1; padding: 18px; border-radius: 16px; background: #fafafa;">
-        <div style="text-align: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 12px;">
-          <h2 style="font-size: 18px; font-weight: 900; color: #4338ca; margin: 0;">YK RECHARGE PORTAL</h2>
-          <p style="font-size: 11px; color: #64748b; margin-top: 2px;">Chanduli, Raxaul, Bihar (845305) | +91 99393-11744</p>
-          <span style="font-size: 10px; font-weight: 800; color: #059669; text-transform: uppercase;">Official Confirmation Slip</span>
+    <div class="modal-body">
+      <div id="printableReceipt" style="border:2px dashed #cbd5e1;padding:14px;border-radius:12px;background:#fafafa;">
+        <div style="text-align:center;border-bottom:2px solid #e2e8f0;padding-bottom:6px;margin-bottom:8px;">
+          <h2 style="font-size:16px;font-weight:900;color:#4338ca;">YK RECHARGE PORTAL</h2>
+          <p style="font-size:10px;color:#64748b;">Chanduli, Raxaul, Bihar (845305) | +91 99393-11744</p>
         </div>
-
-        <div style="font-size: 12px; line-height: 1.8; color: #334155;">
-          <div style="display:flex; justify-content:space-between;"><span>User ID:</span><b id="rcpUserId">-</b></div>
-          <div style="display:flex; justify-content:space-between;"><span>Customer Name:</span><b id="rcpUserName">-</b></div>
-          <div style="display:flex; justify-content:space-between;"><span>Transaction ID:</span><b id="rcpTxnId" style="font-family:monospace; color:#4f46e5; font-weight:800;">-</b></div>
-          <div style="display:flex; justify-content:space-between;"><span>Mobile Number:</span><b id="rcpMobile">-</b></div>
-          <div style="display:flex; justify-content:space-between;"><span>Operator / Circle:</span><b id="rcpOperator">-</b></div>
-          <div style="display:flex; justify-content:space-between;"><span>Plan Details:</span><span id="rcpPlan" style="font-weight:600; text-align:right;">-</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>Date:</span><span id="rcpDate">-</span></div>
-          <div style="display:flex; justify-content:space-between; margin-top: 4px;"><span>Status:</span><span id="rcpStatus" class="badge badge-success">Success</span></div>
-          <hr style="border:none; border-top: 1px dashed #cbd5e1; margin: 10px 0;" />
-          <div style="display:flex; justify-content:space-between; align-items:center;"><span style="font-size: 13px; font-weight:800;">Total Paid:</span><b id="rcpAmount" style="font-size: 18px; color: #059669; font-weight:900;">₹0.00</b></div>
+        <div style="font-size:11.5px;line-height:1.7;">
+          <div>User: <b id="rcpUserId">-</b> (<span id="rcpUserName">-</span>)</div>
+          <div>Txn ID: <b id="rcpTxnId" style="color:#4f46e5;">-</b></div>
+          <div>Mobile: <b id="rcpMobile">-</b></div>
+          <div>Operator: <b id="rcpOperator">-</b></div>
+          <hr style="margin:6px 0;border:none;border-top:1px dashed #cbd5e1;" />
+          <div style="display:flex;justify-content:space-between;"><b>Total Paid:</b><b id="rcpAmount" style="color:#059669;font-size:15px;">₹0.00</b></div>
         </div>
       </div>
-      <div style="display:flex; gap: 8px; margin-top: 14px;">
-        <button class="btn" style="background:#e2e8f0; color:#334155;" onclick="toggleModal('receiptModal', false)">Close</button>
-        <button class="btn btn-primary" onclick="printReceipt()">🖨️ Print / Save PDF</button>
+      <div style="display:flex;gap:6px;margin-top:10px;">
+        <button class="btn" style="background:#e2e8f0;" onclick="toggleModal('receiptModal',false)">Close</button>
+        <button class="btn btn-primary" onclick="window.print()">🖨️ Print</button>
       </div>
     </div>
   </div>
 
+  <!-- ADD MONEY MODAL -->
   <div id="addMoneyModal" class="modal-overlay hidden">
     <form class="modal-body" onsubmit="event.preventDefault(); submitDeposit();">
-      <h3 style="font-weight: 800; font-size: 16px; text-align: center;">Scan UPI QR to Add Money</h3>
-      <div style="text-align: center; margin: 12px 0;">
-        <img id="uQrImg" src="" style="border: 2px dashed #cbd5e1; padding: 6px; border-radius: 12px; width:150px; height:150px; object-fit:contain;" />
-        <p style="font-size: 11px; color: #475569; margin-top: 6px;">UPI ID: <b id="uUpiIdText">9939311744@paytm</b></p>
+      <h3 style="font-weight:800;font-size:14px;text-align:center;margin-bottom:8px;">Add Money via UPI</h3>
+      <div style="text-align:center;margin-bottom:8px;">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=upi://pay?pa=9939311744@paytm" style="width:130px;height:130px;border:1px solid #cbd5e1;border-radius:10px;" />
+        <p style="font-size:11px;color:#475569;margin-top:3px;">UPI: <b>9939311744@paytm</b></p>
       </div>
-      <div class="form-group"><label>Amount Paid (₹)</label><input type="number" id="wAmt" placeholder="e.g. 500" enterkeyhint="next" /></div>
-      <div class="form-group"><label>UTR / Ref Number (12 Digits)</label><input type="text" id="wUtr" maxlength="12" placeholder="Enter 12-digit UTR" enterkeyhint="next" /></div>
-      <div class="form-group"><label>Payment Date</label><input type="date" id="wDate" enterkeyhint="go" /></div>
-      <div style="display:flex; gap: 8px;">
-        <button type="button" class="btn" style="background:#e2e8f0; color:#334155;" onclick="toggleModal('addMoneyModal', false)">Cancel</button>
-        <button type="submit" class="btn btn-primary" id="btnDeposit">Submit Slip</button>
+      <div class="form-group"><label>Amount (₹)</label><input type="number" id="wAmt" placeholder="500" enterkeyhint="next" /></div>
+      <div class="form-group"><label>UTR No (12 Digits)</label><input type="text" id="wUtr" maxlength="12" placeholder="12-digit UTR" enterkeyhint="go" /></div>
+      <div style="display:flex;gap:6px;">
+        <button type="button" class="btn" style="background:#e2e8f0;" onclick="toggleModal('addMoneyModal',false)">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="btnDeposit">Submit</button>
       </div>
     </form>
   </div>
 
-  <div id="userHistoryModal" class="modal-overlay hidden">
-    <div class="modal-body" style="max-width: 600px;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-        <h3 style="font-weight:800; font-size:16px;">My Transaction History</h3>
-        <button onclick="toggleModal('userHistoryModal', false)" style="border:none; background:none; font-size:18px; cursor:pointer;">✕</button>
+  <!-- HISTORY MODAL -->
+  <div id="historyModal" class="modal-overlay hidden">
+    <div class="modal-body" style="max-width:450px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <h3 style="font-weight:800;font-size:14px;">Transaction History</h3>
+        <button onclick="toggleModal('historyModal',false)" style="border:none;background:none;font-size:16px;">✕</button>
       </div>
-      <div style="display:flex; gap:8px; margin-bottom:12px;">
-        <button id="hTabRec" class="btn-sm" style="background:#4f46e5; color:#fff; border:none; cursor:pointer;" onclick="renderHistoryTab('recharges')">Recharges</button>
-        <button id="hTabDep" class="btn-sm" style="background:#e2e8f0; color:#334155; border:none; cursor:pointer;" onclick="renderHistoryTab('deposits')">Deposits</button>
-      </div>
-      <div class="table-responsive" style="max-height:280px; overflow-y:auto;">
-        <table><thead id="historyThead"></thead><tbody id="historyTbody"></tbody></table>
+      <div class="table-responsive" style="max-height:220px;overflow-y:auto;">
+        <table><tbody id="historyTbody"></tbody></table>
       </div>
     </div>
   </div>
 
-  <div id="adminSuccessModal" class="modal-overlay hidden">
-    <form class="modal-body" onsubmit="event.preventDefault(); confirmAdminSuccess();">
-      <h3 style="font-weight:800; font-size:16px; margin-bottom:8px;">Approve Recharge Order</h3>
-      <p style="font-size:11px; color:#64748b; margin-bottom:12px;">Order Txn ID: <b id="asmTxnId">-</b></p>
-      <div class="form-group"><label>Operator Txn ID (Optional)</label><input type="text" id="asmOperatorId" placeholder="Leave empty for Auto Txn ID" enterkeyhint="go" /></div>
-      <div style="display:flex; gap:8px; margin-top:14px;">
-        <button type="button" class="btn" style="background:#e2e8f0; color:#334155;" onclick="toggleModal('adminSuccessModal', false)">Cancel</button>
-        <button type="submit" class="btn btn-success" id="btnAdminSuccess">Mark Success</button>
-      </div>
-    </form>
-  </div>
-
-  <div id="adminQrModal" class="modal-overlay hidden">
-    <form class="modal-body" onsubmit="event.preventDefault(); saveAdminQrAction();">
-      <h3 style="font-weight:800; font-size:16px; margin-bottom:12px;">Set Payment UPI QR Code</h3>
-      <div class="form-group"><label>Admin UPI ID</label><input type="text" id="setAdminUpi" placeholder="e.g. 9939311744@paytm" enterkeyhint="next" /></div>
-      <div class="form-group"><label>Direct QR Image URL</label><input type="text" id="setAdminQrUrl" placeholder="https://..." enterkeyhint="go" /></div>
-      <div style="display:flex; gap:8px; margin-top:14px;">
-        <button type="button" class="btn" style="background:#e2e8f0; color:#334155;" onclick="toggleModal('adminQrModal', false)">Cancel</button>
-        <button type="submit" class="btn btn-primary" id="btnSaveQr">Save QR</button>
-      </div>
-    </form>
-  </div>
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwNm_JGDGCLdWfqyY6Wi4pzk6djEn0wWaL4NqtcWCZX7x4eZDM5rf63cV47bSEUuET1/exec";
-
     let currentUser = JSON.parse(localStorage.getItem("yk_user_session") || "null");
     let adminToken = sessionStorage.getItem("yk_admin_token") || null;
-    let selectedPlanDesc = "Standard Pack";
     let userHistoryData = { recharges: [], deposits: [] };
-    let pendingApprovalTxn = null;
-    let balanceSyncTimer = null;
-    let prevPendingWallets = 0;
-    let prevPendingRecharges = 0;
 
-    let liveAdminQR = {
-      qrUrl: "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=9939311744@paytm",
-      upiId: "9939311744@paytm"
+    const packs = {
+      Jio: [199, 239, 299, 666],
+      Airtel: [199, 239, 299, 719],
+      Vi: [199, 299, 479],
+      BSNL: [107, 197, 397]
     };
 
-    const fallbackPlans = [
-      { operator: "Jio", amount: 199, validity: "23 Days", desc: "1.5GB/Day + Calls" },
-      { operator: "Jio", amount: 299, validity: "28 Days", desc: "2.0GB/Day + Calls" },
-      { operator: "Airtel", amount: 209, validity: "21 Days", desc: "1.0GB/Day + Calls" },
-      { operator: "Airtel", amount: 299, validity: "28 Days", desc: "1.5GB/Day Value" },
-      { operator: "Vi", amount: 199, validity: "28 Days", desc: "1.0GB/Day Pack" },
-      { operator: "BSNL", amount: 107, validity: "35 Days", desc: "3GB Total Data" }
-    ];
-
-    let audioCtx = null;
-    function initAudio() {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-    }
-
-    function playNotificationBeep() {
-      try {
-        initAudio();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(700, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-        osc.start();
-        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.5);
-        osc.stop(audioCtx.currentTime + 0.5);
-      } catch(e) {}
-    }
-
-    function triggerSystemNotification(title, message) {
-      playNotificationBeep();
-      showToast(message, "success");
-      if ("Notification" in window && Notification.permission === "granted") {
-        new Notification(title, { body: message, icon: "https://api.qrserver.com/v1/create-qr-code/?size=128x128&data=YKRecharge" });
-      }
-    }
-
-    function showToast(msg, type = "info") {
+    function showToast(msg) {
       const t = document.getElementById("toast");
-      t.innerText = msg;
-      t.className = `show ${type}`;
-      setTimeout(() => { t.className = ""; }, 3200);
+      t.innerText = msg; t.className = "show";
+      setTimeout(() => { t.className = ""; }, 3000);
     }
 
     function toggleModal(id, show) {
-      const el = document.getElementById(id);
-      if (el) el.classList.toggle('hidden', !show);
+      document.getElementById(id).classList.toggle('hidden', !show);
     }
 
     function setupFormEnterNavigation() {
-      document.querySelectorAll('form').forEach(form => {
-        const inputs = Array.from(form.querySelectorAll('input:not([type="hidden"]), select'));
-        inputs.forEach((input, index) => {
-          input.addEventListener('keydown', (e) => {
+      document.querySelectorAll('form').forEach(f => {
+        const inputs = Array.from(f.querySelectorAll('input'));
+        inputs.forEach((inp, i) => {
+          inp.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.keyCode === 13) {
-              if (index < inputs.length - 1) {
+              if (i < inputs.length - 1) {
                 e.preventDefault();
-                inputs[index + 1].focus();
+                inputs[i + 1].focus();
               }
             }
           });
@@ -417,11 +270,9 @@
     }
 
     function switchNav(tab) {
-      initAudio();
       document.getElementById('navHome').classList.toggle('active', tab === 'home');
       document.getElementById('navUser').classList.toggle('active', tab === 'user');
       document.getElementById('navAdmin').classList.toggle('active', tab === 'admin');
-
       document.getElementById('homeView').classList.toggle('hidden', tab !== 'home');
       document.getElementById('adminArea').classList.toggle('hidden', tab !== 'admin');
 
@@ -443,129 +294,58 @@
     function toggleAuth(mode) {
       document.getElementById('loginForm').classList.toggle('hidden', mode !== 'login');
       document.getElementById('regForm').classList.toggle('hidden', mode === 'login');
-      document.getElementById('tabLogin').style.color = mode === 'login' ? '#4f46e5' : '#94a3b8';
-      document.getElementById('tabLogin').style.borderBottom = mode === 'login' ? '2px solid #4f46e5' : 'none';
-      document.getElementById('tabReg').style.color = mode === 'reg' ? '#4f46e5' : '#94a3b8';
-      document.getElementById('tabReg').style.borderBottom = mode === 'reg' ? '2px solid #4f46e5' : 'none';
     }
 
     function renderUserData() {
       if (!currentUser) return;
-      document.getElementById('uName').innerText = currentUser.name || "Customer";
+      document.getElementById('uName').innerText = currentUser.name;
       document.getElementById('uPhone').innerText = "+91 " + currentUser.mobile;
       document.getElementById('uBal').innerText = Number(currentUser.balance || 0).toFixed(2);
-      startLiveBalancePolling();
-    }
-
-    async function syncBalanceLive() {
-      if (!currentUser || !currentUser.userId) return;
-      try {
-        const res = await fetch(SCRIPT_URL, {
-          method: "POST",
-          body: JSON.stringify({ action: "get_user_balance", userId: currentUser.userId })
-        });
-        const data = await res.json();
-        if (data.success && data.balance !== undefined) {
-          const liveBal = Number(data.balance);
-          const currentBal = Number(currentUser.balance);
-          if (liveBal > currentBal) {
-            const added = (liveBal - currentBal).toFixed(2);
-            currentUser.balance = liveBal;
-            localStorage.setItem("yk_user_session", JSON.stringify(currentUser));
-            document.getElementById('uBal').innerText = liveBal.toFixed(2);
-            triggerSystemNotification("Transaction Completed!", `₹${added} has been added & approved in your wallet!`);
-          } else if (liveBal !== currentBal) {
-            currentUser.balance = liveBal;
-            localStorage.setItem("yk_user_session", JSON.stringify(currentUser));
-            document.getElementById('uBal').innerText = liveBal.toFixed(2);
-          }
-        }
-      } catch(e) {}
-    }
-
-    function startLiveBalancePolling() {
-      if (balanceSyncTimer) clearInterval(balanceSyncTimer);
-      balanceSyncTimer = setInterval(syncBalanceLive, 5000);
     }
 
     async function loginAction() {
-      initAudio();
       const mobile = document.getElementById('lMobile').value.trim();
       const password = document.getElementById('lPass').value.trim();
-      if (!mobile || !password) return showToast("Mobile aur password enter karein!", "error");
+      if (!mobile || !password) return showToast("Enter credentials");
 
-      const btn = document.getElementById('btnLogin');
-      btn.innerText = "Checking...";
-      btn.disabled = true;
-
-      try {
-        const res = await fetch(SCRIPT_URL, {
-          method: "POST",
-          body: JSON.stringify({ action: "login", mobile, password })
-        });
-        const data = await res.json();
-        if (data.success) {
-          currentUser = data.user;
-          localStorage.setItem("yk_user_session", JSON.stringify(currentUser));
-          switchNav('user');
-          triggerSystemNotification("Login Successful", `Welcome back, ${currentUser.name}!`);
-        } else {
-          showToast(data.message || "Invalid Login", "error");
-        }
-      } catch (e) {
-        showToast("Connection error! Please retry.", "error");
-      } finally {
-        btn.innerText = "Sign In";
-        btn.disabled = false;
+      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "login", mobile, password }) });
+      const data = await res.json();
+      if (data.success) {
+        currentUser = data.user;
+        localStorage.setItem("yk_user_session", JSON.stringify(currentUser));
+        switchNav('user');
+        showToast("Login success!");
+      } else {
+        showToast(data.message || "Login failed");
       }
     }
 
     async function registerAction() {
-      initAudio();
       const name = document.getElementById('rName').value.trim();
       const mobile = document.getElementById('rMobile').value.trim();
       const email = document.getElementById('rEmail').value.trim();
       const password = document.getElementById('rPass').value.trim();
+      if (!name || !mobile || !email || !password) return showToast("Fill all details");
 
-      if (!name || mobile.length !== 10 || !email || !password) return showToast("Sabhi details sahi bharein!", "error");
-
-      const btn = document.getElementById('btnReg');
-      btn.innerText = "Submitting...";
-      btn.disabled = true;
-
-      try {
-        const res = await fetch(SCRIPT_URL, {
-          method: "POST",
-          body: JSON.stringify({ action: "register", name, mobile, email, password })
-        });
-        const data = await res.json();
-        showToast(data.message, data.success ? "success" : "error");
-        if (data.success) {
-          triggerSystemNotification("Registration Submitted", "Your registration is requested! Waiting for admin approval.");
-          toggleAuth('login');
-        }
-      } catch(e) {
-        showToast("Registration error!", "error");
-      } finally {
-        btn.innerText = "Submit Registration";
-        btn.disabled = false;
-      }
+      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "register", name, mobile, email, password }) });
+      const data = await res.json();
+      showToast(data.message);
+      if (data.success) toggleAuth('login');
     }
 
     function logoutAction() {
-      if (balanceSyncTimer) clearInterval(balanceSyncTimer);
       currentUser = null;
       localStorage.removeItem("yk_user_session");
       switchNav('home');
-      showToast("Logged out successfully");
+      showToast("Logged out");
     }
 
     function autoDetect(val) {
       if (val.length === 10) {
         const p = val.substring(0, 2);
         let op = "Jio";
-        if (["98", "99", "88", "70"].includes(p)) op = "Airtel";
-        else if (["90", "91", "80", "77"].includes(p)) op = "Vi";
+        if (["98", "99", "88"].includes(p)) op = "Airtel";
+        else if (["90", "91", "80"].includes(p)) op = "Vi";
         else if (["94", "89"].includes(p)) op = "BSNL";
         document.getElementById('recOp').value = op;
         renderPlans();
@@ -574,220 +354,152 @@
 
     function renderPlans() {
       const op = document.getElementById('recOp').value;
-      const list = document.getElementById('plansList');
       const chips = document.getElementById('dynamicChips');
-      list.innerHTML = "";
       chips.innerHTML = "";
-
-      if (!op) {
-        list.innerHTML = `<div style="text-align: center; color: #94a3b8; font-size: 12px; padding: 30px 0;">Select operator to view plans</div>`;
-        return;
+      if (packs[op]) {
+        packs[op].forEach(amt => {
+          const c = document.createElement('span');
+          c.className = "chip"; c.innerText = "₹" + amt;
+          c.onclick = () => { document.getElementById('recAmt').value = amt; };
+          chips.appendChild(c);
+        });
       }
-
-      const filtered = fallbackPlans.filter(p => p.operator.toLowerCase() === op.toLowerCase());
-      filtered.forEach(p => {
-        const chip = document.createElement('span');
-        chip.className = "chip";
-        chip.innerText = `₹${p.amount}`;
-        chip.onclick = () => {
-          document.getElementById('recAmt').value = p.amount;
-          selectedPlanDesc = `${p.validity} | ${p.desc}`;
-        };
-        chips.appendChild(chip);
-
-        const card = document.createElement('div');
-        card.className = "plan-card";
-        card.onclick = () => {
-          document.getElementById('recAmt').value = p.amount;
-          selectedPlanDesc = `${p.validity} | ${p.desc}`;
-        };
-        card.innerHTML = `<div><b>₹${p.amount}</b> <span style="font-size:11px; color:#4f46e5; font-weight:700;">${p.validity}</span><p style="font-size:11px; color:#64748b;">${p.desc}</p></div><b style="font-size:12px; color:#4f46e5;">Select</b>`;
-        list.appendChild(card);
-      });
     }
 
     async function startRecharge() {
-      initAudio();
       const mobile = document.getElementById('recMobile').value.trim();
       const op = document.getElementById('recOp').value;
       const amt = Number(document.getElementById('recAmt').value);
+      if (mobile.length !== 10 || !op || !amt) return showToast("Check details");
+      if (currentUser.balance < amt) return showToast("Insufficient balance");
 
-      if (mobile.length !== 10 || !op || !amt || amt <= 0) return showToast("Sahi mobile, operator aur amount bharein.", "error");
-      if (currentUser.balance < amt) return showToast("Insufficient balance! Please add money to wallet.", "error");
-
-      const btn = document.getElementById('btnContinueRec');
-      btn.innerText = "Processing...";
-      btn.disabled = true;
-
-      try {
-        const res = await fetch(SCRIPT_URL, {
-          method: "POST",
-          body: JSON.stringify({
-            action: "create_recharge",
-            userId: currentUser.userId,
-            mobile, operator: op, circle: "Bihar Jharkhand",
-            amount: amt, planDetails: selectedPlanDesc
-          })
-        });
-        const data = await res.json();
-        if (data.success) {
-          currentUser.balance = data.newBalance !== undefined ? data.newBalance : (currentUser.balance - amt);
-          localStorage.setItem("yk_user_session", JSON.stringify(currentUser));
-          document.getElementById('uBal').innerText = Number(currentUser.balance).toFixed(2);
-          triggerSystemNotification("Recharge Order Placed", `Your recharge transaction of ₹${amt} is requested successfully!`);
-        } else {
-          showToast(data.message, "error");
-        }
-      } catch(e) {
-        triggerSystemNotification("Recharge Order Placed", "Your transaction is requested! Waiting for operator status.");
-      } finally {
-        btn.innerText = "Continue to Recharge";
-        btn.disabled = false;
+      const res = await fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({ action: "create_recharge", userId: currentUser.userId, mobile, operator: op, amount: amt })
+      });
+      const data = await res.json();
+      if (data.success) {
+        currentUser.balance -= amt;
+        localStorage.setItem("yk_user_session", JSON.stringify(currentUser));
+        renderUserData();
+        showToast("Recharge requested!");
+      } else {
+        showToast(data.message);
       }
     }
 
-    async function openAddMoneyModal() {
-      initAudio();
-      document.getElementById('wDate').valueAsDate = new Date();
-      document.getElementById('uQrImg').src = liveAdminQR.qrUrl;
-      document.getElementById('uUpiIdText').innerText = liveAdminQR.upiId;
+    function openAddMoneyModal() {
       toggleModal('addMoneyModal', true);
-
-      try {
-        const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "get_admin_qr" }) });
-        const data = await res.json();
-        if (data.success && data.qrUrl) {
-          liveAdminQR = { qrUrl: data.qrUrl, upiId: data.upiId };
-          document.getElementById('uQrImg').src = data.qrUrl;
-          document.getElementById('uUpiIdText').innerText = data.upiId;
-        }
-      } catch(e) {}
     }
 
     async function submitDeposit() {
-      initAudio();
       const amt = Number(document.getElementById('wAmt').value);
       const utr = document.getElementById('wUtr').value.trim();
-      const date = document.getElementById('wDate').value;
-      if (!amt || utr.length < 6 || !date) return showToast("Amount, 12-digit UTR aur Date bharein!", "error");
+      if (!amt || utr.length < 6) return showToast("Enter amt & 12-digit UTR");
 
-      const btn = document.getElementById('btnDeposit');
-      btn.innerText = "Submitting...";
-      btn.disabled = true;
-
-      try {
-        const res = await fetch(SCRIPT_URL, {
-          method: "POST",
-          body: JSON.stringify({ action: "add_money_request", userId: currentUser.userId, amount: amt, utr, date })
-        });
-        const data = await res.json();
-        if (data.success) {
-          triggerSystemNotification("Add Money Requested", "Your transaction is requested! Waiting for admin approval.");
-          toggleModal('addMoneyModal', false);
-          document.getElementById('wAmt').value = "";
-          document.getElementById('wUtr').value = "";
-        } else {
-          showToast(data.message || "Submission failed!", "error");
-        }
-      } catch(e) {
-        triggerSystemNotification("Add Money Requested", "Your transaction is requested! Waiting for admin approval.");
-        toggleModal('addMoneyModal', false);
-      } finally {
-        btn.innerText = "Submit Slip";
-        btn.disabled = false;
-      }
+      const res = await fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({ action: "add_money_request", userId: currentUser.userId, amount: amt, utr, date: new Date().toISOString().split('T')[0] })
+      });
+      const data = await res.json();
+      showToast(data.message || "Submitted");
+      toggleModal('addMoneyModal', false);
     }
 
-    async function openUserHistoryModal(tab) {
-      initAudio();
-      toggleModal('userHistoryModal', true);
-      renderHistoryTab(tab);
-
-      try {
-        const res = await fetch(SCRIPT_URL, {
-          method: "POST",
-          body: JSON.stringify({ action: "get_user_history", userId: currentUser.userId, mobile: currentUser.mobile })
-        });
-        const data = await res.json();
-        if (data.success) {
-          userHistoryData = data;
-          renderHistoryTab(tab);
-        }
-      } catch(e) {}
-    }
-
-    function renderHistoryTab(tab) {
-      const thead = document.getElementById('historyThead');
+    async function openHistory(type) {
+      toggleModal('historyModal', true);
+      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "get_user_history", userId: currentUser.userId, mobile: currentUser.mobile }) });
+      const data = await res.json();
+      userHistoryData = data;
       const tbody = document.getElementById('historyTbody');
-      const tabRec = document.getElementById('hTabRec');
-      const tabDep = document.getElementById('hTabDep');
+      tbody.innerHTML = "";
 
-      if (tab === 'recharges') {
-        tabRec.style.background = "#4f46e5"; tabRec.style.color = "#fff";
-        tabDep.style.background = "#e2e8f0"; tabDep.style.color = "#334155";
-        thead.innerHTML = `<tr><th>Txn ID</th><th>Mobile</th><th>Amount</th><th>Status</th><th style="text-align:right;">Receipt</th></tr>`;
-        tbody.innerHTML = (userHistoryData.recharges && userHistoryData.recharges.length) ? "" : `<tr><td colspan="5" style="text-align:center; padding:15px; color:#94a3b8;">No recharges found</td></tr>`;
-
-        userHistoryData.recharges?.forEach((r, idx) => {
-          const finalTxn = (r.opTxnId && String(r.opTxnId).trim() !== "") ? r.opTxnId : r.txnId;
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td style="font-family:monospace; color:#4f46e5; font-weight:700;">${finalTxn}</td>
-            <td>${r.mobile}</td>
-            <td><b>₹${r.amount}</b></td>
-            <td><span class="badge ${r.status === 'Success' ? 'badge-success' : (r.status === 'Rejected' ? 'badge-rejected' : 'badge-pending')}">${r.status}</span></td>
-            <td style="text-align:right;">
-              <button class="btn-sm" style="background:#e0e7ff; color:#4338ca; border:none; cursor:pointer; font-weight:700;" onclick="openReceiptByIndex(${idx})">🧾 View</button>
-            </td>
-          `;
-          tbody.appendChild(tr);
+      if (type === 'recharges' && data.recharges) {
+        data.recharges.forEach((r, idx) => {
+          tbody.innerHTML += `<tr><td>${r.mobile}</td><td>₹${r.amount}</td><td><span class="badge badge-success">${r.status}</span></td><td><button class="btn-sm" onclick="showReceipt(${idx})">Receipt</button></td></tr>`;
         });
-      } else {
-        tabDep.style.background = "#4f46e5"; tabDep.style.color = "#fff";
-        tabRec.style.background = "#e2e8f0"; tabRec.style.color = "#334155";
-        thead.innerHTML = `<tr><th>Req ID</th><th>Amount</th><th>UTR</th><th>Date</th><th>Status</th></tr>`;
-        tbody.innerHTML = (userHistoryData.deposits && userHistoryData.deposits.length) ? "" : `<tr><td colspan="5" style="text-align:center; padding:15px; color:#94a3b8;">No deposits found</td></tr>`;
-
-        userHistoryData.deposits?.forEach(d => {
-          const tr = document.createElement('tr');
-          tr.innerHTML = `<td><b>#${d.reqId}</b></td><td><b>₹${d.amount}</b></td><td style="font-family:monospace;">${d.utr}</td><td>${d.date}</td><td><span class="badge ${d.status === 'Approved' ? 'badge-success' : 'badge-pending'}">${d.status}</span></td>`;
-          tbody.appendChild(tr);
+      } else if (data.deposits) {
+        data.deposits.forEach(d => {
+          tbody.innerHTML += `<tr><td>₹${d.amount}</td><td>${d.utr}</td><td><span class="badge badge-pending">${d.status}</span></td></tr>`;
         });
       }
     }
 
-    function openReceiptByIndex(idx) {
-      const item = userHistoryData.recharges[idx];
-      if (!item) return;
-
-      document.getElementById('rcpUserId').innerText = currentUser ? currentUser.userId : "USR1001";
-      document.getElementById('rcpUserName').innerText = currentUser ? currentUser.name : "Customer";
-
-      if (item.opTxnId && String(item.opTxnId).trim() !== "") {
-        document.getElementById('rcpTxnId').innerText = item.opTxnId;
-      } else {
-        document.getElementById('rcpTxnId').innerText = item.txnId;
-      }
-
-      document.getElementById('rcpMobile').innerText = "+91 " + item.mobile;
-      document.getElementById('rcpOperator').innerText = item.operator;
-      document.getElementById('rcpPlan').innerText = item.plan || "Standard Pack";
-      document.getElementById('rcpDate').innerText = item.date || "-";
-      document.getElementById('rcpAmount').innerText = "₹" + Number(item.amount).toFixed(2);
-
-      const statusEl = document.getElementById('rcpStatus');
-      statusEl.innerText = item.status;
-      statusEl.className = `badge ${item.status === 'Success' ? 'badge-success' : (item.status === 'Rejected' ? 'badge-rejected' : 'badge-pending')}`;
-
+    function showReceipt(idx) {
+      const r = userHistoryData.recharges[idx];
+      document.getElementById('rcpUserId').innerText = currentUser.userId;
+      document.getElementById('rcpUserName').innerText = currentUser.name;
+      document.getElementById('rcpTxnId').innerText = r.opTxnId || r.txnId;
+      document.getElementById('rcpMobile').innerText = r.mobile;
+      document.getElementById('rcpOperator').innerText = r.operator;
+      document.getElementById('rcpAmount').innerText = "₹" + r.amount;
       toggleModal('receiptModal', true);
     }
 
-    function printReceipt() {
-      const content = document.getElementById('printableReceipt').innerHTML;
-      const pWin = window.open('', '', 'height=600,width=500');
-      pWin.document.write('<html><head><title>YK RECHARGE PORTAL - Receipt</title><style>body{font-family:sans-serif;padding:20px;}</style></head><body>');
-      pWin.document.write(content);
-      pWin.document.write('</body></html>');
-      pWin.document.close();
-      pWin.focus();
-      setTimeout(() => { pWin.print(); pWin.
+    async function adminLoginAction() {
+      const username = document.getElementById('adminUser').value.trim();
+      const password = document.getElementById('adminPass').value.trim();
+      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_login", username, password }) });
+      const data = await res.json();
+      if (data.success) {
+        adminToken = data.adminToken;
+        sessionStorage.setItem("yk_admin_token", adminToken);
+        document.getElementById('adminAuthBox').classList.add('hidden');
+        document.getElementById('adminControlPanel').classList.remove('hidden');
+        fetchAdminData();
+      } else {
+        showToast(data.message || "Invalid Admin");
+      }
+    }
+
+    async function fetchAdminData() {
+      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_get_all_data", adminToken }) });
+      const data = await res.json();
+      if (!data.success) return;
+
+      const uBody = document.getElementById('adminUserRows');
+      uBody.innerHTML = "";
+      data.users?.forEach(u => {
+        uBody.innerHTML += `<tr><td>${u.id}</td><td>${u.name}</td><td>${u.mobile}</td><td>${u.status === 'Pending' ? `<button class="btn-sm btn-success" onclick="resolveUser('${u.id}', 'Approved')">Approve</button>` : 'Done'}</td></tr>`;
+      });
+
+      const wBody = document.getElementById('adminWalletRows');
+      wBody.innerHTML = "";
+      data.wallets?.forEach(w => {
+        wBody.innerHTML += `<tr><td>${w.userId}</td><td>₹${w.amount}</td><td>${w.utr}</td><td>${w.status === 'Pending' ? `<button class="btn-sm btn-success" onclick="resolveWallet('${w.id}', 'Approved')">Approve</button>` : 'Done'}</td></tr>`;
+      });
+
+      const rBody = document.getElementById('adminRecRows');
+      rBody.innerHTML = "";
+      data.recharges?.forEach(r => {
+        rBody.innerHTML += `<tr><td>${r.id}</td><td>${r.mobile}</td><td>${r.op}</td><td>₹${r.amount}</td><td>${r.status === 'Pending' ? `<button class="btn-sm btn-success" onclick="resolveRec('${r.id}', 'Success')">Approve</button>` : 'Done'}</td></tr>`;
+      });
+    }
+
+    async function resolveUser(userId, status) {
+      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_approve_user", userId, status, adminToken }) });
+      fetchAdminData();
+    }
+    async function resolveWallet(requestId, status) {
+      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_update_wallet", requestId, status, adminToken }) });
+      fetchAdminData();
+    }
+    async function resolveRec(txnId, status) {
+      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_update_recharge", txnId, status, adminToken }) });
+      fetchAdminData();
+    }
+
+    function adminLogoutAction() {
+      adminToken = null;
+      sessionStorage.removeItem("yk_admin_token");
+      document.getElementById('adminControlPanel').classList.add('hidden');
+      document.getElementById('adminAuthBox').classList.remove('hidden');
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      setupFormEnterNavigation();
+      if (currentUser) renderUserData();
+    });
+  </script>
+</body>
+</html>

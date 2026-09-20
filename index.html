@@ -469,6 +469,76 @@
   </div>
 
   <script>
+    // ================= BROWSER NOTIFICATION & AUDIO ENGINE =================
+let lastPendingWalletCount = 0;
+let lastPendingRechargeCount = 0;
+let adminLiveMonitorTimer = null;
+
+// Built-in Web Audio Bell Sound (Koi external audio file download karne ki zaroorat nahi)
+function playAlertBeep() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(800, ctx.currentTime);
+    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+    osc.start();
+    gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.6);
+    osc.stop(ctx.currentTime + 0.6);
+  } catch(e) {}
+}
+
+function requestNotificationPermission() {
+  if ("Notification" in window && Notification.permission === "default") {
+    Notification.requestPermission();
+  }
+}
+
+function triggerDesktopNotification(title, body) {
+  playAlertBeep();
+  if ("Notification" in window && Notification.permission === "granted") {
+    new Notification(title, {
+      body: body,
+      icon: "https://api.qrserver.com/v1/create-qr-code/?size=128x128&data=YKRecharge"
+    });
+  } else {
+    showToast(`🔔 ${title}: ${body}`, "info");
+  }
+}
+
+// Monitor Queue for Admin Hub (Runs every 7 seconds)
+async function monitorAdminQueueSilently() {
+  if (!adminAuthToken) return;
+
+  try {
+    const res = await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify({ action: "admin_get_all_data", adminToken: adminAuthToken })
+    });
+    const data = await res.json();
+    if (!data.success) return;
+
+    const pendingWallets = data.wallets.filter(w => w.status === "Pending").length;
+    const pendingRecharges = data.recharges.filter(r => r.status === "Pending").length;
+
+    // Check for NEW incoming Wallet Deposit
+    if (pendingWallets > lastPendingWalletCount && lastPendingWalletCount !== 0) {
+      triggerDesktopNotification("New Add Money Request!", `A user submitted ₹ deposit slip (UTR).`);
+    }
+
+    // Check for NEW incoming Recharge Order
+    if (pendingRecharges > lastPendingRechargeCount && lastPendingRechargeCount !== 0) {
+      triggerDesktopNotification("New Recharge Order!", `A user placed a mobile recharge order.`);
+    }
+
+    lastPendingWalletCount = pendingWallets;
+    lastPendingRechargeCount = pendingRecharges;
+  } catch(e) {}
+}
+    
     // ==============================================================
     // APNA DEPLOYED GOOGLE APPS SCRIPT URL YAHAN DAALEIN:
     // ==============================================================
@@ -1030,6 +1100,31 @@
       document.getElementById('adminUserDisplay').innerText = currentAdmin.username;
       fetchAdminData();
     }
+    function showAdminPanel() {
+  document.getElementById('adminAuthBox').classList.add('hidden');
+  document.getElementById('adminControlPanel').classList.remove('hidden');
+  document.getElementById('adminUserDisplay').innerText = currentAdmin.username;
+  
+  requestNotificationPermission(); // Ask permission once
+  fetchAdminData();
+
+  if (adminLiveMonitorTimer) clearInterval(adminLiveMonitorTimer);
+  adminLiveMonitorTimer = setInterval(monitorAdminQueueSilently, 7000); // Check every 7s
+}
+
+function adminLogoutAction() {
+  if (adminLiveMonitorTimer) {
+    clearInterval(adminLiveMonitorTimer);
+    adminLiveMonitorTimer = null;
+  }
+  adminAuthToken = null;
+  sessionStorage.removeItem("admin_bearer_token");
+  currentAdmin = null;
+  document.getElementById('adminControlPanel').classList.add('hidden');
+  document.getElementById('adminAuthBox').classList.remove('hidden');
+  showToast("Admin logged out");
+    }
+    
 
     function adminLogoutAction() {
       currentAdmin = null;

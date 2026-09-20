@@ -400,6 +400,79 @@
     </div>
   </div>
 
+  <!-- RECHARGE RECEIPT MODAL -->
+<div id="receiptModal" class="modal-overlay hidden">
+  <div class="modal-body" style="max-width: 440px; background: #ffffff; padding: 24px; border-radius: 20px;">
+    
+    <!-- Printable Area -->
+    <div id="printableReceipt" style="border: 2px dashed #cbd5e1; padding: 20px; border-radius: 16px; background: #fafafa;">
+      <!-- Heading -->
+      <div style="text-align: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 14px;">
+        <h2 style="font-size: 19px; font-weight: 900; color: #4338ca; letter-spacing: 0.5px; margin: 0;">YK RECHARGE PORTAL</h2>
+        <p style="font-size: 11px; color: #64748b; margin-top: 2px;">Official Transaction Receipt</p>
+      </div>
+
+      <!-- User & Order Info -->
+      <div style="font-size: 12px; line-height: 1.8; color: #334155;">
+        <div style="display:flex; justify-content:space-between;">
+          <span style="color:#64748b;">User ID:</span>
+          <b id="rcpUserId" style="color:#0f172a;">-</b>
+        </div>
+        <div style="display:flex; justify-content:space-between;">
+          <span style="color:#64748b;">Customer Name:</span>
+          <b id="rcpUserName" style="color:#0f172a;">-</b>
+        </div>
+        <div style="display:flex; justify-content:space-between;">
+          <span style="color:#64748b;">Transaction ID:</span>
+          <!-- Agar Admin ne Op Txn ID di hai to wahi dikhegi, warna Auto Generated ID -->
+          <b id="rcpTxnId" style="font-family:monospace; color:#4f46e5;">-</b>
+        </div>
+        <div style="display:flex; justify-content:space-between;">
+          <span style="color:#64748b;">Mobile Number:</span>
+          <b id="rcpMobile" style="color:#0f172a;">-</b>
+        </div>
+        <div style="display:flex; justify-content:space-between;">
+          <span style="color:#64748b;">Operator / Circle:</span>
+          <b id="rcpOperator" style="color:#0f172a;">-</b>
+        </div>
+        <div style="display:flex; justify-content:space-between;">
+          <span style="color:#64748b;">Plan Details:</span>
+          <span id="rcpPlan" style="font-weight:600; text-align:right; max-width:60%;">-</span>
+        </div>
+        <div style="display:flex; justify-content:space-between;">
+          <span style="color:#64748b;">Date & Time:</span>
+          <span id="rcpDate" style="font-weight:600;">-</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-top: 6px;">
+          <span style="color:#64748b;">Status:</span>
+          <span id="rcpStatus" class="badge badge-success">Success</span>
+        </div>
+
+        <hr style="border:none; border-top: 1px dashed #cbd5e1; margin: 12px 0;" />
+
+        <!-- Total Amount -->
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size: 14px; font-weight:800; color:#1e293b;">Total Amount Paid:</span>
+          <b id="rcpAmount" style="font-size: 18px; color: #059669; font-weight:900;">₹0.00</b>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 14px; font-size: 10px; color: #94a3b8;">
+        Thank you for recharging with YK RECHARGE PORTAL!<br/>
+        This is a computer-generated receipt.
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div style="display:flex; gap: 8px; margin-top: 16px;">
+      <button class="btn" style="background:#e2e8f0; color:#334155;" onclick="toggleModal('receiptModal', false)">Close</button>
+      <button class="btn btn-primary" onclick="printReceipt()">🖨️ Print / Save PDF</button>
+    </div>
+
+  </div>
+</div>
+  
+
   <!-- MODAL: ADMIN SUCCESS -->
   <div id="adminSuccessModal" class="modal-overlay hidden">
     <div class="modal-body">
@@ -895,56 +968,110 @@ function stopLiveBalancePolling() {
       } catch(e) {}
     }
 
-    function renderHistoryTab(tab) {
-      const thead = document.getElementById('historyThead');
-      const tbody = document.getElementById('historyTbody');
-      const tabRec = document.getElementById('hTabRec');
-      const tabDep = document.getElementById('hTabDep');
+    // 1. History Table me Receipt Button Add karein
+function renderHistoryTab(tab) {
+  const thead = document.getElementById('historyThead');
+  const tbody = document.getElementById('historyTbody');
+  const tabRec = document.getElementById('hTabRec');
+  const tabDep = document.getElementById('hTabDep');
 
-      if (tab === 'recharges') {
-        tabRec.style.background = "#4f46e5"; tabRec.style.color = "#fff";
-        tabDep.style.background = "#e2e8f0"; tabDep.style.color = "#334155";
+  if (tab === 'recharges') {
+    tabRec.style.background = "#4f46e5"; tabRec.style.color = "#fff";
+    tabDep.style.background = "#e2e8f0"; tabDep.style.color = "#334155";
+    
+    // Receipt column add kiya gaya hai
+    thead.innerHTML = `<tr><th>Txn ID</th><th>Mobile</th><th>Operator</th><th>Amount</th><th>Status</th><th>Date</th><th style="text-align:right;">Receipt</th></tr>`;
+    tbody.innerHTML = userHistoryData.recharges && userHistoryData.recharges.length ? "" : `<tr><td colspan="7" style="text-align:center; padding:15px; color:#94a3b8;">No recharges found</td></tr>`;
+
+    if(userHistoryData.recharges) {
+      userHistoryData.recharges.forEach(r => {
+        const tr = document.createElement('tr');
         
-        thead.innerHTML = `<tr><th>Txn ID</th><th>Mobile</th><th>Operator</th><th>Amount</th><th>Op Txn ID</th><th>Date</th><th>Status</th></tr>`;
-        tbody.innerHTML = userHistoryData.recharges && userHistoryData.recharges.length ? "" : `<tr><td colspan="7" style="text-align:center; padding:15px; color:#94a3b8;">No recharges found</td></tr>`;
+        // Transaction ID Logic: Admin Op Txn ID hai to wahi, nahi to Generated Txn ID
+        const finalTxnId = (r.opTxnId && String(r.opTxnId).trim() !== "") ? r.opTxnId : r.txnId;
 
-        if(userHistoryData.recharges) {
-          userHistoryData.recharges.forEach(r => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td><b>${r.txnId}</b></td>
-              <td>${r.mobile}</td>
-              <td>${r.operator}</td>
-              <td>₹${r.amount}</td>
-              <td style="font-family:monospace; font-weight:bold; color:#4f46e5;">${r.opTxnId || '-'}</td>
-              <td>${r.date || '-'}</td>
-              <td><span class="badge ${r.status === 'Success' ? 'badge-success' : (r.status === 'Rejected' ? 'badge-rejected' : 'badge-pending')}">${r.status}</span></td>
-            `;
-            tbody.appendChild(tr);
-          });
-        }
-      } else {
-        tabDep.style.background = "#4f46e5"; tabDep.style.color = "#fff";
-        tabRec.style.background = "#e2e8f0"; tabRec.style.color = "#334155";
-
-        thead.innerHTML = `<tr><th>Req ID</th><th>Amount</th><th>UTR Number</th><th>Date</th><th>Status</th></tr>`;
-        tbody.innerHTML = userHistoryData.deposits && userHistoryData.deposits.length ? "" : `<tr><td colspan="5" style="text-align:center; padding:15px; color:#94a3b8;">No add money requests found</td></tr>`;
-
-        if(userHistoryData.deposits) {
-          userHistoryData.deposits.forEach(d => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td><b>#${d.reqId}</b></td>
-              <td><b>₹${d.amount}</b></td>
-              <td style="font-family:monospace;">${d.utr}</td>
-              <td>${d.date}</td>
-              <td><span class="badge ${d.status === 'Approved' ? 'badge-success' : (d.status === 'Rejected' ? 'badge-rejected' : 'badge-pending')}">${d.status}</span></td>
-            `;
-            tbody.appendChild(tr);
-          });
-        }
-      }
+        tr.innerHTML = `
+          <td style="font-family:monospace; font-weight:bold; color:#4f46e5;">${finalTxnId}</td>
+          <td>${r.mobile}</td>
+          <td>${r.operator}</td>
+          <td><b>₹${r.amount}</b></td>
+          <td><span class="badge ${r.status === 'Success' ? 'badge-success' : (r.status === 'Rejected' ? 'badge-rejected' : 'badge-pending')}">${r.status}</span></td>
+          <td>${r.date || '-'}</td>
+          <td style="text-align:right;">
+            <button class="btn-sm" style="background:#e0e7ff; color:#4338ca; border:none; cursor:pointer; font-weight:700;" onclick='viewReceipt(${JSON.stringify(r)})'>🧾 View</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
     }
+  } else {
+    // Deposits Tab
+    tabDep.style.background = "#4f46e5"; tabDep.style.color = "#fff";
+    tabRec.style.background = "#e2e8f0"; tabRec.style.color = "#334155";
+
+    thead.innerHTML = `<tr><th>Req ID</th><th>Amount</th><th>UTR Number</th><th>Date</th><th>Status</th></tr>`;
+    tbody.innerHTML = userHistoryData.deposits && userHistoryData.deposits.length ? "" : `<tr><td colspan="5" style="text-align:center; padding:15px; color:#94a3b8;">No add money requests found</td></tr>`;
+
+    if(userHistoryData.deposits) {
+      userHistoryData.deposits.forEach(d => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><b>#${d.reqId}</b></td>
+          <td><b>₹${d.amount}</b></td>
+          <td style="font-family:monospace;">${d.utr}</td>
+          <td>${d.date}</td>
+          <td><span class="badge ${d.status === 'Approved' ? 'badge-success' : (d.status === 'Rejected' ? 'badge-rejected' : 'badge-pending')}">${d.status}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+  }
+}
+
+// 2. Receipt Modal View Function
+function viewReceipt(item) {
+  // Heading & User details
+  document.getElementById('rcpUserId').innerText = currentUser ? currentUser.userId : "USR1001";
+  document.getElementById('rcpUserName').innerText = currentUser ? currentUser.name : "Customer";
+
+  // Transaction ID Priority Logic:
+  // Admin ne agar Operator Txn ID dali hai to wahi dikhegi, warna Auto Generated ID dikhegi
+  if (item.opTxnId && String(item.opTxnId).trim() !== "") {
+    document.getElementById('rcpTxnId').innerText = item.opTxnId;
+  } else {
+    document.getElementById('rcpTxnId').innerText = item.txnId;
+  }
+
+  document.getElementById('rcpMobile').innerText = "+91 " + item.mobile;
+  document.getElementById('rcpOperator').innerText = item.operator;
+  document.getElementById('rcpPlan').innerText = item.plan || "Standard Recharge Pack";
+  document.getElementById('rcpDate').innerText = item.date || new Date().toLocaleString();
+  document.getElementById('rcpAmount').innerText = "₹" + Number(item.amount).toFixed(2);
+
+  const statusEl = document.getElementById('rcpStatus');
+  statusEl.innerText = item.status;
+  statusEl.className = `badge ${item.status === 'Success' ? 'badge-success' : (item.status === 'Rejected' ? 'badge-rejected' : 'badge-pending')}`;
+
+  toggleModal('receiptModal', true);
+}
+
+// 3. Print / Save PDF Function
+function printReceipt() {
+  const content = document.getElementById('printableReceipt').innerHTML;
+  const printWindow = window.open('', '', 'height=600,width=500');
+  printWindow.document.write('<html><head><title>YK RECHARGE PORTAL - Receipt</title>');
+  printWindow.document.write('<style>body{font-family:system-ui,sans-serif;padding:20px;} .badge{padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700;} .badge-success{background:#d1fae5;color:#065f46;} .badge-rejected{background:#ffe4e6;color:#9f1239;} .badge-pending{background:#fef3c7;color:#b45309;}</style>');
+  printWindow.document.write('</head><body>');
+  printWindow.document.write(content);
+  printWindow.document.write('</body></html>');
+  printWindow.document.close();
+  printWindow.focus();
+  setTimeout(() => {
+    printWindow.print();
+    printWindow.close();
+  }, 500);
+}
+
 
     // ADMIN LOGIN
     async function adminLoginAction() {

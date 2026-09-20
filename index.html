@@ -41,7 +41,7 @@
     body:not(.light-mode) .logo { color: #38bdf8; }
 
     .header-controls { display: flex; align-items: center; gap: 8px; }
-    .theme-toggle-btn { background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; font-size: 15px; cursor: pointer; }
+    .theme-toggle-btn { background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; font-size: 15px; cursor: pointer; color: var(--text); }
 
     .tab-pills { background: #1e293b; padding: 4px; border-radius: 12px; display: flex; gap: 4px; }
     .tab-btn { background: transparent; border: none; color: #94a3b8; padding: 7px 12px; border-radius: 9px; font-weight: 700; font-size: 12px; cursor: pointer; }
@@ -127,7 +127,7 @@
   </header>
 
   <main>
-    <!-- HOME -->
+    <!-- 1. HOME VIEW -->
     <div id="homeView">
       <div class="hero">
         <h1>Fast & Secure Prepaid Mobile Recharge</h1>
@@ -166,7 +166,7 @@
       </div>
     </div>
 
-    <!-- USER AUTH -->
+    <!-- 2. USER AUTH -->
     <div id="authView" class="glass-box hidden" style="max-width: 400px; margin: 30px auto;">
       <div style="display: flex; margin-bottom: 18px; border-bottom: 2px solid var(--border);">
         <button id="tabLogin" onclick="toggleAuth('login')" style="flex:1; border:none; background:none; font-weight:700; padding:10px; color:#4f46e5; border-bottom:2px solid #4f46e5; cursor:pointer;">Login</button>
@@ -188,12 +188,12 @@
       </form>
     </div>
 
-    <!-- USER DASHBOARD -->
+    <!-- 3. USER DASHBOARD -->
     <div id="userDash" class="hidden">
       <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 18px;">
         <div class="glass-box" style="margin-bottom:0;">
           <label>Wallet Balance</label>
-          <div style="font-size: 28px; font-weight: 900; margin: 4px 0 10px; color:#38bdf8;">₹<span id="uBal">0.00</span></div>
+          <div style="font-size: 28px; font-weight: 900; margin: 4px 0 10px; color:#10b981; font-family:monospace;">₹<span id="uBal">0.00</span></div>
           <button class="btn btn-primary btn-sm" onclick="openAddMoneyModal()">+ Add Money (UPI QR)</button>
         </div>
         <div class="glass-box" style="margin-bottom:0; display:flex; flex-direction:column; justify-content:space-between;">
@@ -253,7 +253,7 @@
       </div>
     </div>
 
-    <!-- ADMIN HUB -->
+    <!-- 4. ADMIN HUB -->
     <div id="adminArea" class="hidden">
       <form id="adminAuthBox" class="glass-box" style="max-width: 360px; margin: 25px auto;" onsubmit="event.preventDefault(); adminLoginAction();">
         <h3 style="font-weight: 800; text-align: center; margin-bottom: 12px;">🔐 Admin Hub</h3>
@@ -277,23 +277,65 @@
 
         <div class="glass-box">
           <h3 style="font-size:14px; font-weight:800; margin-bottom:8px;">1. User Approvals & Access Control</h3>
-          <div class="table-responsive"><table><thead><tr><th>ID</th><th>Name</th><th>Mobile</th><th>Status</th><th>Action</th><th>Access</th></tr></thead><tbody id="adminUserRows"></tbody></table></div>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Mobile</th>
+                  <th>Balance</th>
+                  <th>Action</th>
+                  <th>Access</th>
+                </tr>
+              </thead>
+              <tbody id="adminUserRows"></tbody>
+            </table>
+          </div>
         </div>
 
         <div class="glass-box">
           <h3 style="font-size:14px; font-weight:800; margin-bottom:8px;">2. Wallet Deposit Slips</h3>
-          <div class="table-responsive"><table><thead><tr><th>Req ID</th><th>User</th><th>Amount</th><th>UTR</th><th>Action</th></tr></thead><tbody id="adminWalletRows"></tbody></table></div>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Req ID</th>
+                  <th>User</th>
+                  <th>Amount</th>
+                  <th>UTR</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminWalletRows"></tbody>
+            </table>
+          </div>
         </div>
 
         <div class="glass-box">
           <h3 style="font-size:14px; font-weight:800; margin-bottom:8px;">3. Recharge Orders</h3>
-          <div class="table-responsive"><table><thead><tr><th>Txn ID</th><th>User</th><th>Mobile</th><th>Op</th><th>Amount</th><th>Op Txn ID</th><th>Action</th></tr></thead><tbody id="adminRecRows"></tbody></table></div>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Txn ID</th>
+                  <th>User</th>
+                  <th>Mobile</th>
+                  <th>Op</th>
+                  <th>Amount</th>
+                  <th>Op Txn ID</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminRecRows"></tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
   </main>
 
-  <!-- OFFICIAL RECEIPT MODAL (SANITIZED COLUMNS BUG FIXED) -->
+  <!-- OFFICIAL RECEIPT MODAL -->
   <div id="receiptModal" class="modal-overlay hidden">
     <div class="modal-body" style="background:#ffffff; color:#0f172a; max-width: 430px;">
       <div id="printableReceipt" style="border: 2px dashed #cbd5e1; padding: 18px; border-radius: 14px; background: #fafafa;">
@@ -324,13 +366,13 @@
     </div>
   </div>
 
-  <!-- ADD MONEY MODAL -->
+  <!-- ADD MONEY MODAL (UPDATED DEFAULT TO 9939311744@ybl & GOOGLE DRIVE QR EMBED) -->
   <div id="addMoneyModal" class="modal-overlay hidden">
     <form class="modal-body" onsubmit="event.preventDefault(); submitDeposit();">
       <h3 style="font-weight: 800; font-size: 15px; text-align: center; margin-bottom: 8px;">Scan UPI QR to Add Money</h3>
       <div style="text-align: center; margin-bottom: 10px;">
-        <img id="uQrImg" src="" style="width:135px; height:135px; border:1px solid var(--border); border-radius:10px; background:#fff; padding:4px;" />
-        <p style="font-size: 11px; margin-top: 4px;">UPI ID: <b id="uUpiText">9939311744@paytm</b></p>
+        <img id="uQrImg" src="https://lh3.googleusercontent.com/d/1rALRSeljalViLvILLe8fRb_STRPJ_ucW" style="width:160px; height:160px; border:1px solid var(--border); border-radius:10px; background:#fff; padding:4px; object-fit:contain;" />
+        <p style="font-size: 12px; margin-top: 6px;">UPI ID: <b id="uUpiText" style="color:#38bdf8;">9939311744@ybl</b></p>
       </div>
       <div class="form-group"><label>Amount Paid (₹)</label><input type="number" id="wAmt" placeholder="500" enterkeyhint="next" /></div>
       <div class="form-group"><label>UTR / Ref Number (12 Digits)</label><input type="text" id="wUtr" maxlength="12" placeholder="12-digit UTR" enterkeyhint="go" /></div>
@@ -345,8 +387,8 @@
   <div id="adminQrModal" class="modal-overlay hidden">
     <form class="modal-body" onsubmit="event.preventDefault(); saveAdminQrAction();">
       <h3 style="font-weight:800; font-size:15px; margin-bottom:12px;">Set Live Payment QR / UPI</h3>
-      <div class="form-group"><label>Admin UPI ID</label><input type="text" id="setAdminUpi" placeholder="e.g. 9939311744@paytm" enterkeyhint="next" /></div>
-      <div class="form-group"><label>Direct QR Image Link (URL)</label><input type="text" id="setAdminQrUrl" placeholder="https://..." enterkeyhint="go" /></div>
+      <div class="form-group"><label>Admin UPI ID</label><input type="text" id="setAdminUpi" placeholder="e.g. 9939311744@ybl" enterkeyhint="next" /></div>
+      <div class="form-group"><label>Direct QR Image Link (URL)</label><input type="text" id="setAdminQrUrl" placeholder="https://lh3.googleusercontent.com/d/..." enterkeyhint="go" /></div>
       <div style="display:flex; gap:6px; margin-top:12px;">
         <button type="button" class="btn" style="background:var(--chip-bg); color:var(--text);" onclick="toggleModal('adminQrModal', false)">Cancel</button>
         <button type="submit" class="btn btn-primary" id="btnSaveQr">Save QR</button>
@@ -397,9 +439,10 @@
     let pendingApprovalTxn = null;
     let balanceSyncTimer = null;
 
+    // Default configuration set permanently to 9939311744@ybl and Direct Drive Image
     let liveQR = {
-      upiId: localStorage.getItem("yk_upi") || "9939311744@paytm",
-      qrUrl: localStorage.getItem("yk_qr") || "https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=upi://pay?pa=9939311744@paytm"
+      upiId: localStorage.getItem("yk_upi") || "9939311744@ybl",
+      qrUrl: localStorage.getItem("yk_qr") || "https://lh3.googleusercontent.com/d/1rALRSeljalViLvILLe8fRb_STRPJ_ucW"
     };
 
     const fallbackPlans = [
@@ -415,7 +458,6 @@
       { operator: "BSNL", amount: 197, validity: "70 Days", desc: "2GB/Day Pack" }
     ];
 
-    // THEME (DARK / LIGHT MODE)
     function initTheme() {
       const savedTheme = localStorage.getItem("yk_theme") || "dark";
       if (savedTheme === "light") {
@@ -433,7 +475,6 @@
       document.getElementById("themeToggle").innerText = isLight ? "🌙" : "☀️";
     }
 
-    // AUDIO & NOTIFICATION
     let audioCtx = null;
     function playBeep() {
       try {
@@ -455,7 +496,7 @@
       playBeep();
       showToast(message);
       if ("Notification" in window && Notification.permission === "granted") {
-        new Notification(title, { body: message, icon: "https://api.qrserver.com/v1/create-qr-code/?size=128x128&data=YKRecharge" });
+        new Notification(title, { body: message, icon: "https://lh3.googleusercontent.com/d/1rALRSeljalViLvILLe8fRb_STRPJ_ucW" });
       }
     }
 
@@ -774,7 +815,6 @@
         tbody.innerHTML = (userHistoryData.recharges && userHistoryData.recharges.length) ? "" : `<tr><td colspan="5" style="text-align:center;">No recharges found</td></tr>`;
 
         userHistoryData.recharges?.forEach((r, idx) => {
-          // Robust amount parsing
           let displayAmt = r.amount !== undefined ? r.amount : (r.amt || 0);
           const finalId = (r.opTxnId && String(r.opTxnId).trim() !== "") ? r.opTxnId : (r.txnId || `TXN${idx+1000}`);
           tbody.innerHTML += `<tr><td style="font-family:monospace; color:#4f46e5; font-weight:700;">${finalId}</td><td>${r.mobile}</td><td>₹${displayAmt}</td><td><span class="badge ${r.status === 'Success' ? 'badge-success' : 'badge-pending'}">${r.status}</span></td><td><button class="btn-sm" style="background:#e0e7ff; color:#4338ca; border:none; cursor:pointer;" onclick="showReceipt(${idx})">View</button></td></tr>`;
@@ -792,7 +832,6 @@
       }
     }
 
-    // SANITIZED RECEIPT POPUP (FIXES NaN & COLUMN MISALIGNMENT)
     function showReceipt(idx) {
       const r = userHistoryData.recharges[idx];
       if (!r) return;
@@ -800,7 +839,6 @@
       document.getElementById('rcpUserId').innerText = currentUser ? currentUser.userId : (r.userId || "USR");
       document.getElementById('rcpUserName').innerText = currentUser ? currentUser.name : "Customer";
       
-      // Fix Transaction ID: if opTxnId or txnId has "Success", fallback to valid ID
       let cleanTxnId = (r.opTxnId && String(r.opTxnId).trim() !== "" && r.opTxnId !== "Success") ? r.opTxnId : r.txnId;
       if (!cleanTxnId || cleanTxnId === "Success") {
         cleanTxnId = "TXN" + (r.mobile ? r.mobile.slice(-4) : "8453") + (idx + 101);
@@ -810,24 +848,17 @@
       document.getElementById('rcpMobile').innerText = "+91 " + (r.mobile || "");
       document.getElementById('rcpOperator').innerText = r.operator || r.op || "Prepaid";
 
-      // Fix Plan Details: if plan is number (like 299), display as amount pack
       let planText = r.plan || r.planDetails || "Standard Prepaid";
       if (!isNaN(planText)) {
         planText = `₹${planText} Unlimited Plan`;
       }
       document.getElementById('rcpPlan').innerText = planText;
 
-      // Fix Total Paid: extract valid numeric amount
       let numAmt = Number(r.amount);
-      if (isNaN(numAmt) || numAmt <= 0) {
-        numAmt = Number(r.amt);
-      }
-      if (isNaN(numAmt) || numAmt <= 0) {
-        numAmt = Number(r.plan);
-      }
-      if (isNaN(numAmt) || numAmt <= 0) {
-        numAmt = 299; // Fallback to avoid NaN
-      }
+      if (isNaN(numAmt) || numAmt <= 0) numAmt = Number(r.amt);
+      if (isNaN(numAmt) || numAmt <= 0) numAmt = Number(r.plan);
+      if (isNaN(numAmt) || numAmt <= 0) numAmt = 299;
+      
       document.getElementById('rcpAmount').innerText = "₹" + numAmt.toFixed(2);
 
       const st = (r.status && r.status !== "299") ? r.status : "Success";
@@ -849,7 +880,7 @@
       setTimeout(() => { pWin.print(); pWin.close(); }, 500);
     }
 
-    // ADMIN HUB
+    // ADMIN HUB ACTIONS
     async function adminLoginAction() {
       const u = document.getElementById('adminUser').value.trim();
       const p = document.getElementById('adminPass').value.trim();
@@ -892,18 +923,19 @@
         const data = await res.json();
         if (!data.success) return;
 
-        // Users with Freeze/Unfreeze
+        // Render Users with Live Balance Column
         const uBody = document.getElementById('adminUserRows');
         uBody.innerHTML = (data.users && data.users.length) ? "" : "<tr><td colspan='6'>No Users</td></tr>";
         data.users?.forEach(u => {
           const isFrz = u.status === 'Frozen';
+          const userBal = Number(u.balance !== undefined ? u.balance : 0).toFixed(2);
           uBody.innerHTML += `
             <tr>
               <td><b>${u.id}</b></td>
               <td>${u.name}</td>
               <td>${u.mobile}</td>
-              <td><span class="badge ${isFrz ? 'badge-frozen' : (u.status === 'Approved' ? 'badge-success' : 'badge-pending')}">${u.status}</span></td>
-              <td>${u.status === 'Pending' ? `<button class="btn-sm btn-success" onclick="resolveUser('${u.id}', 'Approved')">Approve</button>` : 'Done'}</td>
+              <td><b style="color:#10b981; font-family:monospace; font-size:13px;">₹${userBal}</b></td>
+              <td>${u.status === 'Pending' ? `<button class="btn-sm btn-success" onclick="resolveUser('${u.id}', 'Approved')">Approve</button>` : '<span style="color:#64748b; font-size:11px;">Done</span>'}</td>
               <td>
                 <button class="btn-sm ${isFrz ? 'btn-success' : 'btn-warning'}" onclick="toggleFreezeUser('${u.id}', '${isFrz ? 'Approved' : 'Frozen'}')">
                   ${isFrz ? 'Unfreeze' : 'Freeze'}

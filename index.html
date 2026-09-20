@@ -697,6 +697,15 @@ function triggerSystemNotification(title, message) {
         btn.disabled = false;
       }
     }
+            if (data.success) {
+          currentUser.balance = data.newBalance !== undefined ? data.newBalance : (currentUser.balance - amt);
+          localStorage.setItem("yk_user_session", JSON.stringify(currentUser));
+          document.getElementById('uBal').innerText = Number(currentUser.balance).toFixed(2);
+          
+          // 👉 Browser Sound & Push Notification (Recharge Requested)
+          triggerSystemNotification("Recharge Order Placed", `Your recharge of ₹${amt} is requested successfully!`);
+    }
+    
 
     // ADD MONEY (WALLET SLIP)
     async function openAddMoneyModal() {
@@ -725,7 +734,6 @@ function triggerSystemNotification(title, message) {
       const btn = document.getElementById('btnDeposit');
       btn.innerText = "Submitting...";
       btn.disabled = true;
-
       try {
         const res = await fetch(SCRIPT_URL, {
           method: "POST",
@@ -738,6 +746,41 @@ function triggerSystemNotification(title, message) {
           document.getElementById('wAmt').value = "";
           document.getElementById('wUtr').value = "";
         }
+            async function submitDeposit() {
+      const amt = Number(document.getElementById('wAmt').value);
+      const utr = document.getElementById('wUtr').value.trim();
+      const date = document.getElementById('wDate').value;
+      if (!amt || utr.length < 6 || !date) return showToast("Amount, 12-digit UTR aur Date bharein!", "error");
+
+      const btn = document.getElementById('btnDeposit');
+      btn.innerText = "Submitting...";
+      btn.disabled = true;
+
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: "add_money_request", userId: currentUser.userId, amount: amt, utr, date })
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+          // 👉 Browser Sound & Push Notification (Deposit Requested)
+          triggerSystemNotification("Add Money Requested", "Your transaction is requested! Waiting for admin approval.");
+          toggleModal('addMoneyModal', false);
+          document.getElementById('wAmt').value = "";
+          document.getElementById('wUtr').value = "";
+        } else {
+          showToast(data.message || "Submission failed!", "error");
+        }
+      } catch(e) {
+        triggerSystemNotification("Add Money Requested", "Your transaction is requested! Waiting for admin approval.");
+        toggleModal('addMoneyModal', false);
+      } finally {
+        btn.innerText = "Submit Slip";
+        btn.disabled = false;
+      }
+            }
+        
       } catch(e) {
         showToast("Deposit slip sent to admin!", "success");
         toggleModal('addMoneyModal', false);

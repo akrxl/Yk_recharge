@@ -17,80 +17,52 @@
       --contact-bg: #0b1120;
       --chip-bg: #1a243b;
     }
-
     body.light-mode {
-      --bg: #f1f5f9;
-      --card-bg: #ffffff;
-      --text: #0f172a;
-      --text-muted: #64748b;
-      --border: #cbd5e1;
-      --header-bg: #ffffff;
-      --input-bg: #ffffff;
+      --bg: #f1f5f9; --card-bg: #ffffff; --text: #0f172a; --text-muted: #64748b;
+      --border: #cbd5e1; --header-bg: #ffffff; --input-bg: #ffffff;
       --hero-grad: linear-gradient(135deg, #4338ca, #312e81);
-      --contact-bg: #f8fafc;
-      --chip-bg: #f1f5f9;
+      --contact-bg: #f8fafc; --chip-bg: #f1f5f9;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; transition: background 0.25s, color 0.25s; }
     body { background: var(--bg); min-height: 100vh; color: var(--text); padding-bottom: 60px; }
-    
     header { background: var(--header-bg); position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.06); }
     .nav-container { max-width: 960px; margin: auto; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
-    .logo { font-size: 1.15rem; font-weight: 900; color: #4338ca; display: flex; align-items: center; gap: 6px; }
-    body.light-mode .logo { color: #4338ca; }
-    body:not(.light-mode) .logo { color: #38bdf8; }
-
+    .logo { font-size: 1.15rem; font-weight: 900; display: flex; align-items: center; gap: 6px; }
+    body.light-mode .logo { color: #4338ca; } body:not(.light-mode) .logo { color: #38bdf8; }
     .header-controls { display: flex; align-items: center; gap: 8px; }
-    .theme-toggle-btn { background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; font-size: 15px; cursor: pointer; color: var(--text); }
-
+    .theme-toggle-btn { background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 50%; width: 34px; height: 34px; display: flex; justify-content: center; align-items: center; font-size: 15px; cursor: pointer; color: var(--text); }
     .tab-pills { background: #1e293b; padding: 4px; border-radius: 12px; display: flex; gap: 4px; }
     .tab-btn { background: transparent; border: none; color: #94a3b8; padding: 7px 12px; border-radius: 9px; font-weight: 700; font-size: 12px; cursor: pointer; }
     .tab-btn.active { background: #4f46e5; color: #fff; box-shadow: 0 3px 10px rgba(79,70,229,0.35); }
-
     main { max-width: 960px; margin: 20px auto; padding: 0 16px; }
     .glass-box { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 22px; box-shadow: 0 12px 30px rgba(0,0,0,0.16); margin-bottom: 20px; }
     .hidden { display: none !important; }
-
-    /* HERO */
     .hero { text-align: center; padding: 32px 18px; background: var(--hero-grad); border-radius: 20px; color: #fff; margin-bottom: 22px; }
     .hero h1 { font-size: 24px; font-weight: 900; margin-bottom: 6px; }
     .hero p { font-size: 13px; opacity: 0.9; max-width: 560px; margin: auto; line-height: 1.6; }
     .service-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 18px; }
     .service-card { background: rgba(255,255,255,0.12); padding: 12px; border-radius: 12px; text-align: center; }
-    .service-card h4 { font-size: 14px; margin-bottom: 3px; }
-    .service-card p { font-size: 11px; opacity: 0.85; }
-
-    /* CONTACT */
     .contact-card { background: var(--contact-bg); border: 1.5px solid var(--border); border-radius: 16px; padding: 18px; display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 18px; }
     @media (min-width: 640px) { .contact-card { grid-template-columns: 1fr 1fr; align-items: center; } }
-    .wa-btn { background: #25d366; color: #fff; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 18px; border-radius: 12px; font-weight: 700; font-size: 13px; box-shadow: 0 4px 12px rgba(37,211,102,0.3); }
-
-    /* FORMS */
+    .wa-btn { background: #25d366; color: #fff; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 18px; border-radius: 12px; font-weight: 700; font-size: 13px; }
     .form-group { margin-bottom: 14px; }
     label { display: block; font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
     input, select { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1.5px solid var(--border); font-size: 14px; background: var(--input-bg); color: var(--text); outline: none; }
-    input:focus, select:focus { border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79,70,229,0.18); }
-    
+    input:focus, select:focus { border-color: #4f46e5; }
     .btn { width: 100%; padding: 12px; border: none; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; }
-    .btn-primary { background: #4f46e5; color: #fff; box-shadow: 0 4px 14px rgba(79,70,229,0.35); }
+    .btn-primary { background: #4f46e5; color: #fff; }
     .btn-success { background: #059669; color: #fff; }
     .btn-danger { background: #e11d48; color: #fff; }
     .btn-warning { background: #d97706; color: #fff; }
-    .btn-sm { width: auto; padding: 5px 10px; font-size: 11px; border-radius: 7px; }
-
-    /* OPERATOR PILLS */
+    .btn-sm { width: auto; padding: 6px 12px; font-size: 11px; border-radius: 7px; }
     .op-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
     .op-pill { background: var(--chip-bg); border: 1.5px solid var(--border); border-radius: 10px; padding: 10px 4px; text-align: center; cursor: pointer; font-size: 12px; font-weight: 800; color: var(--text); }
     .op-pill.active { border-color: #4f46e5; background: #e0e7ff; color: #4338ca; }
-
     .chip-row { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
     .chip { background: var(--chip-bg); border: 1px solid var(--border); padding: 5px 12px; border-radius: 18px; font-size: 12px; font-weight: 700; cursor: pointer; color: var(--text); }
     .chip:hover { border-color: #4f46e5; color: #4338ca; }
-
     .plan-card { padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
     .plan-card:hover { border-color: #4f46e5; }
-
-    /* TABLES */
     .table-responsive { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; }
     table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: left; }
     th { background: var(--input-bg); padding: 10px; color: var(--text-muted); font-weight: 700; white-space: nowrap; }
@@ -99,11 +71,8 @@
     .badge-pending { background: #fef3c7; color: #b45309; }
     .badge-success { background: #d1fae5; color: #065f46; }
     .badge-frozen { background: #fee2e2; color: #dc2626; }
-
-    /* MODAL */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; padding: 16px; z-index: 100; }
     .modal-body { background: var(--card-bg); border-radius: 20px; width: 100%; max-width: 440px; padding: 22px; box-shadow: 0 20px 45px rgba(0,0,0,0.3); border: 1px solid var(--border); }
-
     #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); opacity: 0; z-index: 200; background: #1e293b; color: #fff; padding: 11px 20px; border-radius: 30px; font-size: 12.5px; font-weight: 600; transition: 0.3s; pointer-events: none; }
     #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
   </style>
@@ -116,7 +85,7 @@
     <div class="nav-container">
       <div class="logo">⚡ YK RECHARGE PORTAL</div>
       <div class="header-controls">
-        <button id="themeToggle" class="theme-toggle-btn" onclick="toggleThemeMode()" title="Toggle Dark/Light Mode">☀️</button>
+        <button id="themeToggle" class="theme-toggle-btn" onclick="toggleThemeMode()" title="Theme">☀️</button>
         <div class="tab-pills">
           <button id="navHome" class="tab-btn active" onclick="switchNav('home')">Home</button>
           <button id="navUser" class="tab-btn" onclick="switchNav('user')">User Area</button>
@@ -127,7 +96,6 @@
   </header>
 
   <main>
-    <!-- 1. HOME VIEW -->
     <div id="homeView">
       <div class="hero">
         <h1>Fast & Secure Prepaid Mobile Recharge</h1>
@@ -138,47 +106,31 @@
           <div class="service-card"><h4>🧾 Official Receipts</h4><p>PDF & Print supported</p></div>
         </div>
       </div>
-
       <div class="glass-box">
         <h3 style="font-size: 17px; font-weight: 900; color: #4338ca; margin-bottom: 6px;">About YK RECHARGE PORTAL</h3>
-        <p style="font-size: 13px; color: var(--text-muted); line-height: 1.7;">
-          YK Recharge Portal is an authorized retail prepaid mobile service provider located in Raxaul, Bihar. We offer reliable mobile recharge top-ups, instant wallet balance management, and digital confirmation invoices for all major telecom operators.
-        </p>
-
+        <p style="font-size: 13px; color: var(--text-muted); line-height: 1.7;">Authorized retail prepaid mobile service provider located in Raxaul, Bihar.</p>
         <div class="contact-card">
           <div>
             <h4 style="font-size: 14px; font-weight: 800; margin-bottom: 4px;">📍 Office Address</h4>
-            <p style="font-size: 12.5px; line-height: 1.5;">
-              <b>YK RECHARGE PORTAL</b><br>
-              Chanduli, Raxaul, East Champaran, Bihar - 845305
-            </p>
-            <p style="font-size: 12.5px; margin-top: 6px;">
-              📞 Call / Helpline: <b>+91 99393-11744</b>
-            </p>
+            <p style="font-size: 12.5px; line-height: 1.5;"><b>YK RECHARGE PORTAL</b><br>Chanduli, Raxaul, East Champaran, Bihar - 845305<br>📞 Call: <b>+91 99393-11744</b></p>
           </div>
           <div style="text-align: center;">
-            <a href="https://wa.me/919939311744?text=Hello%20YK%20Recharge%20Portal%2C%20I%20need%20support" target="_blank" class="wa-btn">
-              💬 Chat on WhatsApp (+91 99393-11744)
-            </a>
-            <p style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">Instant priority retail support</p>
+            <a href="https://wa.me/919939311744?text=Hello" target="_blank" class="wa-btn">💬 Chat on WhatsApp</a>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 2. USER AUTH -->
     <div id="authView" class="glass-box hidden" style="max-width: 400px; margin: 30px auto;">
       <div style="display: flex; margin-bottom: 18px; border-bottom: 2px solid var(--border);">
         <button id="tabLogin" onclick="toggleAuth('login')" style="flex:1; border:none; background:none; font-weight:700; padding:10px; color:#4f46e5; border-bottom:2px solid #4f46e5; cursor:pointer;">Login</button>
         <button id="tabReg" onclick="toggleAuth('reg')" style="flex:1; border:none; background:none; font-weight:700; padding:10px; color:var(--text-muted); cursor:pointer;">Register</button>
       </div>
-
       <form id="loginForm" onsubmit="event.preventDefault(); loginAction();">
         <div class="form-group"><label>Registered Mobile</label><input type="tel" id="lMobile" maxlength="10" placeholder="10-digit mobile" enterkeyhint="next" /></div>
         <div class="form-group"><label>Password</label><input type="password" id="lPass" placeholder="••••••••" enterkeyhint="go" /></div>
         <button type="submit" class="btn btn-primary" id="btnLogin">Sign In</button>
       </form>
-
       <form id="regForm" class="hidden" onsubmit="event.preventDefault(); registerAction();">
         <div class="form-group"><label>Full Name</label><input type="text" id="rName" placeholder="Full name" enterkeyhint="next" /></div>
         <div class="form-group"><label>Mobile</label><input type="tel" id="rMobile" maxlength="10" placeholder="10-digit mobile" enterkeyhint="next" /></div>
@@ -188,7 +140,6 @@
       </form>
     </div>
 
-    <!-- 3. USER DASHBOARD -->
     <div id="userDash" class="hidden">
       <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 18px;">
         <div class="glass-box" style="margin-bottom:0;">
@@ -212,16 +163,11 @@
         </div>
       </div>
 
-      <!-- RECHARGE PANEL -->
       <div id="userRechargeBox" class="glass-box">
         <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 12px;">Prepaid Mobile Recharge</h3>
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px;">
           <form onsubmit="event.preventDefault(); startRecharge();">
-            <div class="form-group">
-              <label>Mobile Number (Auto Detect)</label>
-              <input type="tel" id="recMobile" maxlength="10" placeholder="10-digit number" oninput="autoDetect(this.value)" enterkeyhint="next" />
-            </div>
-
+            <div class="form-group"><label>Mobile Number (Auto Detect)</label><input type="tel" id="recMobile" maxlength="10" placeholder="10-digit number" oninput="autoDetect(this.value)" enterkeyhint="next" /></div>
             <label>Telecom Operator</label>
             <div class="op-row">
               <div id="opJio" class="op-pill active" onclick="selectOp('Jio')">JIO</div>
@@ -230,16 +176,13 @@
               <div id="opBsnl" class="op-pill" onclick="selectOp('BSNL')">BSNL</div>
             </div>
             <input type="hidden" id="recOp" value="Jio" />
-
             <div class="form-group">
               <label>Recharge Amount (₹)</label>
               <input type="number" id="recAmt" placeholder="Plan Amount" enterkeyhint="go" />
               <div id="dynamicChips" class="chip-row"></div>
             </div>
-
             <button type="submit" class="btn btn-primary" id="btnRec">Recharge Now</button>
           </form>
-
           <div>
             <label>Available Plans</label>
             <div id="plansList" style="max-height: 250px; overflow-y: auto;"></div>
@@ -253,7 +196,7 @@
       </div>
     </div>
 
-    <!-- 4. ADMIN HUB -->
+    <!-- ADMIN HUB -->
     <div id="adminArea" class="hidden">
       <form id="adminAuthBox" class="glass-box" style="max-width: 360px; margin: 25px auto;" onsubmit="event.preventDefault(); adminLoginAction();">
         <h3 style="font-weight: 800; text-align: center; margin-bottom: 12px;">🔐 Admin Hub</h3>
@@ -275,67 +218,46 @@
           </div>
         </div>
 
+        <!-- 4. MANAGE PLANS SECTION ADDED HERE -->
         <div class="glass-box">
-          <h3 style="font-size:14px; font-weight:800; margin-bottom:8px;">1. User Approvals & Access Control</h3>
+          <h3 style="font-size:14px; font-weight:800; margin-bottom:10px; color:#38bdf8;">1. Manage Recharge Plans</h3>
+          <form onsubmit="event.preventDefault(); adminAddPlan();" style="display:flex; gap:6px; margin-bottom:12px; flex-wrap:wrap;">
+            <select id="apOp" style="flex:1; min-width:80px;"><option>Jio</option><option>Airtel</option><option>Vi</option><option>BSNL</option></select>
+            <input type="number" id="apAmt" placeholder="Amt(₹)" style="flex:1; min-width:70px;" required/>
+            <input type="text" id="apVal" placeholder="Validity" style="flex:1; min-width:80px;" required/>
+            <input type="text" id="apDesc" placeholder="Description" style="flex:2; min-width:120px;" required/>
+            <button type="submit" class="btn btn-primary btn-sm" id="btnPlanAdd">Add Plan</button>
+          </form>
           <div class="table-responsive">
-            <table>
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>Mobile</th>
-                  <th>Balance</th>
-                  <th>Action</th>
-                  <th>Access</th>
-                </tr>
-              </thead>
-              <tbody id="adminUserRows"></tbody>
-            </table>
+            <table><thead><tr><th>Op</th><th>Amt</th><th>Validity</th><th>Description</th></tr></thead><tbody id="adminPlanRows"></tbody></table>
           </div>
         </div>
 
         <div class="glass-box">
-          <h3 style="font-size:14px; font-weight:800; margin-bottom:8px;">2. Wallet Deposit Slips</h3>
+          <h3 style="font-size:14px; font-weight:800; margin-bottom:8px; color:#38bdf8;">2. User Approvals & Access Control</h3>
           <div class="table-responsive">
-            <table>
-              <thead>
-                <tr>
-                  <th>Req ID</th>
-                  <th>User</th>
-                  <th>Amount</th>
-                  <th>UTR</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody id="adminWalletRows"></tbody>
-            </table>
+            <table><thead><tr><th>ID</th><th>Name</th><th>Mobile</th><th>Balance</th><th>Action</th><th>Access</th></tr></thead><tbody id="adminUserRows"></tbody></table>
           </div>
         </div>
 
         <div class="glass-box">
-          <h3 style="font-size:14px; font-weight:800; margin-bottom:8px;">3. Recharge Orders</h3>
+          <h3 style="font-size:14px; font-weight:800; margin-bottom:8px; color:#38bdf8;">3. Wallet Deposit Slips</h3>
           <div class="table-responsive">
-            <table>
-              <thead>
-                <tr>
-                  <th>Txn ID</th>
-                  <th>User</th>
-                  <th>Mobile</th>
-                  <th>Op</th>
-                  <th>Amount</th>
-                  <th>Op Txn ID</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody id="adminRecRows"></tbody>
-            </table>
+            <table><thead><tr><th>Req ID</th><th>User</th><th>Amount</th><th>UTR</th><th>Action</th></tr></thead><tbody id="adminWalletRows"></tbody></table>
+          </div>
+        </div>
+
+        <div class="glass-box">
+          <h3 style="font-size:14px; font-weight:800; margin-bottom:8px; color:#38bdf8;">4. Recharge Orders</h3>
+          <div class="table-responsive">
+            <table><thead><tr><th>Txn ID</th><th>User</th><th>Mobile</th><th>Op</th><th>Amount</th><th>Op Txn ID</th><th>Action</th></tr></thead><tbody id="adminRecRows"></tbody></table>
           </div>
         </div>
       </div>
     </div>
   </main>
 
-  <!-- OFFICIAL RECEIPT MODAL -->
+  <!-- RECEIPT MODAL -->
   <div id="receiptModal" class="modal-overlay hidden">
     <div class="modal-body" style="background:#ffffff; color:#0f172a; max-width: 430px;">
       <div id="printableReceipt" style="border: 2px dashed #cbd5e1; padding: 18px; border-radius: 14px; background: #fafafa;">
@@ -344,7 +266,6 @@
           <p style="font-size: 10.5px; color: #64748b; margin-top:2px;">Chanduli, Raxaul, Bihar (845305) | +91 99393-11744</p>
           <span style="font-size: 9.5px; font-weight: 800; color: #059669; text-transform: uppercase;">Official Confirmation Slip</span>
         </div>
-
         <div style="font-size: 12px; line-height: 1.8; color: #334155;">
           <div style="display:flex; justify-content:space-between;"><span>User ID:</span><b id="rcpUserId">-</b></div>
           <div style="display:flex; justify-content:space-between;"><span>Customer:</span><b id="rcpUserName">-</b></div>
@@ -366,17 +287,18 @@
     </div>
   </div>
 
-  <!-- ADD MONEY MODAL (UPDATED DEFAULT TO 9939311744@ybl & GOOGLE DRIVE QR EMBED) -->
+  <!-- ADD MONEY MODAL (DATE INPUT ADDED & QR SET) -->
   <div id="addMoneyModal" class="modal-overlay hidden">
     <form class="modal-body" onsubmit="event.preventDefault(); submitDeposit();">
       <h3 style="font-weight: 800; font-size: 15px; text-align: center; margin-bottom: 8px;">Scan UPI QR to Add Money</h3>
       <div style="text-align: center; margin-bottom: 10px;">
-        <img id="uQrImg" src="https://lh3.googleusercontent.com/d/1rALRSeljalViLvILLe8fRb_STRPJ_ucW" style="width:160px; height:160px; border:1px solid var(--border); border-radius:10px; background:#fff; padding:4px; object-fit:contain;" />
+        <img id="uQrImg" src="" style="width:160px; height:160px; border:1px solid var(--border); border-radius:10px; background:#fff; padding:4px; object-fit:contain;" />
         <p style="font-size: 12px; margin-top: 6px;">UPI ID: <b id="uUpiText" style="color:#38bdf8;">9939311744@ybl</b></p>
       </div>
-      <div class="form-group"><label>Amount Paid (₹)</label><input type="number" id="wAmt" placeholder="500" enterkeyhint="next" /></div>
-      <div class="form-group"><label>UTR / Ref Number (12 Digits)</label><input type="text" id="wUtr" maxlength="12" placeholder="12-digit UTR" enterkeyhint="go" /></div>
-      <div style="display:flex; gap:6px;">
+      <div class="form-group"><label>Amount Paid (₹)</label><input type="number" id="wAmt" placeholder="500" enterkeyhint="next" required/></div>
+      <div class="form-group"><label>UTR / Ref Number (12 Digits)</label><input type="text" id="wUtr" maxlength="12" placeholder="12-digit UTR" enterkeyhint="next" required/></div>
+      <div class="form-group"><label>Payment Date</label><input type="date" id="wDate" enterkeyhint="go" required/></div>
+      <div style="display:flex; gap:6px; margin-top:8px;">
         <button type="button" class="btn" style="background:var(--chip-bg); color:var(--text);" onclick="toggleModal('addMoneyModal', false)">Cancel</button>
         <button type="submit" class="btn btn-primary" id="btnDeposit">Submit Slip</button>
       </div>
@@ -387,8 +309,8 @@
   <div id="adminQrModal" class="modal-overlay hidden">
     <form class="modal-body" onsubmit="event.preventDefault(); saveAdminQrAction();">
       <h3 style="font-weight:800; font-size:15px; margin-bottom:12px;">Set Live Payment QR / UPI</h3>
-      <div class="form-group"><label>Admin UPI ID</label><input type="text" id="setAdminUpi" placeholder="e.g. 9939311744@ybl" enterkeyhint="next" /></div>
-      <div class="form-group"><label>Direct QR Image Link (URL)</label><input type="text" id="setAdminQrUrl" placeholder="https://lh3.googleusercontent.com/d/..." enterkeyhint="go" /></div>
+      <div class="form-group"><label>Admin UPI ID</label><input type="text" id="setAdminUpi" placeholder="9939311744@ybl" enterkeyhint="next" /></div>
+      <div class="form-group"><label>Direct QR Image Link</label><input type="text" id="setAdminQrUrl" placeholder="https://lh3.googleusercontent.com/..." enterkeyhint="go" /></div>
       <div style="display:flex; gap:6px; margin-top:12px;">
         <button type="button" class="btn" style="background:var(--chip-bg); color:var(--text);" onclick="toggleModal('adminQrModal', false)">Cancel</button>
         <button type="submit" class="btn btn-primary" id="btnSaveQr">Save QR</button>
@@ -418,10 +340,7 @@
     <form class="modal-body" onsubmit="event.preventDefault(); confirmAdminSuccess();">
       <h3 style="font-weight: 800; font-size: 15px; margin-bottom: 8px;">Approve Recharge Order</h3>
       <p style="font-size: 11px; margin-bottom: 10px;">Order: <b id="asmTxnId">-</b></p>
-      <div class="form-group">
-        <label>Operator Reference ID (Optional)</label>
-        <input type="text" id="asmOperatorId" placeholder="Leave empty for auto Txn ID" enterkeyhint="go" />
-      </div>
+      <div class="form-group"><label>Operator Ref ID (Optional)</label><input type="text" id="asmOperatorId" placeholder="Leave empty for auto Txn ID" enterkeyhint="go" /></div>
       <div style="display:flex; gap:6px;">
         <button type="button" class="btn" style="background:var(--chip-bg); color:var(--text);" onclick="toggleModal('adminSuccessModal', false)">Cancel</button>
         <button type="submit" class="btn btn-success" id="btnAdminSuccess">Confirm Success</button>
@@ -439,23 +358,18 @@
     let pendingApprovalTxn = null;
     let balanceSyncTimer = null;
 
-    // Default configuration set permanently to 9939311744@ybl and Direct Drive Image
     let liveQR = {
       upiId: localStorage.getItem("yk_upi") || "9939311744@ybl",
       qrUrl: localStorage.getItem("yk_qr") || "https://lh3.googleusercontent.com/d/1rALRSeljalViLvILLe8fRb_STRPJ_ucW"
     };
 
-    const fallbackPlans = [
+    let livePlans = [
       { operator: "Jio", amount: 199, validity: "23 Days", desc: "1.5GB/Day + Calls" },
       { operator: "Jio", amount: 239, validity: "28 Days", desc: "1.5GB/Day + Calls" },
       { operator: "Jio", amount: 299, validity: "28 Days", desc: "2.0GB/Day + Calls" },
       { operator: "Airtel", amount: 199, validity: "24 Days", desc: "1.0GB/Day Pack" },
-      { operator: "Airtel", amount: 239, validity: "24 Days", desc: "1.5GB/Day Pack" },
-      { operator: "Airtel", amount: 299, validity: "28 Days", desc: "1.5GB/Day Pack" },
-      { operator: "Vi", amount: 199, validity: "28 Days", desc: "1.0GB/Day Pack" },
       { operator: "Vi", amount: 299, validity: "28 Days", desc: "1.5GB/Day Pack" },
-      { operator: "BSNL", amount: 107, validity: "35 Days", desc: "3GB Data + Calls" },
-      { operator: "BSNL", amount: 197, validity: "70 Days", desc: "2GB/Day Pack" }
+      { operator: "BSNL", amount: 107, validity: "35 Days", desc: "3GB Data + Calls" }
     ];
 
     function initTheme() {
@@ -486,9 +400,7 @@
         osc.type = 'sine';
         osc.frequency.setValueAtTime(750, audioCtx.currentTime);
         gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-        osc.start();
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.45);
-        osc.stop(audioCtx.currentTime + 0.45);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.45);
       } catch(e) {}
     }
 
@@ -506,20 +418,15 @@
       setTimeout(() => { t.className = ""; }, 3200);
     }
 
-    function toggleModal(id, show) {
-      document.getElementById(id).classList.toggle('hidden', !show);
-    }
+    function toggleModal(id, show) { document.getElementById(id).classList.toggle('hidden', !show); }
 
     function setupFormEnterNavigation() {
       document.querySelectorAll('form').forEach(f => {
-        const inputs = Array.from(f.querySelectorAll('input:not([type="hidden"])'));
+        const inputs = Array.from(f.querySelectorAll('input:not([type="hidden"]), select'));
         inputs.forEach((inp, i) => {
           inp.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.keyCode === 13) {
-              if (i < inputs.length - 1) {
-                e.preventDefault();
-                inputs[i + 1].focus();
-              }
+              if (i < inputs.length - 1) { e.preventDefault(); inputs[i + 1].focus(); }
             }
           });
         });
@@ -552,9 +459,9 @@
     function toggleAuth(mode) {
       document.getElementById('loginForm').classList.toggle('hidden', mode !== 'login');
       document.getElementById('regForm').classList.toggle('hidden', mode === 'login');
-      document.getElementById('tabLogin').style.color = mode === 'login' ? '#4f46e5' : '#94a3b8';
+      document.getElementById('tabLogin').style.color = mode === 'login' ? '#4f46e5' : 'var(--text-muted)';
       document.getElementById('tabLogin').style.borderBottom = mode === 'login' ? '2px solid #4f46e5' : 'none';
-      document.getElementById('tabReg').style.color = mode === 'reg' ? '#4f46e5' : '#94a3b8';
+      document.getElementById('tabReg').style.color = mode === 'reg' ? '#4f46e5' : 'var(--text-muted)';
       document.getElementById('tabReg').style.borderBottom = mode === 'reg' ? '2px solid #4f46e5' : 'none';
     }
 
@@ -572,6 +479,16 @@
       b.className = `badge ${isFrozen ? 'badge-frozen' : 'badge-success'}`;
 
       startLiveBalancePolling();
+    }
+
+    // SYNC DATA (Plans & Balance)
+    async function fetchLivePlans() {
+      try {
+        const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "get_plans" }) });
+        const data = await res.json();
+        if (data.success && data.plans.length > 0) livePlans = data.plans;
+        if (currentUser) selectOp('Jio');
+      } catch(e) {}
     }
 
     async function syncBalanceLive() {
@@ -619,29 +536,18 @@
 
       const btn = document.getElementById('btnLogin');
       btn.innerText = "Checking..."; btn.disabled = true;
-
       try {
-        const res = await fetch(SCRIPT_URL, {
-          method: "POST",
-          body: JSON.stringify({ action: "login", mobile, password })
-        });
+        const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "login", mobile, password }) });
         const data = await res.json();
         if (data.success) {
-          if (data.user.status === "Frozen") {
-            showToast("Aapka account freeze hai! Admin se contact karein.");
-          }
+          if (data.user.status === "Frozen") showToast("Aapka account freeze hai!");
           currentUser = data.user;
           localStorage.setItem("yk_user_session", JSON.stringify(currentUser));
           switchNav('user');
           showToast(`Welcome ${currentUser.name}!`);
-        } else {
-          showToast(data.message || "Invalid Login");
-        }
-      } catch(e) {
-        showToast("Connection error");
-      } finally {
-        btn.innerText = "Sign In"; btn.disabled = false;
-      }
+        } else { showToast(data.message || "Invalid Login"); }
+      } catch(e) { showToast("Connection error"); }
+      finally { btn.innerText = "Sign In"; btn.disabled = false; }
     }
 
     async function registerAction() {
@@ -653,20 +559,13 @@
 
       const btn = document.getElementById('btnReg');
       btn.innerText = "Submitting..."; btn.disabled = true;
-
       try {
-        const res = await fetch(SCRIPT_URL, {
-          method: "POST",
-          body: JSON.stringify({ action: "register", name, mobile, email, password })
-        });
+        const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "register", name, mobile, email, password }) });
         const data = await res.json();
         showToast(data.message);
         if (data.success) toggleAuth('login');
-      } catch(e) {
-        showToast("Registration error");
-      } finally {
-        btn.innerText = "Submit Registration"; btn.disabled = false;
-      }
+      } catch(e) { showToast("Registration error"); }
+      finally { btn.innerText = "Submit Registration"; btn.disabled = false; }
     }
 
     function logoutAction() {
@@ -703,7 +602,7 @@
       chips.innerHTML = "";
       list.innerHTML = "";
 
-      const filtered = fallbackPlans.filter(p => p.operator.toLowerCase() === op.toLowerCase());
+      const filtered = livePlans.filter(p => p.operator.toLowerCase() === op.toLowerCase());
       filtered.forEach(p => {
         const c = document.createElement('span');
         c.className = "chip"; c.innerText = "₹" + p.amount;
@@ -719,9 +618,7 @@
     }
 
     async function startRecharge() {
-      if (currentUser && currentUser.status === "Frozen") {
-        return showToast("Aapka account frozen hai!");
-      }
+      if (currentUser && currentUser.status === "Frozen") return showToast("Aapka account frozen hai!");
 
       const mobile = document.getElementById('recMobile').value.trim();
       const op = document.getElementById('recOp').value;
@@ -731,29 +628,21 @@
 
       const btn = document.getElementById('btnRec');
       btn.innerText = "Processing..."; btn.disabled = true;
-
       try {
-        const res = await fetch(SCRIPT_URL, {
-          method: "POST",
-          body: JSON.stringify({ action: "create_recharge", userId: currentUser.userId, mobile, operator: op, amount: amt, planDetails: selectedPlanDesc })
-        });
+        const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "create_recharge", userId: currentUser.userId, mobile, operator: op, amount: amt, planDetails: selectedPlanDesc }) });
         const data = await res.json();
         if (data.success) {
           currentUser.balance -= amt;
           localStorage.setItem("yk_user_session", JSON.stringify(currentUser));
           renderUserData();
           showToast(`Recharge requested! ID: ${data.txnId}`);
-        } else {
-          showToast(data.message);
-        }
-      } catch(e) {
-        showToast("Recharge order submitted for approval");
-      } finally {
-        btn.innerText = "Recharge Now"; btn.disabled = false;
-      }
+        } else { showToast(data.message); }
+      } catch(e) { showToast("Recharge order submitted for approval"); }
+      finally { btn.innerText = "Recharge Now"; btn.disabled = false; }
     }
 
     function openAddMoneyModal() {
+      document.getElementById('wDate').valueAsDate = new Date(); // Date Input default today
       document.getElementById('uUpiText').innerText = liveQR.upiId;
       document.getElementById('uQrImg').src = liveQR.qrUrl;
       toggleModal('addMoneyModal', true);
@@ -762,43 +651,30 @@
     async function submitDeposit() {
       const amt = Number(document.getElementById('wAmt').value);
       const utr = document.getElementById('wUtr').value.trim();
-      if (!amt || utr.length < 6) return showToast("Amount aur 12-digit UTR enter karein");
+      const dt = document.getElementById('wDate').value;
+      if (!amt || utr.length < 6 || !dt) return showToast("Amount, UTR, aur Date bharein!");
 
       const btn = document.getElementById('btnDeposit');
       btn.innerText = "Submitting..."; btn.disabled = true;
-
       try {
-        const res = await fetch(SCRIPT_URL, {
-          method: "POST",
-          body: JSON.stringify({ action: "add_money_request", userId: currentUser.userId, amount: amt, utr, date: new Date().toISOString().split('T')[0] })
-        });
+        const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "add_money_request", userId: currentUser.userId, amount: amt, utr, date: dt }) });
         const data = await res.json();
         showToast(data.message || "Slip submitted");
         toggleModal('addMoneyModal', false);
-        document.getElementById('wAmt').value = "";
-        document.getElementById('wUtr').value = "";
+        document.getElementById('wAmt').value = ""; document.getElementById('wUtr').value = "";
       } catch(e) {
         showToast("Slip submitted to admin");
         toggleModal('addMoneyModal', false);
-      } finally {
-        btn.innerText = "Submit Slip"; btn.disabled = false;
-      }
+      } finally { btn.innerText = "Submit Slip"; btn.disabled = false; }
     }
 
     async function openHistory(tab) {
       toggleModal('historyModal', true);
       renderHistoryTab(tab);
-
       try {
-        const res = await fetch(SCRIPT_URL, {
-          method: "POST",
-          body: JSON.stringify({ action: "get_user_history", userId: currentUser.userId, mobile: currentUser.mobile })
-        });
+        const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "get_user_history", userId: currentUser.userId, mobile: currentUser.mobile }) });
         const data = await res.json();
-        if (data.success) {
-          userHistoryData = data;
-          renderHistoryTab(tab);
-        }
+        if (data.success) { userHistoryData = data; renderHistoryTab(tab); }
       } catch(e) {}
     }
 
@@ -812,7 +688,7 @@
         tabRec.style.background = "#4f46e5"; tabRec.style.color = "#fff";
         tabDep.style.background = "var(--chip-bg)"; tabDep.style.color = "var(--text)";
         thead.innerHTML = `<tr><th>Txn ID</th><th>Mobile</th><th>Amount</th><th>Status</th><th>Receipt</th></tr>`;
-        tbody.innerHTML = (userHistoryData.recharges && userHistoryData.recharges.length) ? "" : `<tr><td colspan="5" style="text-align:center;">No recharges found</td></tr>`;
+        tbody.innerHTML = (userHistoryData.recharges && userHistoryData.recharges.length) ? "" : `<tr><td colspan="5" style="text-align:center;">No recharges</td></tr>`;
 
         userHistoryData.recharges?.forEach((r, idx) => {
           let displayAmt = r.amount !== undefined ? r.amount : (r.amt || 0);
@@ -823,7 +699,7 @@
         tabDep.style.background = "#4f46e5"; tabDep.style.color = "#fff";
         tabRec.style.background = "var(--chip-bg)"; tabRec.style.color = "var(--text)";
         thead.innerHTML = `<tr><th>Req ID</th><th>Amount</th><th>UTR</th><th>Status</th></tr>`;
-        tbody.innerHTML = (userHistoryData.deposits && userHistoryData.deposits.length) ? "" : `<tr><td colspan="4" style="text-align:center;">No deposits found</td></tr>`;
+        tbody.innerHTML = (userHistoryData.deposits && userHistoryData.deposits.length) ? "" : `<tr><td colspan="4" style="text-align:center;">No deposits</td></tr>`;
 
         userHistoryData.deposits?.forEach(d => {
           let depAmt = d.amount !== undefined ? d.amount : (d.amt || 0);
@@ -840,18 +716,13 @@
       document.getElementById('rcpUserName').innerText = currentUser ? currentUser.name : "Customer";
       
       let cleanTxnId = (r.opTxnId && String(r.opTxnId).trim() !== "" && r.opTxnId !== "Success") ? r.opTxnId : r.txnId;
-      if (!cleanTxnId || cleanTxnId === "Success") {
-        cleanTxnId = "TXN" + (r.mobile ? r.mobile.slice(-4) : "8453") + (idx + 101);
-      }
+      if (!cleanTxnId || cleanTxnId === "Success") cleanTxnId = "TXN" + (r.mobile ? r.mobile.slice(-4) : "8453") + (idx + 101);
       document.getElementById('rcpTxnId').innerText = cleanTxnId;
-
       document.getElementById('rcpMobile').innerText = "+91 " + (r.mobile || "");
       document.getElementById('rcpOperator').innerText = r.operator || r.op || "Prepaid";
 
       let planText = r.plan || r.planDetails || "Standard Prepaid";
-      if (!isNaN(planText)) {
-        planText = `₹${planText} Unlimited Plan`;
-      }
+      if (!isNaN(planText)) planText = `₹${planText} Unlimited Plan`;
       document.getElementById('rcpPlan').innerText = planText;
 
       let numAmt = Number(r.amount);
@@ -888,12 +759,8 @@
 
       const btn = document.getElementById('btnAdm');
       btn.innerText = "Verifying..."; btn.disabled = true;
-
       try {
-        const res = await fetch(SCRIPT_URL, {
-          method: "POST",
-          body: JSON.stringify({ action: "admin_login", username: u, password: p })
-        });
+        const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_login", username: u, password: p }) });
         const data = await res.json();
         if (data.success) {
           adminToken = data.adminToken;
@@ -903,27 +770,45 @@
           document.getElementById('adminUserDisplay').innerText = u;
           fetchAdminData();
           showToast("Admin authenticated!");
-        } else {
-          showToast(data.message || "Invalid Admin");
-        }
-      } catch(e) {
-        showToast("Admin login failed");
-      } finally {
-        btn.innerText = "Login to Admin"; btn.disabled = false;
-      }
+        } else { showToast(data.message || "Invalid Admin"); }
+      } catch(e) { showToast("Admin login failed"); } 
+      finally { btn.innerText = "Login to Admin"; btn.disabled = false; }
+    }
+
+    async function adminAddPlan() {
+      const operator = document.getElementById('apOp').value;
+      const amount = document.getElementById('apAmt').value;
+      const validity = document.getElementById('apVal').value;
+      const desc = document.getElementById('apDesc').value;
+
+      const btn = document.getElementById('btnPlanAdd');
+      btn.innerText = "..."; btn.disabled = true;
+
+      try {
+        await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_add_plan", operator, amount, validity, desc, adminToken }) });
+        showToast("Plan added successfully!");
+        document.getElementById('apAmt').value = ""; document.getElementById('apVal').value = ""; document.getElementById('apDesc').value = "";
+        fetchAdminData();
+        fetchLivePlans();
+      } catch(e) {}
+      finally { btn.innerText = "Add Plan"; btn.disabled = false; }
     }
 
     async function fetchAdminData() {
       if (!adminToken) return;
       try {
-        const res = await fetch(SCRIPT_URL, {
-          method: "POST",
-          body: JSON.stringify({ action: "admin_get_all_data", adminToken })
-        });
+        const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_get_all_data", adminToken }) });
         const data = await res.json();
         if (!data.success) return;
 
-        // Render Users with Live Balance Column
+        // Plans
+        const pBody = document.getElementById('adminPlanRows');
+        pBody.innerHTML = (data.plans && data.plans.length) ? "" : "<tr><td colspan='4'>No Plans Added</td></tr>";
+        data.plans?.forEach(p => {
+          pBody.innerHTML += `<tr><td><b>${p.op}</b></td><td>₹${p.amt}</td><td>${p.val}</td><td>${p.desc}</td></tr>`;
+        });
+
+        // Users
         const uBody = document.getElementById('adminUserRows');
         uBody.innerHTML = (data.users && data.users.length) ? "" : "<tr><td colspan='6'>No Users</td></tr>";
         data.users?.forEach(u => {
@@ -936,11 +821,7 @@
               <td>${u.mobile}</td>
               <td><b style="color:#10b981; font-family:monospace; font-size:13px;">₹${userBal}</b></td>
               <td>${u.status === 'Pending' ? `<button class="btn-sm btn-success" onclick="resolveUser('${u.id}', 'Approved')">Approve</button>` : '<span style="color:#64748b; font-size:11px;">Done</span>'}</td>
-              <td>
-                <button class="btn-sm ${isFrz ? 'btn-success' : 'btn-warning'}" onclick="toggleFreezeUser('${u.id}', '${isFrz ? 'Approved' : 'Frozen'}')">
-                  ${isFrz ? 'Unfreeze' : 'Freeze'}
-                </button>
-              </td>
+              <td><button class="btn-sm ${isFrz ? 'btn-success' : 'btn-warning'}" onclick="toggleFreezeUser('${u.id}', '${isFrz ? 'Approved' : 'Frozen'}')">${isFrz ? 'Unfreeze' : 'Freeze'}</button></td>
             </tr>`;
         });
 
@@ -965,12 +846,10 @@
       showToast(`User status: ${newStatus}!`);
       fetchAdminData();
     }
-
     async function resolveUser(userId, status) {
       await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_approve_user", userId, status, adminToken }) });
       fetchAdminData();
     }
-
     async function resolveWallet(requestId, status) {
       await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_update_wallet", requestId, status, adminToken }) });
       fetchAdminData();
@@ -982,7 +861,6 @@
       document.getElementById('asmOperatorId').value = "";
       toggleModal('adminSuccessModal', true);
     }
-
     async function confirmAdminSuccess() {
       const opTxnId = document.getElementById('asmOperatorId').value.trim();
       await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_update_recharge", txnId: pendingApprovalTxn, status: "Success", operatorTxnId: opTxnId, adminToken }) });
@@ -995,7 +873,6 @@
       document.getElementById('setAdminQrUrl').value = liveQR.qrUrl;
       toggleModal('adminQrModal', true);
     }
-
     function saveAdminQrAction() {
       const upi = document.getElementById('setAdminUpi').value.trim();
       const qr = document.getElementById('setAdminQrUrl').value.trim();
@@ -1018,6 +895,7 @@
     window.addEventListener("DOMContentLoaded", () => {
       initTheme();
       setupFormEnterNavigation();
+      fetchLivePlans();
       selectOp('Jio');
       if (currentUser) renderUserData();
 

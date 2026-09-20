@@ -64,14 +64,20 @@
     .plan-card { padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
     .plan-card:hover { border-color: #4f46e5; }
     
+    /* Rolling & Scrollable Table Styling */
     .table-responsive { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; }
     .table-rolling { max-height: 260px; overflow-y: auto; scroll-behavior: smooth; }
     table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: left; }
     th { background: var(--input-bg); padding: 10px; color: var(--text-muted); font-weight: 700; white-space: nowrap; position: sticky; top: 0; z-index: 2; }
     td { padding: 10px; border-bottom: 1px solid var(--border); white-space: nowrap; color: var(--text); }
     
+    /* Header search inputs */
     .section-header-box { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
     .table-search-input { width: 220px; padding: 6px 12px; border-radius: 8px; font-size: 12px; margin-bottom: 0; }
+
+    .live-indicator { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: #10b981; font-weight: 700; }
+    .pulse-dot { width: 8px; height: 8px; background: #10b981; border-radius: 50%; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); animation: pulse 1.6s infinite; }
+    @keyframes pulse { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
 
     .badge { padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
     .badge-pending { background: #fef3c7; color: #b45309; }
@@ -217,14 +223,16 @@
       <div id="adminControlPanel" class="hidden">
         <div class="glass-box" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
           <div>
-            <span class="badge badge-success">Admin Mode Active</span>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="badge badge-success">Admin Mode Active</span>
+              <span class="live-indicator"><span class="pulse-dot"></span> Live Sync</span>
+            </div>
             <h3 style="font-weight:800; margin-top:2px;">Logged in: <span id="adminUserDisplay">admin</span></h3>
             <small id="adminSyncTime" style="color:var(--text-muted); font-size:11px;">Syncing with Sheet...</small>
           </div>
           <div style="display:flex; gap:6px; flex-wrap:wrap;">
             <button class="btn btn-warning btn-sm" id="btnAdminNotif" onclick="requestAdminNotifPermission()">🔔 Enable Notifications</button>
             <button class="btn btn-primary btn-sm" onclick="openAdminQrModal()">💳 Set QR</button>
-            <button class="btn btn-primary btn-sm" onclick="syncAllFromSheet()">🔄 Sync Sheet</button>
             <button class="btn btn-danger btn-sm" onclick="adminLogoutAction()">Logout</button>
           </div>
         </div>
@@ -232,20 +240,27 @@
         <!-- 1. MANAGE PLANS -->
         <div class="glass-box">
           <h3 style="font-size:14px; font-weight:800; margin-bottom:10px; color:#38bdf8;">1. Manage Recharge Plans</h3>
+          <form onsubmit="event.preventDefault(); adminAddPlan();" style="display:flex; gap:6px; margin-bottom:12px; flex-wrap:wrap;">
+            <select id="apOp" style="flex:1; min-width:80px;"><option>Jio</option><option>Airtel</option><option>Vi</option><option>BSNL</option></select>
+            <input type="number" id="apAmt" placeholder="Amt(₹)" style="flex:1; min-width:70px;" required/>
+            <input type="text" id="apVal" placeholder="Validity" style="flex:1; min-width:80px;" required/>
+            <input type="text" id="apDesc" placeholder="Description" style="flex:2; min-width:120px;" required/>
+            <button type="submit" class="btn btn-primary btn-sm" id="btnPlanAdd">Add Plan</button>
+          </form>
           <div class="table-responsive">
             <table><thead><tr><th>Op</th><th>Amt</th><th>Validity</th><th>Description</th></tr></thead><tbody id="adminPlanRows"></tbody></table>
           </div>
         </div>
 
-        <!-- 2. USER APPROVALS -->
+        <!-- 2. USERS CONTROL -->
         <div class="glass-box">
           <h3 style="font-size:14px; font-weight:800; margin-bottom:8px; color:#38bdf8;">2. Users In Sheet</h3>
           <div class="table-responsive">
-            <table><thead><tr><th>ID</th><th>Name</th><th>Mobile</th><th>Balance</th><th>Status</th></tr></thead><tbody id="adminUserRows"></tbody></table>
+            <table><thead><tr><th>ID</th><th>Name</th><th>Mobile</th><th>Balance</th><th>Action</th><th>Access</th></tr></thead><tbody id="adminUserRows"></tbody></table>
           </div>
         </div>
 
-        <!-- 3. WALLET DEPOSITS (WITH SEARCH, APPROVAL-FIRST & ROLLING) -->
+        <!-- 3. WALLET DEPOSITS (SEPARATE SEARCH + APPROVAL-FIRST + ROLLING) -->
         <div class="glass-box">
           <div class="section-header-box">
             <h3 style="font-size:14px; font-weight:800; color:#38bdf8; margin:0;">3. Wallet Deposit Slips</h3>
@@ -267,7 +282,7 @@
           </div>
         </div>
 
-        <!-- 4. RECHARGE ORDERS (WITH SEARCH, APPROVAL-FIRST & ROLLING) -->
+        <!-- 4. RECHARGE ORDERS (SEPARATE SEARCH + APPROVAL-FIRST + ROLLING) -->
         <div class="glass-box">
           <div class="section-header-box">
             <h3 style="font-size:14px; font-weight:800; color:#38bdf8; margin:0;">4. Recharge Orders</h3>
@@ -353,11 +368,25 @@
     </div>
   </div>
 
+  <!-- ADMIN SET QR MODAL -->
+  <div id="adminQrModal" class="modal-overlay hidden">
+    <div class="modal-body">
+      <h3 style="font-size:16px; font-weight:800; margin-bottom:12px;">Set UPI Payment QR / ID</h3>
+      <form onsubmit="event.preventDefault(); saveAdminQr();">
+        <div class="form-group"><label>UPI ID (VPA)</label><input type="text" id="adminUpiId" placeholder="9939311744@okbizaxis" required /></div>
+        <div style="display:flex; gap:8px;">
+          <button type="submit" class="btn btn-primary">Save QR</button>
+          <button type="button" class="btn btn-danger" onclick="closeModal('adminQrModal')">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script>
     // ==========================================
-    // 1. CONFIGURATION: APPS SCRIPT URL
+    // 1. CONFIGURATION: APPS SCRIPT WEB APP URL
     // ==========================================
-    // APNA APPS SCRIPT WEB APP URL YAHA REPLACE KAREIN:
+    // Apna Apps script Web App Executable URL yahan dalein:
     const API_URL = "https://script.google.com/macros/s/AKfycbxKpUFTVYFMAryvle79MnLhDBO0lCd0sPgTj_bU08iA-BTqYzgh9QTtCNDXbk8-joDX/exec";
 
     const alertBeep = new Audio("data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a1/S9cT8SFlq65PWhZSsVO4rR7a5sNRo1g8/pt24/GDR/y+ivcT0fOIHO6rFqNhk5gc3or2k6GzWAzeiwaTsZOX7N6a9pOxk3fc7or2g5");
@@ -368,7 +397,7 @@
     let knownDepositIds = new Set();
     let isInitialAdminLoad = true;
 
-    // In-Memory Database (Synced with Sheets)
+    // In-Memory Database (Synced real-time with Google Sheet)
     let db = {
       users: [],
       plans: [
@@ -379,56 +408,58 @@
       ],
       deposits: [],
       recharges: [],
-      upiId: "9939311744@okbizaxis"
+      upiId: "9939311744@ybl"
     };
 
     // ==========================================
-    // 2. GOOGLE SHEETS SYNC ENGINE
+    // 2. LIVE SYNC ENGINE (AUTO POLLING)
     // ==========================================
     async function syncAllFromSheet() {
       try {
         const res = await fetch(API_URL);
         const data = await res.json();
 
-        // Sheet ka purana data db me save karein
-        if (data.users && data.users.length) db.users = data.users;
-        if (data.plans && data.plans.length) db.plans = data.plans;
-        if (data.deposits && data.deposits.length) db.deposits = data.deposits;
-        if (data.recharges && data.recharges.length) db.recharges = data.recharges;
-        if (data.upiId) db.upiId = data.upiId;
+        if (data && data.status === "success") {
+          if (data.users) db.users = data.users;
+          if (data.plans && data.plans.length) db.plans = data.plans;
+          if (data.deposits) db.deposits = data.deposits;
+          if (data.recharges) db.recharges = data.recharges;
+          if (data.upiId) db.upiId = data.upiId;
 
-        // Current logged in user balance update
-        if (currentUser) {
-          const matched = db.users.find(u => u.phone === currentUser.phone);
-          if (matched) {
-            currentUser = matched;
-            renderUserView();
+          // User live balance sync
+          if (currentUser) {
+            const matched = db.users.find(u => String(u.phone) === String(currentUser.phone));
+            if (matched) {
+              currentUser = matched;
+              renderUserView();
+            }
           }
-        }
 
-        if (isAdminLoggedIn) {
-          fetchAdminData();
+          if (isAdminLoggedIn) {
+            fetchAdminData();
+          }
+          renderPlans();
         }
-        renderPlans();
       } catch (err) {
-        console.warn("Sheet sync fallback to cache:", err);
+        console.warn("Live sync background error:", err);
       }
     }
 
     async function sendToSheet(payload) {
       try {
-        await fetch(API_URL, {
+        const response = await fetch(API_URL, {
           method: "POST",
           headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify(payload)
         });
+        return await response.json();
       } catch (err) {
-        console.error("Failed to post to sheet:", err);
+        console.error("Sheet send error:", err);
       }
     }
 
     // ==========================================
-    // 3. DESKTOP NOTIFICATIONS FOR ADMIN
+    // 3. DESKTOP PUSH NOTIFICATIONS FOR ADMIN
     // ==========================================
     function checkNotifPermissionState() {
       const btn = document.getElementById("btnAdminNotif");
@@ -445,11 +476,11 @@
     }
 
     function requestAdminNotifPermission() {
-      if (!("Notification" in window)) return showToast("Browser desktop notifications support nahi karta.");
+      if (!("Notification" in window)) return showToast("Yeh browser desktop notifications support nahi karta.");
       Notification.requestPermission().then((perm) => {
         if (perm === "granted") {
           checkNotifPermissionState();
-          showDesktopNotification("YK Admin Hub", "Desktop Notifications active ho gaye!");
+          showDesktopNotification("YK Admin Hub", "Desktop Notifications active ho gaye hain!");
         }
       });
     }
@@ -459,7 +490,7 @@
         alertBeep.play().catch(() => {});
         const n = new Notification(title, {
           body: bodyText,
-          tag: tag || Date.now().toString(),
+          tag: String(tag || Date.now()),
           icon: "https://via.placeholder.com/128/4f46e5/ffffff?text=YK"
         });
         n.onclick = function() {
@@ -470,7 +501,7 @@
     }
 
     // ==========================================
-    // 4. UI NAVIGATION & HELPERS
+    // 4. UI NAVIGATION & TOAST
     // ==========================================
     function showToast(msg) {
       const t = document.getElementById("toast");
@@ -548,8 +579,8 @@
       const email = document.getElementById("rEmail").value.trim();
       const pass = document.getElementById("rPass").value.trim();
 
-      if (phone.length !== 10) return showToast("10-digit mobile required");
-      if (db.users.find(u => String(u.phone) === phone)) return showToast("Mobile already registered!");
+      if (phone.length !== 10) return showToast("10-digit valid mobile daalein");
+      if (db.users.find(u => String(u.phone) === phone)) return showToast("Mobile already registered hai!");
 
       const newUser = {
         action: "REGISTER_USER",
@@ -558,7 +589,7 @@
       };
 
       db.users.push(newUser);
-      showToast("Registering in Google Sheet...");
+      showToast("Registering user in Sheet...");
       await sendToSheet(newUser);
       toggleAuth("login");
       document.getElementById("lMobile").value = phone;
@@ -569,10 +600,10 @@
       const pass = document.getElementById("lPass").value.trim();
 
       const user = db.users.find(u => String(u.phone) === phone && String(u.pass) === pass);
-      if (!user) return showToast("Galat Mobile ya Password! (Check Google Sheet)");
+      if (!user) return showToast("Galat Mobile ya Password! (Check Sheet)");
 
       currentUser = user;
-      showToast(`Welcome, ${user.name}!`);
+      showToast(`Welcome back, ${user.name}!`);
       switchNav("user");
     }
 
@@ -591,9 +622,9 @@
         document.getElementById("adminControlPanel").classList.remove("hidden");
         checkNotifPermissionState();
         fetchAdminData();
-        showToast("Admin Logged In");
+        showToast("Admin Hub Logged In");
       } else {
-        showToast("Invalid Admin Details");
+        showToast("Galat Admin Details!");
       }
     }
 
@@ -671,9 +702,9 @@
       const amt = Number(document.getElementById("recAmt").value);
       const op = document.getElementById("recOp").value;
 
-      if (mob.length !== 10) return showToast("10-digit number required");
-      if (!amt || amt <= 0) return showToast("Valid amount required");
-      if (Number(currentUser.bal) < amt) return showToast("Insufficient Balance! Add money first.");
+      if (mob.length !== 10) return showToast("10-digit number enter karein");
+      if (!amt || amt <= 0) return showToast("Valid amount enter karein");
+      if (Number(currentUser.bal) < amt) return showToast("Insufficient Balance! Pehle wallet me money add karein.");
 
       currentUser.bal = Number(currentUser.bal) - amt;
       const order = {
@@ -691,7 +722,7 @@
 
       db.recharges.push(order);
       renderUserView();
-      showToast("Recharge sent to Sheet!");
+      showToast("Recharge order submitted to Sheet!");
       showReceipt(order);
       await sendToSheet(order);
     }
@@ -710,7 +741,7 @@
     }
 
     // ==========================================
-    // 7. WALLET & HISTORY
+    // 7. WALLET & SLIP SUBMISSION
     // ==========================================
     function openAddMoneyModal() {
       document.getElementById("upiQrImg").src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=${encodeURIComponent(db.upiId)}&pn=YK%20Recharge`;
@@ -721,8 +752,8 @@
       const amt = Number(document.getElementById("depAmt").value);
       const utr = document.getElementById("depUtr").value.trim();
 
-      if (!amt || amt < 10) return showToast("Minimum ₹10 deposit");
-      if (utr.length < 10) return showToast("Valid 12-digit UTR enter karein");
+      if (!amt || amt < 10) return showToast("Kam se kam ₹10 deposit karein");
+      if (utr.length < 10) return showToast("Valid 12-digit UTR daalein");
 
       const slip = {
         action: "ADD_DEPOSIT",
@@ -739,7 +770,7 @@
       closeModal("addMoneyModal");
       document.getElementById("depAmt").value = "";
       document.getElementById("depUtr").value = "";
-      showToast("Deposit saved to Sheet!");
+      showToast("Deposit slip submitted for admin verification!");
       await sendToSheet(slip);
     }
 
@@ -754,20 +785,20 @@
         const myRec = db.recharges.filter(r => String(r.userId) === String(currentUser.id));
         tbody.innerHTML = myRec.length ? myRec.reverse().map(r => `
           <tr><td>${r.id}</td><td>${r.mobile}</td><td>${r.op}</td><td>₹${r.amt}</td><td><span class="badge ${r.status === 'Success' ? 'badge-success' : 'badge-pending'}">${r.status}</span></td></tr>
-        `).join("") : "<tr><td colspan='5' style='text-align:center;'>No history</td></tr>";
+        `).join("") : "<tr><td colspan='5' style='text-align:center;'>No records found</td></tr>";
       } else {
         title.textContent = "My Deposit Slips";
         thead.innerHTML = "<tr><th>Req ID</th><th>Amount</th><th>UTR</th><th>Status</th></tr>";
         const myDep = db.deposits.filter(d => String(d.userId) === String(currentUser.id));
         tbody.innerHTML = myDep.length ? myDep.reverse().map(d => `
           <tr><td>${d.id}</td><td>₹${d.amt}</td><td>${d.utr}</td><td><span class="badge ${d.status === 'Approved' ? 'badge-success' : 'badge-pending'}">${d.status}</span></td></tr>
-        `).join("") : "<tr><td colspan='4' style='text-align:center;'>No deposits</td></tr>";
+        `).join("") : "<tr><td colspan='4' style='text-align:center;'>No deposits found</td></tr>";
       }
       document.getElementById("historyModal").classList.remove("hidden");
     }
 
     // ==========================================
-    // 8. ADMIN DASHBOARD: APPROVAL-FIRST & SEARCH
+    // 8. ADMIN ENGINE: APPROVAL-FIRST & SEARCH
     // ==========================================
     function sortByPendingFirst(list) {
       return [...list].sort((a, b) => {
@@ -792,12 +823,12 @@
 
       const tbody = document.getElementById("adminWalletRows");
       if (!list.length) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No records in Sheet</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No deposits found</td></tr>`;
         return;
       }
 
       tbody.innerHTML = list.map(d => `
-        <tr style="${d.status === 'Pending' ? 'background: rgba(245, 158, 11, 0.08);' : ''}">
+        <tr style="${d.status === 'Pending' ? 'background: rgba(245, 158, 11, 0.12);' : ''}">
           <td>${d.id}</td>
           <td>${d.userName} (${d.userId})</td>
           <td>₹${d.amt}</td>
@@ -827,12 +858,12 @@
 
       const tbody = document.getElementById("adminRecRows");
       if (!list.length) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;">No records in Sheet</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-muted);">No recharges found</td></tr>`;
         return;
       }
 
       tbody.innerHTML = list.map(r => `
-        <tr style="${r.status === 'Pending' ? 'background: rgba(245, 158, 11, 0.08);' : ''}">
+        <tr style="${r.status === 'Pending' ? 'background: rgba(245, 158, 11, 0.12);' : ''}">
           <td>${r.id}</td>
           <td>${r.userName}</td>
           <td><b>${r.mobile}</b></td>
@@ -850,39 +881,92 @@
 
     function fetchAdminData() {
       if (!isAdminLoggedIn) return;
-      document.getElementById("adminSyncTime").textContent = "Synced with Sheet: " + new Date().toLocaleTimeString();
+      document.getElementById("adminSyncTime").textContent = "Live updated: " + new Date().toLocaleTimeString();
 
+      // 1. Render Plans
       document.getElementById("adminPlanRows").innerHTML = db.plans.map(p => `
         <tr><td><b>${p.op}</b></td><td>₹${p.amt}</td><td>${p.val}</td><td>${p.desc}</td></tr>
       `).join("");
 
+      // 2. Render Users
       document.getElementById("adminUserRows").innerHTML = db.users.map(u => `
-        <tr><td>${u.id}</td><td>${u.name}</td><td>${u.phone}</td><td>₹${Number(u.bal).toFixed(2)}</td><td><span class="badge badge-success">${u.status || 'Active'}</span></td></tr>
+        <tr>
+          <td>${u.id}</td>
+          <td>${u.name}</td>
+          <td>${u.phone}</td>
+          <td>₹${Number(u.bal).toFixed(2)}</td>
+          <td><button class="btn btn-primary btn-sm" onclick="adminAddWallet('${u.id}')">+ Bal</button></td>
+          <td>
+            <button class="btn ${u.status === 'Active' ? 'btn-danger' : 'btn-success'} btn-sm" onclick="adminToggleUser('${u.id}')">
+              ${u.status === 'Active' ? 'Freeze' : 'Unfreeze'}
+            </button>
+          </td>
+        </tr>
       `).join("");
 
+      // 3. Render Deposit & Recharge Tables
       renderAdminWallets();
       renderAdminRecharges();
 
-      // Desktop Notifications for Admin
+      // 4. TRIGGER REAL-TIME BROWSER NOTIFICATIONS WHEN NEW USER REQUEST OCCURS
       db.deposits.forEach(d => {
-        if (!knownDepositIds.has(String(d.id))) {
+        const idKey = String(d.id);
+        if (!knownDepositIds.has(idKey)) {
           if (!isInitialAdminLoad && d.status === "Pending") {
-            showDesktopNotification("Naya Deposit Slip (Sheet)", `${d.userName} ne ₹${d.amt} submit kiya (UTR: ${d.utr})`, d.id);
+            showDesktopNotification("Naya Wallet Deposit Slip!", `User: ${d.userName} | Amount: ₹${d.amt} (UTR: ${d.utr})`, idKey);
           }
-          knownDepositIds.add(String(d.id));
+          knownDepositIds.add(idKey);
         }
       });
 
       db.recharges.forEach(r => {
-        if (!knownRecIds.has(String(r.id))) {
+        const idKey = String(r.id);
+        if (!knownRecIds.has(idKey)) {
           if (!isInitialAdminLoad && r.status === "Pending") {
-            showDesktopNotification("Naya Recharge Order (Sheet)", `${r.op} ${r.mobile} - ₹${r.amt} (${r.userName})`, r.id);
+            showDesktopNotification("Naya Recharge Order!", `${r.op} Mobile: ${r.mobile} | ₹${r.amt} (${r.userName})`, idKey);
           }
-          knownRecIds.add(String(r.id));
+          knownRecIds.add(idKey);
         }
       });
 
       isInitialAdminLoad = false;
+    }
+
+    // Admin Operations
+    async function adminAddPlan() {
+      const op = document.getElementById("apOp").value;
+      const amt = document.getElementById("apAmt").value;
+      const val = document.getElementById("apVal").value;
+      const desc = document.getElementById("apDesc").value;
+
+      const newPlan = { action: "ADD_PLAN", op, amt, val, desc };
+      db.plans.push(newPlan);
+      fetchAdminData();
+      showToast("Plan added to Sheet!");
+      await sendToSheet(newPlan);
+    }
+
+    async function adminAddWallet(uid) {
+      const amt = prompt("Amount to add (₹):");
+      if (amt && !isNaN(amt)) {
+        const u = db.users.find(x => String(x.id) === String(uid));
+        if (u) {
+          u.bal = Number(u.bal) + Number(amt);
+          fetchAdminData();
+          showToast(`₹${amt} added to ${u.name}`);
+          await sendToSheet({ action: "UPDATE_USER", userId: uid, addBal: Number(amt) });
+        }
+      }
+    }
+
+    async function adminToggleUser(uid) {
+      const u = db.users.find(x => String(x.id) === String(uid));
+      if (u) {
+        u.status = u.status === "Active" ? "Frozen" : "Active";
+        fetchAdminData();
+        showToast(`Status updated to ${u.status}`);
+        await sendToSheet({ action: "UPDATE_USER", userId: uid, status: u.status });
+      }
     }
 
     async function adminApproveDeposit(depId) {
@@ -917,11 +1001,28 @@
       syncAllFromSheet();
     }
 
-    // Auto Sync startup
+    function openAdminQrModal() {
+      document.getElementById("adminUpiId").value = db.upiId;
+      document.getElementById("adminQrModal").classList.remove("hidden");
+    }
+
+    async function saveAdminQr() {
+      const val = document.getElementById("adminUpiId").value.trim();
+      if (val) {
+        db.upiId = val;
+        closeModal("adminQrModal");
+        showToast("UPI ID saved in Sheet!");
+        await sendToSheet({ action: "SET_UPI", upiId: val });
+      }
+    }
+
+    // ==========================================
+    // 9. AUTOMATIC 5-SECOND LIVE SYNC LOOP
+    // ==========================================
     window.addEventListener("DOMContentLoaded", () => {
       syncAllFromSheet();
-      // Har 10 second me Google Sheets se sync karega
-      setInterval(syncAllFromSheet, 10000);
+      // Har 5 second me Google Sheet se live check karega
+      setInterval(syncAllFromSheet, 5000);
     });
   </script>
 </body>

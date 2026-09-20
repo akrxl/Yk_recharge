@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>YK RECHARGE PORTAL - Chanduli, Raxaul</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
@@ -19,7 +19,6 @@
     .glass-box { background: #ffffff; border-radius: 20px; padding: 24px; box-shadow: 0 12px 30px rgba(0,0,0,0.18); margin-bottom: 22px; }
     .hidden { display: none !important; }
 
-    /* HERO & HOME */
     .hero { text-align: center; padding: 35px 20px; background: linear-gradient(135deg, #4338ca, #312e81); border-radius: 22px; color: #fff; margin-bottom: 24px; }
     .hero h1 { font-size: 24px; font-weight: 900; margin-bottom: 8px; }
     .hero p { font-size: 13.5px; opacity: 0.9; max-width: 580px; margin: auto; line-height: 1.6; }
@@ -28,15 +27,13 @@
     .service-card h4 { font-size: 15px; margin-bottom: 4px; }
     .service-card p { font-size: 11.5px; opacity: 0.85; }
 
-    /* CONTACT & WHATSAPP */
     .contact-card { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 18px; padding: 20px; display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 20px; }
     @media (min-width: 640px) { .contact-card { grid-template-columns: 1fr 1fr; align-items: center; } }
     .wa-btn { background: #25d366; color: #fff; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 18px; border-radius: 12px; font-weight: 700; font-size: 13.5px; box-shadow: 0 4px 12px rgba(37,211,102,0.3); }
 
-    /* FORM & INPUTS */
     .form-group { margin-bottom: 14px; }
     label { display: block; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
-    input, select { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1.5px solid #cbd5e1; font-size: 14px; background: #fff; outline: none; transition: 0.2s; }
+    input, select { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1.5px solid #cbd5e1; font-size: 14px; background: #fff; outline: none; transition: 0.2s; -webkit-appearance: none; }
     input:focus, select:focus { border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79,70,229,0.18); }
     
     .btn { width: 100%; padding: 13px; border: none; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; }
@@ -64,7 +61,6 @@
 
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); backdrop-filter: blur(6px); display: flex; justify-content: center; align-items: center; padding: 16px; z-index: 100; }
     .modal-body { background: #fff; border-radius: 22px; width: 100%; max-width: 440px; padding: 24px; box-shadow: 0 24px 48px rgba(0,0,0,0.35); }
-    .warning-box { background: #fff1f2; border-left: 4px solid #f43f5e; padding: 12px; border-radius: 0 10px 10px 0; margin: 12px 0; font-size: 11.5px; color: #be123c; line-height: 1.45; }
 
     #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); opacity: 0; z-index: 200; background: #1e293b; color: #fff; padding: 12px 20px; border-radius: 30px; font-size: 13px; font-weight: 600; transition: 0.3s; pointer-events: none; }
     #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
@@ -88,7 +84,7 @@
   </header>
 
   <main>
-    <!-- ================= 1. HOME VIEW ================= -->
+    <!-- 1. HOME VIEW -->
     <div id="homeView">
       <div class="hero">
         <h1>Fast & Secure Prepaid Mobile Recharge</h1>
@@ -127,31 +123,29 @@
       </div>
     </div>
 
-    <!-- ================= 2. USER AUTH (ENTER TO JUMP / SUBMIT) ================= -->
+    <!-- 2. USER AUTH -->
     <div id="authView" class="glass-box hidden" style="max-width: 420px; margin: 30px auto;">
       <div style="display: flex; border-bottom: 2px solid #f1f5f9; margin-bottom: 20px;">
         <button id="tabLogin" onclick="toggleAuth('login')" style="flex: 1; border: none; background: none; font-weight: 700; padding: 10px; color: #4f46e5; border-bottom: 2px solid #4f46e5; cursor: pointer;">Login</button>
         <button id="tabReg" onclick="toggleAuth('reg')" style="flex: 1; border: none; background: none; font-weight: 700; padding: 10px; color: #94a3b8; cursor: pointer;">Register</button>
       </div>
 
-      <!-- Login Form with Enter-Key Jump -->
-      <div id="loginForm" class="enter-group" data-submit="btnLogin">
-        <div class="form-group"><label>Registered Mobile</label><input type="tel" id="lMobile" maxlength="10" placeholder="10-digit number" /></div>
-        <div class="form-group"><label>Password</label><input type="password" id="lPass" placeholder="••••••••" /></div>
-        <button class="btn btn-primary" id="btnLogin" onclick="loginAction()">Sign In</button>
-      </div>
+      <form id="loginForm" onsubmit="event.preventDefault(); loginAction();">
+        <div class="form-group"><label>Registered Mobile</label><input type="tel" id="lMobile" maxlength="10" placeholder="10-digit number" enterkeyhint="next" /></div>
+        <div class="form-group"><label>Password</label><input type="password" id="lPass" placeholder="••••••••" enterkeyhint="go" /></div>
+        <button type="submit" class="btn btn-primary" id="btnLogin">Sign In</button>
+      </form>
 
-      <!-- Register Form with Enter-Key Jump -->
-      <div id="regForm" class="hidden enter-group" data-submit="btnReg">
-        <div class="form-group"><label>Full Name</label><input type="text" id="rName" placeholder="Enter full name" /></div>
-        <div class="form-group"><label>Mobile</label><input type="tel" id="rMobile" maxlength="10" placeholder="10-digit mobile" /></div>
-        <div class="form-group"><label>Email</label><input type="email" id="rEmail" placeholder="name@email.com" /></div>
-        <div class="form-group"><label>Set Password</label><input type="password" id="rPass" placeholder="Set password" /></div>
-        <button class="btn btn-primary" id="btnReg" onclick="registerAction()">Submit Registration</button>
-      </div>
+      <form id="regForm" class="hidden" onsubmit="event.preventDefault(); registerAction();">
+        <div class="form-group"><label>Full Name</label><input type="text" id="rName" placeholder="Enter full name" enterkeyhint="next" /></div>
+        <div class="form-group"><label>Mobile</label><input type="tel" id="rMobile" maxlength="10" placeholder="10-digit mobile" enterkeyhint="next" /></div>
+        <div class="form-group"><label>Email</label><input type="email" id="rEmail" placeholder="name@email.com" enterkeyhint="next" /></div>
+        <div class="form-group"><label>Set Password</label><input type="password" id="rPass" placeholder="Set password" enterkeyhint="go" /></div>
+        <button type="submit" class="btn btn-primary" id="btnReg">Submit Registration</button>
+      </form>
     </div>
 
-    <!-- ================= 3. USER DASHBOARD ================= -->
+    <!-- 3. USER DASHBOARD -->
     <div id="userDash" class="hidden">
       <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 20px;">
         <div class="glass-box" style="margin-bottom:0;">
@@ -175,18 +169,17 @@
         </div>
       </div>
 
-      <!-- RECHARGE PANEL WITH ENTER JUMP -->
       <div class="glass-box">
         <h3 style="font-size: 17px; font-weight: 800; margin-bottom: 14px;">Prepaid Mobile Recharge</h3>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
-          <div class="enter-group" data-submit="btnContinueRec">
+          <form onsubmit="event.preventDefault(); startRecharge();">
             <div class="form-group">
               <label>Mobile Number (Auto Detect)</label>
-              <input type="tel" id="recMobile" maxlength="10" placeholder="Enter 10-digit number" oninput="autoDetect(this.value)" />
+              <input type="tel" id="recMobile" maxlength="10" placeholder="Enter 10-digit number" oninput="autoDetect(this.value)" enterkeyhint="next" />
             </div>
             <div class="form-group">
               <label>Operator</label>
-              <select id="recOp" onchange="renderPlans()">
+              <select id="recOp" onchange="renderPlans()" enterkeyhint="next">
                 <option value="">Select Operator</option>
                 <option value="Jio">Jio</option>
                 <option value="Airtel">Airtel</option>
@@ -196,11 +189,11 @@
             </div>
             <div class="form-group">
               <label>Recharge Amount (₹)</label>
-              <input type="number" id="recAmt" placeholder="Plan Amount" />
+              <input type="number" id="recAmt" placeholder="Plan Amount" enterkeyhint="go" />
               <div id="dynamicChips" class="chip-row"></div>
             </div>
-            <button class="btn btn-primary" id="btnContinueRec" onclick="startRecharge()">Continue to Recharge</button>
-          </div>
+            <button type="submit" class="btn btn-primary" id="btnContinueRec">Continue to Recharge</button>
+          </form>
           <div>
             <label>Available Plans</label>
             <div id="plansList" style="max-height: 250px; overflow-y: auto;">
@@ -213,15 +206,14 @@
       </div>
     </div>
 
-    <!-- ================= 4. ADMIN HUB ================= -->
+    <!-- 4. ADMIN HUB -->
     <div id="adminArea" class="hidden">
-      <!-- Admin Login with Enter-Key Jump -->
-      <div id="adminAuthBox" class="glass-box enter-group" data-submit="btnAdminLogin" style="max-width: 380px; margin: 30px auto;">
+      <form id="adminAuthBox" class="glass-box" style="max-width: 380px; margin: 30px auto;" onsubmit="event.preventDefault(); adminLoginAction();">
         <h3 style="font-weight: 800; text-align: center; margin-bottom: 14px;">🔐 Admin Hub</h3>
-        <div class="form-group"><label>Admin Username</label><input type="text" id="adminUser" placeholder="Enter username" /></div>
-        <div class="form-group"><label>Admin Password</label><input type="password" id="adminPass" placeholder="Enter password" /></div>
-        <button class="btn btn-primary" id="btnAdminLogin" onclick="adminLoginAction()">Login to Admin Hub</button>
-      </div>
+        <div class="form-group"><label>Admin Username</label><input type="text" id="adminUser" placeholder="Enter username" enterkeyhint="next" /></div>
+        <div class="form-group"><label>Admin Password</label><input type="password" id="adminPass" placeholder="Enter password" enterkeyhint="go" /></div>
+        <button type="submit" class="btn btn-primary" id="btnAdminLogin">Login to Admin Hub</button>
+      </form>
 
       <div id="adminControlPanel" class="hidden">
         <div class="glass-box" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
@@ -254,9 +246,7 @@
     </div>
   </main>
 
-  <!-- ================= MODALS ================= -->
-
-  <!-- OFFICIAL YK RECHARGE PORTAL RECEIPT MODAL -->
+  <!-- MODALS -->
   <div id="receiptModal" class="modal-overlay hidden">
     <div class="modal-body" style="max-width: 440px;">
       <div id="printableReceipt" style="border: 2px dashed #cbd5e1; padding: 18px; border-radius: 16px; background: #fafafa;">
@@ -269,31 +259,16 @@
         <div style="font-size: 12px; line-height: 1.8; color: #334155;">
           <div style="display:flex; justify-content:space-between;"><span>User ID:</span><b id="rcpUserId">-</b></div>
           <div style="display:flex; justify-content:space-between;"><span>Customer Name:</span><b id="rcpUserName">-</b></div>
-          <div style="display:flex; justify-content:space-between;">
-            <span>Transaction ID:</span>
-            <!-- Logic: Admin Op ID first, else Auto-generated ID -->
-            <b id="rcpTxnId" style="font-family:monospace; color:#4f46e5; font-weight:800;">-</b>
-          </div>
+          <div style="display:flex; justify-content:space-between;"><span>Transaction ID:</span><b id="rcpTxnId" style="font-family:monospace; color:#4f46e5; font-weight:800;">-</b></div>
           <div style="display:flex; justify-content:space-between;"><span>Mobile Number:</span><b id="rcpMobile">-</b></div>
           <div style="display:flex; justify-content:space-between;"><span>Operator / Circle:</span><b id="rcpOperator">-</b></div>
           <div style="display:flex; justify-content:space-between;"><span>Plan Details:</span><span id="rcpPlan" style="font-weight:600; text-align:right;">-</span></div>
           <div style="display:flex; justify-content:space-between;"><span>Date:</span><span id="rcpDate">-</span></div>
-          <div style="display:flex; justify-content:space-between; margin-top: 4px;">
-            <span>Status:</span><span id="rcpStatus" class="badge badge-success">Success</span>
-          </div>
-
+          <div style="display:flex; justify-content:space-between; margin-top: 4px;"><span>Status:</span><span id="rcpStatus" class="badge badge-success">Success</span></div>
           <hr style="border:none; border-top: 1px dashed #cbd5e1; margin: 10px 0;" />
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-size: 13px; font-weight:800;">Total Paid:</span>
-            <b id="rcpAmount" style="font-size: 18px; color: #059669; font-weight:900;">₹0.00</b>
-          </div>
-        </div>
-
-        <div style="text-align: center; margin-top: 12px; font-size: 10px; color: #94a3b8;">
-          Thank you for recharging with YK RECHARGE PORTAL!<br/>Computer generated invoice.
+          <div style="display:flex; justify-content:space-between; align-items:center;"><span style="font-size: 13px; font-weight:800;">Total Paid:</span><b id="rcpAmount" style="font-size: 18px; color: #059669; font-weight:900;">₹0.00</b></div>
         </div>
       </div>
-
       <div style="display:flex; gap: 8px; margin-top: 14px;">
         <button class="btn" style="background:#e2e8f0; color:#334155;" onclick="toggleModal('receiptModal', false)">Close</button>
         <button class="btn btn-primary" onclick="printReceipt()">🖨️ Print / Save PDF</button>
@@ -301,25 +276,23 @@
     </div>
   </div>
 
-  <!-- ADD MONEY MODAL -->
   <div id="addMoneyModal" class="modal-overlay hidden">
-    <div class="modal-body enter-group" data-submit="btnDeposit">
+    <form class="modal-body" onsubmit="event.preventDefault(); submitDeposit();">
       <h3 style="font-weight: 800; font-size: 16px; text-align: center;">Scan UPI QR to Add Money</h3>
       <div style="text-align: center; margin: 12px 0;">
         <img id="uQrImg" src="" style="border: 2px dashed #cbd5e1; padding: 6px; border-radius: 12px; width:150px; height:150px; object-fit:contain;" />
         <p style="font-size: 11px; color: #475569; margin-top: 6px;">UPI ID: <b id="uUpiIdText">9939311744@paytm</b></p>
       </div>
-      <div class="form-group"><label>Amount Paid (₹)</label><input type="number" id="wAmt" placeholder="e.g. 500" /></div>
-      <div class="form-group"><label>UTR / Ref Number (12 Digits)</label><input type="text" id="wUtr" maxlength="12" placeholder="Enter 12-digit UTR" /></div>
-      <div class="form-group"><label>Payment Date</label><input type="date" id="wDate" /></div>
+      <div class="form-group"><label>Amount Paid (₹)</label><input type="number" id="wAmt" placeholder="e.g. 500" enterkeyhint="next" /></div>
+      <div class="form-group"><label>UTR / Ref Number (12 Digits)</label><input type="text" id="wUtr" maxlength="12" placeholder="Enter 12-digit UTR" enterkeyhint="next" /></div>
+      <div class="form-group"><label>Payment Date</label><input type="date" id="wDate" enterkeyhint="go" /></div>
       <div style="display:flex; gap: 8px;">
-        <button class="btn" style="background:#e2e8f0; color:#334155;" onclick="toggleModal('addMoneyModal', false)">Cancel</button>
-        <button class="btn btn-primary" id="btnDeposit" onclick="submitDeposit()">Submit Slip</button>
+        <button type="button" class="btn" style="background:#e2e8f0; color:#334155;" onclick="toggleModal('addMoneyModal', false)">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="btnDeposit">Submit Slip</button>
       </div>
-    </div>
+    </form>
   </div>
 
-  <!-- USER HISTORY MODAL -->
   <div id="userHistoryModal" class="modal-overlay hidden">
     <div class="modal-body" style="max-width: 600px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
@@ -331,86 +304,35 @@
         <button id="hTabDep" class="btn-sm" style="background:#e2e8f0; color:#334155; border:none; cursor:pointer;" onclick="renderHistoryTab('deposits')">Deposits</button>
       </div>
       <div class="table-responsive" style="max-height:280px; overflow-y:auto;">
-        <table>
-          <thead id="historyThead"></thead>
-          <tbody id="historyTbody"></tbody>
-        </table>
+        <table><thead id="historyThead"></thead><tbody id="historyTbody"></tbody></table>
       </div>
     </div>
   </div>
 
-  <!-- ADMIN RESOLVE MODAL (OPTIONAL OPERATOR ID) -->
   <div id="adminSuccessModal" class="modal-overlay hidden">
-    <div class="modal-body enter-group" data-submit="btnAdminSuccess">
+    <form class="modal-body" onsubmit="event.preventDefault(); confirmAdminSuccess();">
       <h3 style="font-weight:800; font-size:16px; margin-bottom:8px;">Approve Recharge Order</h3>
       <p style="font-size:11px; color:#64748b; margin-bottom:12px;">Order Txn ID: <b id="asmTxnId">-</b></p>
-      <div class="form-group">
-        <label>Operator Transaction Number (Optional)</label>
-        <input type="text" id="asmOperatorId" placeholder="Leave empty for Auto Txn ID" />
-        <span style="font-size:10px; color:#64748b;">Agar bharenge toh receipt me yahi show hoga, warna Auto-generated ID show hogi.</span>
-      </div>
+      <div class="form-group"><label>Operator Txn ID (Optional)</label><input type="text" id="asmOperatorId" placeholder="Leave empty for Auto Txn ID" enterkeyhint="go" /></div>
       <div style="display:flex; gap:8px; margin-top:14px;">
-        <button class="btn" style="background:#e2e8f0; color:#334155;" onclick="toggleModal('adminSuccessModal', false)">Cancel</button>
-        <button class="btn btn-success" id="btnAdminSuccess" onclick="confirmAdminSuccess()">Mark Success</button>
+        <button type="button" class="btn" style="background:#e2e8f0; color:#334155;" onclick="toggleModal('adminSuccessModal', false)">Cancel</button>
+        <button type="submit" class="btn btn-success" id="btnAdminSuccess">Mark Success</button>
       </div>
-    </div>
+    </form>
   </div>
 
-  <!-- ADMIN QR SETUP -->
   <div id="adminQrModal" class="modal-overlay hidden">
-    <div class="modal-body enter-group" data-submit="btnSaveQr">
+    <form class="modal-body" onsubmit="event.preventDefault(); saveAdminQrAction();">
       <h3 style="font-weight:800; font-size:16px; margin-bottom:12px;">Set Payment UPI QR Code</h3>
-      <div class="form-group"><label>Admin UPI ID</label><input type="text" id="setAdminUpi" placeholder="e.g. 9939311744@paytm" /></div>
-      <div class="form-group"><label>Direct QR Image URL</label><input type="text" id="setAdminQrUrl" placeholder="https://..." /></div>
+      <div class="form-group"><label>Admin UPI ID</label><input type="text" id="setAdminUpi" placeholder="e.g. 9939311744@paytm" enterkeyhint="next" /></div>
+      <div class="form-group"><label>Direct QR Image URL</label><input type="text" id="setAdminQrUrl" placeholder="https://..." enterkeyhint="go" /></div>
       <div style="display:flex; gap:8px; margin-top:14px;">
-        <button class="btn" style="background:#e2e8f0; color:#334155;" onclick="toggleModal('adminQrModal', false)">Cancel</button>
-        <button class="btn btn-primary" id="btnSaveQr" onclick="saveAdminQrAction()">Save QR</button>
+        <button type="button" class="btn" style="background:#e2e8f0; color:#334155;" onclick="toggleModal('adminQrModal', false)">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="btnSaveQr">Save QR</button>
       </div>
-    </div>
+    </form>
   </div>
-
   <script>
-    // Browser Audio Context (Short clean beep)
-function playSystemNotificationSound() {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(650, ctx.currentTime);
-    gain.gain.setValueAtTime(0.25, ctx.currentTime);
-    osc.start();
-    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.5);
-    osc.stop(ctx.currentTime + 0.5);
-  } catch(e) {}
-}
-
-// Universal Browser Push Notification
-function triggerSystemNotification(title, message) {
-  playSystemNotificationSound();
-  showToast(message, "success");
-
-  if ("Notification" in window) {
-    if (Notification.permission === "granted") {
-      new Notification(title, {
-        body: message,
-        icon: "https://api.qrserver.com/v1/create-qr-code/?size=128x128&data=YKRecharge"
-      });
-    } else if (Notification.permission !== "denied") {
-      Notification.requestPermission().then(permission => {
-        if (permission === "granted") {
-          new Notification(title, { body: message });
-        }
-      });
-    }
-  }
-    }
-      
-    // ==============================================================
-    // VERIFIED APPS SCRIPT GATEWAY
-    // ==============================================================
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwNm_JGDGCLdWfqyY6Wi4pzk6djEn0wWaL4NqtcWCZX7x4eZDM5rf63cV47bSEUuET1/exec";
 
     let currentUser = JSON.parse(localStorage.getItem("yk_user_session") || "null");
@@ -419,6 +341,8 @@ function triggerSystemNotification(title, message) {
     let userHistoryData = { recharges: [], deposits: [] };
     let pendingApprovalTxn = null;
     let balanceSyncTimer = null;
+    let prevPendingWallets = 0;
+    let prevPendingRecharges = 0;
 
     let liveAdminQR = {
       qrUrl: "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=9939311744@paytm",
@@ -434,6 +358,36 @@ function triggerSystemNotification(title, message) {
       { operator: "BSNL", amount: 107, validity: "35 Days", desc: "3GB Total Data" }
     ];
 
+    let audioCtx = null;
+    function initAudio() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function playNotificationBeep() {
+      try {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(700, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        osc.start();
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.5);
+        osc.stop(audioCtx.currentTime + 0.5);
+      } catch(e) {}
+    }
+
+    function triggerSystemNotification(title, message) {
+      playNotificationBeep();
+      showToast(message, "success");
+      if ("Notification" in window && Notification.permission === "granted") {
+        new Notification(title, { body: message, icon: "https://api.qrserver.com/v1/create-qr-code/?size=128x128&data=YKRecharge" });
+      }
+    }
+
     function showToast(msg, type = "info") {
       const t = document.getElementById("toast");
       t.innerText = msg;
@@ -446,23 +400,15 @@ function triggerSystemNotification(title, message) {
       if (el) el.classList.toggle('hidden', !show);
     }
 
-    // ================= ENTER KEY JUMP / AUTO-SUBMIT ENGINE =================
-    function setupEnterKeyJump() {
-      document.querySelectorAll('.enter-group').forEach(group => {
-        const inputs = Array.from(group.querySelectorAll('input, select'));
-        const submitBtnId = group.getAttribute('data-submit');
-
-        inputs.forEach((input, idx) => {
+    function setupFormEnterNavigation() {
+      document.querySelectorAll('form').forEach(form => {
+        const inputs = Array.from(form.querySelectorAll('input:not([type="hidden"]), select'));
+        inputs.forEach((input, index) => {
           input.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-              e.preventDefault();
-              if (idx < inputs.length - 1) {
-                // Agle box par focus le jao
-                inputs[idx + 1].focus();
-              } else if (submitBtnId) {
-                // Aakhiri box par Enter dabte hi Action Submit trigger
-                const btn = document.getElementById(submitBtnId);
-                if (btn) btn.click();
+            if (e.key === 'Enter' || e.keyCode === 13) {
+              if (index < inputs.length - 1) {
+                e.preventDefault();
+                inputs[index + 1].focus();
               }
             }
           });
@@ -471,6 +417,7 @@ function triggerSystemNotification(title, message) {
     }
 
     function switchNav(tab) {
+      initAudio();
       document.getElementById('navHome').classList.toggle('active', tab === 'home');
       document.getElementById('navUser').classList.toggle('active', tab === 'user');
       document.getElementById('navAdmin').classList.toggle('active', tab === 'admin');
@@ -510,7 +457,6 @@ function triggerSystemNotification(title, message) {
       startLiveBalancePolling();
     }
 
-    // AUTO-BALANCE BACKGROUND SYNC
     async function syncBalanceLive() {
       if (!currentUser || !currentUser.userId) return;
       try {
@@ -527,7 +473,7 @@ function triggerSystemNotification(title, message) {
             currentUser.balance = liveBal;
             localStorage.setItem("yk_user_session", JSON.stringify(currentUser));
             document.getElementById('uBal').innerText = liveBal.toFixed(2);
-            showToast(`🎉 Wallet Credited: ₹${added} approved!`, "success");
+            triggerSystemNotification("Transaction Completed!", `₹${added} has been added & approved in your wallet!`);
           } else if (liveBal !== currentBal) {
             currentUser.balance = liveBal;
             localStorage.setItem("yk_user_session", JSON.stringify(currentUser));
@@ -542,8 +488,8 @@ function triggerSystemNotification(title, message) {
       balanceSyncTimer = setInterval(syncBalanceLive, 5000);
     }
 
-    // USER AUTH
     async function loginAction() {
+      initAudio();
       const mobile = document.getElementById('lMobile').value.trim();
       const password = document.getElementById('lPass').value.trim();
       if (!mobile || !password) return showToast("Mobile aur password enter karein!", "error");
@@ -562,12 +508,12 @@ function triggerSystemNotification(title, message) {
           currentUser = data.user;
           localStorage.setItem("yk_user_session", JSON.stringify(currentUser));
           switchNav('user');
-          showToast(`Welcome ${currentUser.name}!`, "success");
+          triggerSystemNotification("Login Successful", `Welcome back, ${currentUser.name}!`);
         } else {
           showToast(data.message || "Invalid Login", "error");
         }
       } catch (e) {
-        showToast("Connection error! Check network.", "error");
+        showToast("Connection error! Please retry.", "error");
       } finally {
         btn.innerText = "Sign In";
         btn.disabled = false;
@@ -575,6 +521,7 @@ function triggerSystemNotification(title, message) {
     }
 
     async function registerAction() {
+      initAudio();
       const name = document.getElementById('rName').value.trim();
       const mobile = document.getElementById('rMobile').value.trim();
       const email = document.getElementById('rEmail').value.trim();
@@ -593,7 +540,10 @@ function triggerSystemNotification(title, message) {
         });
         const data = await res.json();
         showToast(data.message, data.success ? "success" : "error");
-        if (data.success) toggleAuth('login');
+        if (data.success) {
+          triggerSystemNotification("Registration Submitted", "Your registration is requested! Waiting for admin approval.");
+          toggleAuth('login');
+        }
       } catch(e) {
         showToast("Registration error!", "error");
       } finally {
@@ -610,7 +560,6 @@ function triggerSystemNotification(title, message) {
       showToast("Logged out successfully");
     }
 
-    // OPERATOR & PLANS
     function autoDetect(val) {
       if (val.length === 10) {
         const p = val.substring(0, 2);
@@ -618,7 +567,6 @@ function triggerSystemNotification(title, message) {
         if (["98", "99", "88", "70"].includes(p)) op = "Airtel";
         else if (["90", "91", "80", "77"].includes(p)) op = "Vi";
         else if (["94", "89"].includes(p)) op = "BSNL";
-
         document.getElementById('recOp').value = op;
         renderPlans();
       }
@@ -658,8 +606,8 @@ function triggerSystemNotification(title, message) {
       });
     }
 
-    // RECHARGE EXECUTION
     async function startRecharge() {
+      initAudio();
       const mobile = document.getElementById('recMobile').value.trim();
       const op = document.getElementById('recOp').value;
       const amt = Number(document.getElementById('recAmt').value);
@@ -686,29 +634,20 @@ function triggerSystemNotification(title, message) {
           currentUser.balance = data.newBalance !== undefined ? data.newBalance : (currentUser.balance - amt);
           localStorage.setItem("yk_user_session", JSON.stringify(currentUser));
           document.getElementById('uBal').innerText = Number(currentUser.balance).toFixed(2);
-          showToast(`Recharge submitted! Order: ${data.txnId}`, "success");
+          triggerSystemNotification("Recharge Order Placed", `Your recharge transaction of ₹${amt} is requested successfully!`);
         } else {
           showToast(data.message, "error");
         }
       } catch(e) {
-        showToast("Recharge order submitted for approval!", "success");
+        triggerSystemNotification("Recharge Order Placed", "Your transaction is requested! Waiting for operator status.");
       } finally {
         btn.innerText = "Continue to Recharge";
         btn.disabled = false;
       }
     }
-            if (data.success) {
-          currentUser.balance = data.newBalance !== undefined ? data.newBalance : (currentUser.balance - amt);
-          localStorage.setItem("yk_user_session", JSON.stringify(currentUser));
-          document.getElementById('uBal').innerText = Number(currentUser.balance).toFixed(2);
-          
-          // 👉 Browser Sound & Push Notification (Recharge Requested)
-          triggerSystemNotification("Recharge Order Placed", `Your recharge of ₹${amt} is requested successfully!`);
-    }
-    
 
-    // ADD MONEY (WALLET SLIP)
     async function openAddMoneyModal() {
+      initAudio();
       document.getElementById('wDate').valueAsDate = new Date();
       document.getElementById('uQrImg').src = liveAdminQR.qrUrl;
       document.getElementById('uUpiIdText').innerText = liveAdminQR.upiId;
@@ -726,27 +665,7 @@ function triggerSystemNotification(title, message) {
     }
 
     async function submitDeposit() {
-      const amt = Number(document.getElementById('wAmt').value);
-      const utr = document.getElementById('wUtr').value.trim();
-      const date = document.getElementById('wDate').value;
-      if (!amt || utr.length < 6 || !date) return showToast("Amount, 12-digit UTR aur Date bharein!", "error");
-
-      const btn = document.getElementById('btnDeposit');
-      btn.innerText = "Submitting...";
-      btn.disabled = true;
-      try {
-        const res = await fetch(SCRIPT_URL, {
-          method: "POST",
-          body: JSON.stringify({ action: "add_money_request", userId: currentUser.userId, amount: amt, utr, date })
-        });
-        const data = await res.json();
-        showToast(data.message || "Slip submitted!", data.success ? "success" : "error");
-        if (data.success) {
-          toggleModal('addMoneyModal', false);
-          document.getElementById('wAmt').value = "";
-          document.getElementById('wUtr').value = "";
-        }
-            async function submitDeposit() {
+      initAudio();
       const amt = Number(document.getElementById('wAmt').value);
       const utr = document.getElementById('wUtr').value.trim();
       const date = document.getElementById('wDate').value;
@@ -762,9 +681,7 @@ function triggerSystemNotification(title, message) {
           body: JSON.stringify({ action: "add_money_request", userId: currentUser.userId, amount: amt, utr, date })
         });
         const data = await res.json();
-        
         if (data.success) {
-          // 👉 Browser Sound & Push Notification (Deposit Requested)
           triggerSystemNotification("Add Money Requested", "Your transaction is requested! Waiting for admin approval.");
           toggleModal('addMoneyModal', false);
           document.getElementById('wAmt').value = "";
@@ -779,19 +696,10 @@ function triggerSystemNotification(title, message) {
         btn.innerText = "Submit Slip";
         btn.disabled = false;
       }
-            }
-        
-      } catch(e) {
-        showToast("Deposit slip sent to admin!", "success");
-        toggleModal('addMoneyModal', false);
-      } finally {
-        btn.innerText = "Submit Slip";
-        btn.disabled = false;
-      }
     }
 
-    // USER HISTORY & OFFICIAL RECEIPT
     async function openUserHistoryModal(tab) {
+      initAudio();
       toggleModal('userHistoryModal', true);
       renderHistoryTab(tab);
 
@@ -855,7 +763,6 @@ function triggerSystemNotification(title, message) {
       document.getElementById('rcpUserId').innerText = currentUser ? currentUser.userId : "USR1001";
       document.getElementById('rcpUserName').innerText = currentUser ? currentUser.name : "Customer";
 
-      // Transaction ID Priority: Admin Op Txn ID agar available hai, warna Auto-generated Txn ID
       if (item.opTxnId && String(item.opTxnId).trim() !== "") {
         document.getElementById('rcpTxnId').innerText = item.opTxnId;
       } else {
@@ -883,175 +790,4 @@ function triggerSystemNotification(title, message) {
       pWin.document.write('</body></html>');
       pWin.document.close();
       pWin.focus();
-      setTimeout(() => { pWin.print(); pWin.close(); }, 500);
-    }
-
-    // ADMIN HUB ACTIONS
-    async function adminLoginAction() {
-      const u = document.getElementById('adminUser').value.trim();
-      const p = document.getElementById('adminPass').value.trim();
-      if (!u || !p) return showToast("Admin username aur password enter karein", "error");
-
-      const btn = document.getElementById('btnAdminLogin');
-      btn.innerText = "Verifying...";
-      btn.disabled = true;
-
-      try {
-        const res = await fetch(SCRIPT_URL, {
-          method: "POST",
-          body: JSON.stringify({ action: "admin_login", username: u, password: p })
-        });
-        const data = await res.json();
-        if (data.success) {
-          adminToken = data.adminToken;
-          sessionStorage.setItem("yk_admin_token", adminToken);
-          document.getElementById('adminAuthBox').classList.add('hidden');
-          document.getElementById('adminControlPanel').classList.remove('hidden');
-          document.getElementById('adminUserDisplay').innerText = u;
-          fetchAdminData();
-          showToast("Admin authenticated!", "success");
-        } else {
-          showToast(data.message || "Invalid Admin", "error");
-        }
-      } catch(e) {
-        showToast("Admin connection error", "error");
-      } finally {
-        btn.innerText = "Login to Admin Hub";
-        btn.disabled = false;
-      }
-    }
-
-    async function fetchAdminData() {
-      if (!adminToken) return;
-      try {
-        const res = await fetch(SCRIPT_URL, {
-          method: "POST",
-          body: JSON.stringify({ action: "admin_get_all_data", adminToken })
-        });
-        const data = await res.json();
-        if (!data.success) return;
-
-        if (data.qrUrl) liveAdminQR.qrUrl = data.qrUrl;
-        if (data.upiId) liveAdminQR.upiId = data.upiId;
-
-        // Render Users
-        const uBody = document.getElementById('adminUserRows');
-        uBody.innerHTML = (data.users && data.users.length) ? "" : "<tr><td colspan='6'>No Users</td></tr>";
-        data.users?.forEach(u => {
-          uBody.innerHTML += `
-            <tr>
-              <td><b>${u.id}</b></td><td>${u.name}</td><td>${u.mobile}</td><td>${u.email}</td>
-              <td><span class="badge ${u.status === 'Approved' ? 'badge-success' : 'badge-pending'}">${u.status}</span></td>
-              <td style="text-align:right;">
-                ${u.status === 'Pending' ? `<button class="btn-sm" style="background:#059669; color:#fff; border:none; cursor:pointer;" onclick="resolveUser('${u.id}', 'Approved')">Approve</button>` : 'Done'}
-              </td>
-            </tr>`;
-        });
-
-        // Render Wallets
-        const wBody = document.getElementById('adminWalletRows');
-        wBody.innerHTML = (data.wallets && data.wallets.length) ? "" : "<tr><td colspan='7'>No Requests</td></tr>";
-        data.wallets?.forEach(w => {
-          wBody.innerHTML += `
-            <tr>
-              <td>#${w.id}</td><td>${w.userId}</td><td><b>₹${w.amount}</b></td><td style="font-family:monospace;">${w.utr}</td><td>${w.date}</td>
-              <td><span class="badge ${w.status === 'Approved' ? 'badge-success' : 'badge-pending'}">${w.status}</span></td>
-              <td style="text-align:right;">
-                ${w.status === 'Pending' ? `<button class="btn-sm" style="background:#059669; color:#fff; border:none; cursor:pointer;" onclick="resolveWallet('${w.id}', 'Approved')">Approve</button>` : 'Done'}
-              </td>
-            </tr>`;
-        });
-
-        // Render Recharges
-        const rBody = document.getElementById('adminRecRows');
-        rBody.innerHTML = (data.recharges && data.recharges.length) ? "" : "<tr><td colspan='8'>No Orders</td></tr>";
-        data.recharges?.forEach(r => {
-          rBody.innerHTML += `
-            <tr>
-              <td>#${r.id}</td><td>${r.userId}</td><td>${r.mobile}</td><td>${r.op}</td><td><b>₹${r.amount}</b></td>
-              <td style="font-family:monospace; color:#4f46e5; font-weight:700;">${r.opTxnId || '-'}</td>
-              <td><span class="badge ${r.status === 'Success' ? 'badge-success' : (r.status === 'Rejected' ? 'badge-rejected' : 'badge-pending')}">${r.status}</span></td>
-              <td style="text-align:right;">
-                ${r.status === 'Pending' ? `<button class="btn-sm" style="background:#059669; color:#fff; border:none; cursor:pointer;" onclick="promptAdminSuccess('${r.id}')">Approve</button>` : 'Done'}
-              </td>
-            </tr>`;
-        });
-      } catch(e) {}
-    }
-
-    async function resolveUser(userId, status) {
-      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_approve_user", userId, status, adminToken }) });
-      showToast(`User ${status}!`, "success");
-      fetchAdminData();
-    }
-
-    async function resolveWallet(requestId, status) {
-      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_update_wallet", requestId, status, adminToken }) });
-      showToast(`Wallet slip ${status}!`, "success");
-      fetchAdminData();
-    }
-
-    function promptAdminSuccess(txnId) {
-      pendingApprovalTxn = txnId;
-      document.getElementById('asmTxnId').innerText = "#" + txnId;
-      document.getElementById('asmOperatorId').value = "";
-      toggleModal('adminSuccessModal', true);
-    }
-
-    async function confirmAdminSuccess() {
-      const opTxnId = document.getElementById('asmOperatorId').value.trim();
-      const btn = document.getElementById('btnAdminSuccess');
-      btn.innerText = "Marking...";
-      btn.disabled = true;
-
-      try {
-        const res = await fetch(SCRIPT_URL, {
-          method: "POST",
-          body: JSON.stringify({ action: "admin_update_recharge", txnId: pendingApprovalTxn, status: "Success", operatorTxnId: opTxnId, adminToken })
-        });
-        const data = await res.json();
-        showToast(data.message || "Recharge marked success!", "success");
-        toggleModal('adminSuccessModal', false);
-        fetchAdminData();
-      } catch(e) {
-        showToast("Order marked success!", "success");
-        toggleModal('adminSuccessModal', false);
-        fetchAdminData();
-      } finally {
-        btn.innerText = "Mark Success";
-        btn.disabled = false;
-      }
-    }
-
-    function openAdminQrModal() {
-      document.getElementById('setAdminUpi').value = liveAdminQR.upiId || "";
-      document.getElementById('setAdminQrUrl').value = liveAdminQR.qrUrl || "";
-      toggleModal('adminQrModal', true);
-    }
-
-    async function saveAdminQrAction() {
-      const upiId = document.getElementById('setAdminUpi').value.trim();
-      const qrUrl = document.getElementById('setAdminQrUrl').value.trim();
-      if (!upiId && !qrUrl) return showToast("UPI ID ya QR Link bharein!", "error");
-
-      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_update_qr", upiId, qrUrl, adminToken }) });
-      liveAdminQR = { upiId, qrUrl };
-      showToast("Payment QR updated successfully!", "success");
-      toggleModal('adminQrModal', false);
-    }
-
-    function adminLogoutAction() {
-      adminToken = null;
-      sessionStorage.removeItem("yk_admin_token");
-      document.getElementById('adminControlPanel').classList.add('hidden');
-      document.getElementById('adminAuthBox').classList.remove('hidden');
-      showToast("Admin logged out");
-    }
-
-    window.addEventListener("DOMContentLoaded", () => {
-      setupEnterKeyJump();
-      if (currentUser) renderUserData();
-    });
-  </script>
-</body>
-</html>
+      setTimeout(() => { pWin.print(); pWin.

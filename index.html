@@ -758,20 +758,29 @@ function stopLiveBalancePolling() {
     }
 
     function renderUserScreen() {
-      document.getElementById('authView').classList.add('hidden');
-      document.getElementById('userDash').classList.remove('hidden');
-      document.getElementById('uName').innerText = currentUser.name;
-      document.getElementById('uPhone').innerText = "+91 " + currentUser.mobile;
-      document.getElementById('uBal').innerText = Number(currentUser.balance).toFixed(2);
-    }
+  document.getElementById('authView').classList.add('hidden');
+  document.getElementById('userDash').classList.remove('hidden');
+  document.getElementById('uName').innerText = currentUser.name;
+  document.getElementById('uPhone').innerText = "+91 " + currentUser.mobile;
+  document.getElementById('uBal').innerText = Number(currentUser.balance).toFixed(2);
+
+  // 👉 Ye nayi line add karein:
+  startLiveBalancePolling();
+}
+
 
     function logoutAction() {
-      currentUser = null;
-      localStorage.removeItem("qr_user_session");
-      document.getElementById('userDash').classList.add('hidden');
-      document.getElementById('authView').classList.remove('hidden');
-      showToast("Logged out successfully");
-    }
+  // 👉 Ye nayi line add karein:
+  stopLiveBalancePolling();
+
+  currentUser = null;
+  localStorage.removeItem("qr_user_session");
+  document.getElementById('userDash').classList.add('hidden');
+  document.getElementById('authView').classList.remove('hidden');
+  showToast("Logged out successfully");
+}
+
+
 
     // RECHARGE FLOW
     function startRecharge() {

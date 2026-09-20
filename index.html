@@ -63,10 +63,39 @@
     .chip:hover { border-color: #4f46e5; color: #4338ca; }
     .plan-card { padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
     .plan-card:hover { border-color: #4f46e5; }
-    .table-responsive { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; }
+    
+    /* Rolling / Scrollable Table Styling */
+    .table-responsive { 
+      overflow-x: auto; 
+      border: 1px solid var(--border); 
+      border-radius: 10px; 
+    }
+    .table-rolling {
+      max-height: 260px;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+    }
     table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: left; }
-    th { background: var(--input-bg); padding: 10px; color: var(--text-muted); font-weight: 700; white-space: nowrap; }
+    th { background: var(--input-bg); padding: 10px; color: var(--text-muted); font-weight: 700; white-space: nowrap; position: sticky; top: 0; z-index: 2; }
     td { padding: 10px; border-bottom: 1px solid var(--border); white-space: nowrap; color: var(--text); }
+    
+    /* Search Bar inside Card Header */
+    .section-header-box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .table-search-input {
+      width: 220px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      margin-bottom: 0;
+    }
+
     .badge { padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
     .badge-pending { background: #fef3c7; color: #b45309; }
     .badge-success { background: #d1fae5; color: #065f46; }
@@ -246,19 +275,47 @@
           </div>
         </div>
 
-        <!-- 3. WALLET DEPOSITS -->
+        <!-- 3. WALLET DEPOSITS (WITH SEPARATE SEARCH, APPROVAL-FIRST & ROLLING) -->
         <div class="glass-box">
-          <h3 style="font-size:14px; font-weight:800; margin-bottom:8px; color:#38bdf8;">3. Wallet Deposit Slips</h3>
-          <div class="table-responsive">
-            <table><thead><tr><th>Req ID</th><th>User</th><th>Amount</th><th>UTR</th><th>Action</th></tr></thead><tbody id="adminWalletRows"></tbody></table>
+          <div class="section-header-box">
+            <h3 style="font-size:14px; font-weight:800; color:#38bdf8; margin:0;">3. Wallet Deposit Slips</h3>
+            <input 
+              type="text" 
+              id="walletSearchInput" 
+              class="table-search-input" 
+              placeholder="🔍 Search UTR, User, Req ID..." 
+              oninput="renderAdminWallets()" 
+            />
+          </div>
+          <div class="table-responsive table-rolling">
+            <table>
+              <thead>
+                <tr><th>Req ID</th><th>User</th><th>Amount</th><th>UTR</th><th>Action</th></tr>
+              </thead>
+              <tbody id="adminWalletRows"></tbody>
+            </table>
           </div>
         </div>
 
-        <!-- 4. RECHARGE ORDERS -->
+        <!-- 4. RECHARGE ORDERS (WITH SEPARATE SEARCH, APPROVAL-FIRST & ROLLING) -->
         <div class="glass-box">
-          <h3 style="font-size:14px; font-weight:800; margin-bottom:8px; color:#38bdf8;">4. Recharge Orders</h3>
-          <div class="table-responsive">
-            <table><thead><tr><th>Txn ID</th><th>User</th><th>Mobile</th><th>Op</th><th>Amount</th><th>Op Txn ID</th><th>Action</th></tr></thead><tbody id="adminRecRows"></tbody></table>
+          <div class="section-header-box">
+            <h3 style="font-size:14px; font-weight:800; color:#38bdf8; margin:0;">4. Recharge Orders</h3>
+            <input 
+              type="text" 
+              id="recSearchInput" 
+              class="table-search-input" 
+              placeholder="🔍 Search Mobile, User, Op..." 
+              oninput="renderAdminRecharges()" 
+            />
+          </div>
+          <div class="table-responsive table-rolling">
+            <table>
+              <thead>
+                <tr><th>Txn ID</th><th>User</th><th>Mobile</th><th>Op</th><th>Amount</th><th>Op Txn ID</th><th>Action</th></tr>
+              </thead>
+              <tbody id="adminRecRows"></tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -344,19 +401,15 @@
     // ==========================================
     // 1. CONFIGURATION & STATE
     // ==========================================
-    // Apps script deployed web app URL (agar connected hai)
-    const API_URL = "https://script.google.com/macros/s/AKfycbz_YOUR_SCRIPT_ID/exec";
-
-    // Beep sound alert (Base64 WAV)
     const alertBeep = new Audio("data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a1/S9cT8SFlq65PWhZSsVO4rR7a5sNRo1g8/pt24/GDR/y+ivcT0fOIHO6rFqNhk5gc3or2k6GzWAzeiwaTsZOX7N6a9pOxk3fc7or2g5");
 
-    let currentUser = JSON.null;
+    let currentUser = null;
     let isAdminLoggedIn = false;
     let knownRecIds = new Set();
     let knownDepositIds = new Set();
     let isInitialAdminLoad = true;
 
-    // Local Mock DB fallback (Storage)
+    // Local Storage Mock DB
     let db = {
       users: JSON.parse(localStorage.getItem("yk_users")) || [
         { id: "101", name: "Ramesh Kumar", phone: "9876543210", email: "ramesh@test.com", pass: "1234", bal: 450, status: "Active" }
@@ -382,7 +435,7 @@
     }
 
     // ==========================================
-    // 2. BROWSER NOTIFICATION ENGINE FOR ADMIN
+    // 2. BROWSER NOTIFICATION ENGINE
     // ==========================================
     function checkNotifPermissionState() {
       const btn = document.getElementById("btnAdminNotif");
@@ -429,7 +482,7 @@
     }
 
     // ==========================================
-    // 3. NAVIGATION & THEME CONTROLS
+    // 3. NAVIGATION & MODALS
     // ==========================================
     function showToast(msg) {
       const t = document.getElementById("toast");
@@ -499,7 +552,7 @@
     }
 
     // ==========================================
-    // 4. AUTHENTICATION (USER & ADMIN)
+    // 4. AUTH ACTIONS
     // ==========================================
     function registerAction() {
       const name = document.getElementById("rName").value.trim();
@@ -563,7 +616,7 @@
     }
 
     // ==========================================
-    // 5. USER RECHARGE & WALLET ENGINE
+    // 5. USER RECHARGE & PLANS
     // ==========================================
     function renderUserView() {
       if (!currentUser) return;
@@ -633,7 +686,6 @@
       if (!amt || amt <= 0) return showToast("Valid amount enter karein");
       if (currentUser.bal < amt) return showToast("Insufficient Wallet Balance! Add money first.");
 
-      // Deduct balance & create order
       currentUser.bal -= amt;
       const order = {
         id: "TXN" + Date.now().toString().slice(-6),
@@ -643,7 +695,7 @@
         op: op,
         amt: amt,
         opTxnId: "OP" + Math.floor(10000000 + Math.random() * 90000000),
-        status: "Pending", // Admin will approve/process
+        status: "Pending",
         date: new Date().toLocaleString()
       };
 
@@ -651,8 +703,6 @@
       saveDb();
       renderUserView();
       showToast("Recharge Request Submitted!");
-
-      // Open Receipt Modal
       showReceipt(order);
     }
 
@@ -670,7 +720,7 @@
     }
 
     // ==========================================
-    // 6. WALLET ADD MONEY SLIPS
+    // 6. WALLET ADD MONEY SLIPS & HISTORY
     // ==========================================
     function openAddMoneyModal() {
       const upi = db.upiId;
@@ -738,13 +788,98 @@
     }
 
     // ==========================================
-    // 7. ADMIN DASHBOARD SYNC & NOTIFICATION ENGINE
+    // 7. ADMIN DASHBOARD & APPROVAL-FIRST FILTERING
     // ==========================================
+
+    // Helper: Sort array so 'Pending' (Approval needed) comes first, others below
+    function sortByPendingFirst(list) {
+      return [...list].sort((a, b) => {
+        if (a.status === "Pending" && b.status !== "Pending") return -1;
+        if (a.status !== "Pending" && b.status === "Pending") return 1;
+        return 0;
+      });
+    }
+
+    // Render Admin Wallet Deposits (Separate Search + Approval First)
+    function renderAdminWallets() {
+      const query = (document.getElementById("walletSearchInput")?.value || "").toLowerCase().trim();
+      let list = sortByPendingFirst(db.deposits);
+
+      if (query) {
+        list = list.filter(d => 
+          (d.id && d.id.toLowerCase().includes(query)) ||
+          (d.userName && d.userName.toLowerCase().includes(query)) ||
+          (d.userId && d.userId.toLowerCase().includes(query)) ||
+          (d.utr && d.utr.toLowerCase().includes(query)) ||
+          (String(d.amt).includes(query))
+        );
+      }
+
+      const tbody = document.getElementById("adminWalletRows");
+      if (!list.length) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No deposits found</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map(d => `
+        <tr style="${d.status === 'Pending' ? 'background: rgba(245, 158, 11, 0.08);' : ''}">
+          <td>${d.id}</td>
+          <td>${d.userName} (${d.userId})</td>
+          <td>₹${d.amt}</td>
+          <td><b>${d.utr}</b></td>
+          <td>
+            ${d.status === 'Pending' ? `
+              <button class="btn btn-success btn-sm" onclick="adminApproveDeposit('${d.id}')">Approve</button>
+            ` : `<span class="badge badge-success">${d.status}</span>`}
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    // Render Admin Recharges (Separate Search + Approval First)
+    function renderAdminRecharges() {
+      const query = (document.getElementById("recSearchInput")?.value || "").toLowerCase().trim();
+      let list = sortByPendingFirst(db.recharges);
+
+      if (query) {
+        list = list.filter(r => 
+          (r.id && r.id.toLowerCase().includes(query)) ||
+          (r.userName && r.userName.toLowerCase().includes(query)) ||
+          (r.mobile && r.mobile.toLowerCase().includes(query)) ||
+          (r.op && r.op.toLowerCase().includes(query)) ||
+          (r.opTxnId && r.opTxnId.toLowerCase().includes(query)) ||
+          (String(r.amt).includes(query))
+        );
+      }
+
+      const tbody = document.getElementById("adminRecRows");
+      if (!list.length) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-muted);">No recharges found</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map(r => `
+        <tr style="${r.status === 'Pending' ? 'background: rgba(245, 158, 11, 0.08);' : ''}">
+          <td>${r.id}</td>
+          <td>${r.userName}</td>
+          <td><b>${r.mobile}</b></td>
+          <td>${r.op}</td>
+          <td>₹${r.amt}</td>
+          <td>${r.opTxnId}</td>
+          <td>
+            ${r.status === 'Pending' ? `
+              <button class="btn btn-success btn-sm" onclick="adminApproveRecharge('${r.id}')">Complete</button>
+            ` : `<span class="badge badge-success">${r.status}</span>`}
+          </td>
+        </tr>
+      `).join("");
+    }
+
     function fetchAdminData() {
       if (!isAdminLoggedIn) return;
       document.getElementById("adminSyncTime").textContent = "Updated: " + new Date().toLocaleTimeString();
 
-      // Render Plans
+      // 1. Render Plans
       document.getElementById("adminPlanRows").innerHTML = db.plans.map(p => `
         <tr>
           <td><b>${p.op}</b></td>
@@ -754,7 +889,7 @@
         </tr>
       `).join("");
 
-      // Render Users
+      // 2. Render Users
       document.getElementById("adminUserRows").innerHTML = db.users.map(u => `
         <tr>
           <td>${u.id}</td>
@@ -772,39 +907,11 @@
         </tr>
       `).join("");
 
-      // Render Deposits & Detect New Requests
-      document.getElementById("adminWalletRows").innerHTML = db.deposits.slice().reverse().map(d => `
-        <tr>
-          <td>${d.id}</td>
-          <td>${d.userName} (${d.userId})</td>
-          <td>₹${d.amt}</td>
-          <td>${d.utr}</td>
-          <td>
-            ${d.status === 'Pending' ? `
-              <button class="btn btn-success btn-sm" onclick="adminApproveDeposit('${d.id}')">Approve</button>
-            ` : `<span class="badge badge-success">${d.status}</span>`}
-          </td>
-        </tr>
-      `).join("");
+      // 3. Render Deposit & Recharge Tables
+      renderAdminWallets();
+      renderAdminRecharges();
 
-      // Render Recharge Orders & Detect New
-      document.getElementById("adminRecRows").innerHTML = db.recharges.slice().reverse().map(r => `
-        <tr>
-          <td>${r.id}</td>
-          <td>${r.userName}</td>
-          <td>${r.mobile}</td>
-          <td>${r.op}</td>
-          <td>₹${r.amt}</td>
-          <td>${r.opTxnId}</td>
-          <td>
-            ${r.status === 'Pending' ? `
-              <button class="btn btn-success btn-sm" onclick="adminApproveRecharge('${r.id}')">Complete</button>
-            ` : `<span class="badge badge-success">${r.status}</span>`}
-          </td>
-        </tr>
-      `).join("");
-
-      // CHECK FOR NEW USER NOTIFICATIONS
+      // CHECK FOR NEW USER REQUEST NOTIFICATIONS
       db.deposits.forEach(d => {
         if (!knownDepositIds.has(d.id)) {
           if (!isInitialAdminLoad && d.status === "Pending") {
@@ -902,11 +1009,10 @@
     }
 
     // ==========================================
-    // 8. AUTO-POLLING INTERVAL INITIALIZATION
+    // 8. INITIALIZE & AUTO POLLING
     // ==========================================
     window.addEventListener("DOMContentLoaded", () => {
       renderPlans();
-      // Har 8 second me background check karega naye requests ke liye
       setInterval(() => {
         if (isAdminLoggedIn) {
           fetchAdminData();

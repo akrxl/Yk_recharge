@@ -54,6 +54,7 @@
     .btn-success { background: #059669; color: #fff; }
     .btn-danger { background: #e11d48; color: #fff; }
     .btn-warning { background: #d97706; color: #fff; }
+    .btn-purple { background: #9333ea; color: #fff; }
     .btn-sm { width: auto; padding: 5px 10px; font-size: 11px; border-radius: 7px; }
     .op-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
     .op-pill { background: var(--chip-bg); border: 1.5px solid var(--border); border-radius: 10px; padding: 10px 4px; text-align: center; cursor: pointer; font-size: 12px; font-weight: 800; color: var(--text); }
@@ -71,6 +72,7 @@
     .badge-pending { background: #fef3c7; color: #b45309; }
     .badge-success { background: #d1fae5; color: #065f46; }
     .badge-frozen { background: #fee2e2; color: #dc2626; }
+    .badge-cashback { background: #f3e8ff; color: #7e22ce; border: 1px solid #d8b4fe; }
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; padding: 16px; z-index: 100; }
     .modal-body { background: var(--card-bg); border-radius: 20px; width: 100%; max-width: 440px; padding: 22px; box-shadow: 0 20px 45px rgba(0,0,0,0.3); border: 1px solid var(--border); }
     #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); opacity: 0; z-index: 200; background: #1e293b; color: #fff; padding: 11px 20px; border-radius: 30px; font-size: 12.5px; font-weight: 600; transition: 0.3s; pointer-events: none; }
@@ -161,7 +163,7 @@
           </div>
           <div style="display:flex; gap:6px; margin-top:10px;">
             <button class="btn-sm" style="flex:1; background:var(--chip-bg); color:#4f46e5; border:1px solid var(--border); cursor:pointer; font-weight:700;" onclick="openHistory('recharges')">📜 Recharges</button>
-            <button class="btn-sm" style="flex:1; background:var(--chip-bg); color:#4f46e5; border:1px solid var(--border); cursor:pointer; font-weight:700;" onclick="openHistory('deposits')">💳 Deposits / Cashback</button>
+            <button class="btn-sm" style="flex:1; background:var(--chip-bg); color:#4f46e5; border:1px solid var(--border); cursor:pointer; font-weight:700;" onclick="openHistory('deposits')">💳 Deposits & Cashback</button>
           </div>
         </div>
       </div>
@@ -187,7 +189,7 @@
             <button type="submit" class="btn btn-primary" id="btnRec">Recharge Now</button>
           </form>
           <div>
-            <label>Available Plans</label>
+            <label>Available Plans (Added by Admin)</label>
             <div id="plansList" style="max-height: 250px; overflow-y: auto;"></div>
           </div>
         </div>
@@ -236,11 +238,11 @@
           </div>
         </div>
 
-        <!-- 2. USER APPROVALS & ACCESS CONTROL -->
+        <!-- 2. USER APPROVALS, ACCESS & CASHBACK -->
         <div class="glass-box">
-          <h3 style="font-size:14px; font-weight:800; margin-bottom:8px; color:#38bdf8;">2. User Approvals & Access Control</h3>
+          <h3 style="font-size:14px; font-weight:800; margin-bottom:8px; color:#38bdf8;">2. User Approvals, Access & Cashback</h3>
           <div class="table-responsive">
-            <table><thead><tr><th>ID</th><th>Name</th><th>Mobile</th><th>Balance</th><th>Action</th><th>Access</th></tr></thead><tbody id="adminUserRows"></tbody></table>
+            <table><thead><tr><th>ID</th><th>Name</th><th>Mobile</th><th>Balance</th><th>Action</th><th>Access</th><th>Reward</th></tr></thead><tbody id="adminUserRows"></tbody></table>
           </div>
         </div>
 
@@ -263,7 +265,7 @@
     </div>
   </main>
 
-  <!-- RECEIPT MODAL -->
+  <!-- RECHARGE RECEIPT MODAL -->
   <div id="receiptModal" class="modal-overlay hidden">
     <div class="modal-body" style="background:#ffffff; color:#0f172a; max-width: 430px;">
       <div id="printableReceipt" style="border: 2px dashed #cbd5e1; padding: 18px; border-radius: 14px; background: #fafafa;">
@@ -288,9 +290,51 @@
       </div>
       <div style="display:flex; gap: 6px; margin-top: 12px;">
         <button class="btn" style="background:#e2e8f0; color:#334155;" onclick="toggleModal('receiptModal', false)">Close</button>
-        <button class="btn btn-primary" onclick="printReceipt()">🖨️ Print Receipt</button>
+        <button class="btn btn-primary" onclick="printSlip('printableReceipt')">🖨️ Print Receipt</button>
       </div>
     </div>
+  </div>
+
+  <!-- DEPOSIT / CASHBACK RECEIPT MODAL -->
+  <div id="depositReceiptModal" class="modal-overlay hidden">
+    <div class="modal-body" style="background:#ffffff; color:#0f172a; max-width: 430px;">
+      <div id="printableDepositReceipt" style="border: 2px dashed #cbd5e1; padding: 18px; border-radius: 14px; background: #fafafa;">
+        <div style="text-align: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; margin-bottom: 10px;">
+          <h2 style="font-size: 17px; font-weight: 900; color: #4338ca; margin:0;">YK RECHARGE PORTAL</h2>
+          <p style="font-size: 10.5px; color: #64748b; margin-top:2px;">Chanduli, Raxaul, Bihar (845305) | +91 99393-11744</p>
+          <span id="dpRcpBadge" style="font-size: 9.5px; font-weight: 800; color: #7e22ce; text-transform: uppercase;">CASHBACK REWARD SLIP</span>
+        </div>
+        <div style="font-size: 12px; line-height: 1.8; color: #334155;">
+          <div style="display:flex; justify-content:space-between;"><span>User ID:</span><b id="dpRcpUserId">-</b></div>
+          <div style="display:flex; justify-content:space-between;"><span>Transaction Type:</span><b id="dpRcpType" style="color:#7e22ce;">Cashback</b></div>
+          <div style="display:flex; justify-content:space-between;"><span>Reference / UTR:</span><b id="dpRcpUtr" style="color:#4f46e5; font-family:monospace;">-</b></div>
+          <div style="display:flex; justify-content:space-between;"><span>Date:</span><span id="dpRcpDate">-</span></div>
+          <div style="display:flex; justify-content:space-between;"><span>Status:</span><span id="dpRcpStatus" class="badge badge-cashback">Cashback Credited</span></div>
+          <hr style="margin: 8px 0; border: none; border-top: 1px dashed #cbd5e1;" />
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <b>Amount Credited:</b><b id="dpRcpAmount" style="color:#059669; font-size:16px;">₹0.00</b>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex; gap: 6px; margin-top: 12px;">
+        <button class="btn" style="background:#e2e8f0; color:#334155;" onclick="toggleModal('depositReceiptModal', false)">Close</button>
+        <button class="btn btn-primary" onclick="printSlip('printableDepositReceipt')">🖨️ Print Slip</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN GIVE CASHBACK MODAL -->
+  <div id="adminCashbackModal" class="modal-overlay hidden">
+    <form class="modal-body" onsubmit="event.preventDefault(); submitAdminCashback();">
+      <h3 style="font-weight: 800; font-size: 15px; margin-bottom: 8px;">🎁 Give Cashback / Reward</h3>
+      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Credit cashback directly to: <b id="cbTargetUser" style="color:#38bdf8;">-</b></p>
+      <div class="form-group"><label>Cashback Amount (₹)</label><input type="number" id="cbAmount" placeholder="e.g. 50" enterkeyhint="next" required/></div>
+      <div class="form-group"><label>Reward Note / Reason</label><input type="text" id="cbNote" placeholder="e.g. Special Festival Cashback" enterkeyhint="go" required/></div>
+      <div style="display:flex; gap:6px; margin-top:12px;">
+        <button type="button" class="btn" style="background:var(--chip-bg); color:var(--text);" onclick="toggleModal('adminCashbackModal', false)">Cancel</button>
+        <button type="submit" class="btn btn-purple" id="btnSubmitCb">Credit Cashback</button>
+      </div>
+    </form>
   </div>
 
   <!-- ADD MONEY MODAL -->
@@ -333,7 +377,7 @@
       </div>
       <div style="display:flex; gap:6px; margin-bottom:10px;">
         <button id="hTabRec" class="btn-sm" style="background:#4f46e5; color:#fff; border:none; cursor:pointer;" onclick="renderHistoryTab('recharges')">Recharges</button>
-        <button id="hTabDep" class="btn-sm" style="background:var(--chip-bg); color:var(--text); border:1px solid var(--border); cursor:pointer;" onclick="renderHistoryTab('deposits')">Deposits / Cashback</button>
+        <button id="hTabDep" class="btn-sm" style="background:var(--chip-bg); color:var(--text); border:1px solid var(--border); cursor:pointer;" onclick="renderHistoryTab('deposits')">Deposits & Cashback</button>
       </div>
       <div class="table-responsive" style="max-height: 240px; overflow-y:auto;">
         <table><thead id="historyThead"></thead><tbody id="historyTbody"></tbody></table>
@@ -363,7 +407,7 @@
     
     let currentUser = JSON.parse(localStorage.getItem("yk_user_session") || "null");
     let adminToken = sessionStorage.getItem("yk_admin_token") || null;
-    let selectedPlanDesc = "Standard Pack";
+    let selectedPlanDesc = "Custom Plan";
     let userHistoryData = { recharges: [], deposits: [] };
     let pendingApprovalTxn = null;
     let balanceSyncTimer = null;
@@ -371,6 +415,7 @@
     let lastKnownPendingWallets = -1;
     let lastKnownPendingRecharges = -1;
     let lastApprovedTxns = new Set(JSON.parse(localStorage.getItem("yk_approved_txns") || "[]"));
+    let targetCashbackUserId = null;
 
     localStorage.setItem("yk_upi", "9939311744@ybl");
     let liveQR = {
@@ -378,14 +423,8 @@
       qrUrl: localStorage.getItem("yk_qr") || "https://lh3.googleusercontent.com/d/1rALRSeljalViLvILLe8fRb_STRPJ_ucW"
     };
 
-    let livePlans = [
-      { operator: "Jio", amount: 199, validity: "23 Days", desc: "1.5GB/Day + Calls" },
-      { operator: "Jio", amount: 239, validity: "28 Days", desc: "1.5GB/Day + Calls" },
-      { operator: "Jio", amount: 299, validity: "28 Days", desc: "2.0GB/Day + Calls" },
-      { operator: "Airtel", amount: 199, validity: "24 Days", desc: "1.0GB/Day Pack" },
-      { operator: "Vi", amount: 299, validity: "28 Days", desc: "1.5GB/Day Pack" },
-      { operator: "BSNL", amount: 107, validity: "35 Days", desc: "3GB Data + Calls" }
-    ];
+    // Live plans fetched from database (Defaults removed)
+    let livePlans = [];
 
     function initTheme() {
       const savedTheme = localStorage.getItem("yk_theme") || "dark";
@@ -498,20 +537,23 @@
       startLiveBalancePolling();
     }
 
+    // FETCH ONLY DATABASE PLANS (NO HARDCODED DEFAULTS)
     async function fetchLivePlans() {
       try {
         const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "get_plans" }) });
         const data = await res.json();
-        if (data.success && data.plans.length > 0) livePlans = data.plans;
-        if (currentUser) selectOp('Jio');
+        if (data.success) {
+          livePlans = data.plans || [];
+          const currentOp = document.getElementById('recOp').value || 'Jio';
+          renderPlans(currentOp);
+        }
       } catch(e) {}
     }
 
-    // USER LIVE POLLING: MONITORS WALLET BALANCE & RECHARGE APPROVALS
+    // USER LIVE POLLING: MONITORS BALANCE & RECHARGE APPROVAL
     async function syncBalanceLive() {
       if (!currentUser || !currentUser.userId) return;
       try {
-        // 1. Balance Sync
         const res = await fetch(SCRIPT_URL, {
           method: "POST",
           body: JSON.stringify({ action: "get_user_balance", userId: currentUser.userId })
@@ -526,7 +568,7 @@
             currentUser.balance = liveBal;
             localStorage.setItem("yk_user_session", JSON.stringify(currentUser));
             document.getElementById('uBal').innerText = liveBal.toFixed(2);
-            triggerLockScreenNotification("Payment Complete!", `Admin approved your deposit! ₹${creditedAmt} added to wallet.`);
+            triggerLockScreenNotification("Payment Complete!", `Amount credited! ₹${creditedAmt} added to your wallet.`);
           } else if (liveBal !== currentBal) {
             currentUser.balance = liveBal;
             localStorage.setItem("yk_user_session", JSON.stringify(currentUser));
@@ -540,7 +582,7 @@
           }
         }
 
-        // 2. Recharge Approval Notification for User
+        // Check if recharge was approved
         const hRes = await fetch(SCRIPT_URL, {
           method: "POST",
           body: JSON.stringify({ action: "get_user_history", userId: currentUser.userId, mobile: currentUser.mobile })
@@ -631,6 +673,7 @@
       renderPlans(op);
     }
 
+    // RENDER ONLY ADMIN PLANS
     function renderPlans(op) {
       const chips = document.getElementById('dynamicChips');
       const list = document.getElementById('plansList');
@@ -638,6 +681,12 @@
       list.innerHTML = "";
 
       const filtered = livePlans.filter(p => p.operator.toLowerCase() === op.toLowerCase());
+
+      if (filtered.length === 0) {
+        list.innerHTML = `<p style="font-size:12px; color:var(--text-muted); padding:10px;">No plans added yet by Admin for ${op}.</p>`;
+        return;
+      }
+
       filtered.forEach(p => {
         const c = document.createElement('span');
         c.className = "chip"; c.innerText = "₹" + p.amount;
@@ -733,17 +782,25 @@
       } else {
         tabDep.style.background = "#4f46e5"; tabDep.style.color = "#fff";
         tabRec.style.background = "var(--chip-bg)"; tabRec.style.color = "var(--text)";
-        thead.innerHTML = `<tr><th>Req ID</th><th>Type</th><th>Amount</th><th>UTR</th><th>Status</th></tr>`;
-        tbody.innerHTML = (userHistoryData.deposits && userHistoryData.deposits.length) ? "" : `<tr><td colspan="5" style="text-align:center;">No deposits</td></tr>`;
+        thead.innerHTML = `<tr><th>Req ID</th><th>Type</th><th>Amount</th><th>UTR/Note</th><th>Status</th><th>Slip</th></tr>`;
+        tbody.innerHTML = (userHistoryData.deposits && userHistoryData.deposits.length) ? "" : `<tr><td colspan="6" style="text-align:center;">No deposits</td></tr>`;
 
-        userHistoryData.deposits?.forEach(d => {
+        userHistoryData.deposits?.forEach((d, idx) => {
           let depAmt = d.amount !== undefined ? d.amount : (d.amt || 0);
-          tbody.innerHTML += `<tr><td>#${d.reqId}</td><td><b style="color:#10b981;">${d.type || 'Deposit'}</b></td><td>₹${depAmt}</td><td style="font-family:monospace;">${d.utr}</td><td><span class="badge ${d.status === 'Approved' ? 'badge-success' : 'badge-pending'}">${d.status}</span></td></tr>`;
+          const isCb = d.isCashback;
+          tbody.innerHTML += `<tr>
+            <td>#${d.reqId}</td>
+            <td><b style="color:${isCb ? '#a855f7' : '#10b981'};">${d.type || 'Deposit'}</b></td>
+            <td>₹${depAmt}</td>
+            <td style="font-family:monospace; font-size:11px;">${d.utr}</td>
+            <td><span class="badge ${isCb ? 'badge-cashback' : (d.status === 'Approved' ? 'badge-success' : 'badge-pending')}">${d.status}</span></td>
+            <td><button class="btn-sm" style="background:#e0e7ff; color:#4338ca; border:none; cursor:pointer;" onclick="showDepositReceipt(${idx})">Receipt</button></td>
+          </tr>`;
         });
       }
     }
 
-    // USER RECEIPT: ADMIN OPERATOR TXN ID FIRST PRIORITY
+    // USER RECHARGE RECEIPT
     function showReceipt(idx) {
       const r = userHistoryData.recharges[idx];
       if (!r) return;
@@ -774,10 +831,38 @@
       toggleModal('receiptModal', true);
     }
 
-    function printReceipt() {
-      const content = document.getElementById('printableReceipt').innerHTML;
+    // USER DEPOSIT / CASHBACK RECEIPT
+    function showDepositReceipt(idx) {
+      const d = userHistoryData.deposits[idx];
+      if (!d) return;
+
+      document.getElementById('dpRcpUserId').innerText = currentUser ? currentUser.userId : (d.userId || "USR");
+      document.getElementById('dpRcpType').innerText = d.isCashback ? "🎁 Promotional Cashback" : "💳 Wallet Deposit Top-Up";
+      document.getElementById('dpRcpUtr').innerText = d.utr || "N/A";
+      document.getElementById('dpRcpDate').innerText = d.date || "N/A";
+      document.getElementById('dpRcpAmount').innerText = "₹" + Number(d.amount || 0).toFixed(2);
+      
+      const badge = document.getElementById('dpRcpBadge');
+      const statusEl = document.getElementById('dpRcpStatus');
+      if (d.isCashback) {
+        badge.innerText = "CASHBACK REWARD SLIP";
+        badge.style.color = "#7e22ce";
+        statusEl.className = "badge badge-cashback";
+        statusEl.innerText = "Cashback Credited";
+      } else {
+        badge.innerText = "WALLET DEPOSIT CONFIRMATION";
+        badge.style.color = "#059669";
+        statusEl.className = `badge ${d.status === 'Approved' ? 'badge-success' : 'badge-pending'}`;
+        statusEl.innerText = d.status;
+      }
+
+      toggleModal('depositReceiptModal', true);
+    }
+
+    function printSlip(elementId) {
+      const content = document.getElementById(elementId).innerHTML;
       const pWin = window.open('', '', 'height=600,width=500');
-      pWin.document.write('<html><head><title>YK RECHARGE PORTAL - Receipt</title><style>body{font-family:sans-serif;padding:20px;}</style></head><body>');
+      pWin.document.write('<html><head><title>YK RECHARGE PORTAL - Slip</title><style>body{font-family:sans-serif;padding:20px;}</style></head><body>');
       pWin.document.write(content);
       pWin.document.write('</body></html>');
       pWin.document.close();
@@ -785,7 +870,7 @@
       setTimeout(() => { pWin.print(); pWin.close(); }, 500);
     }
 
-    // ADMIN HUB ACTIONS & REALTIME NOTIFICATIONS
+    // ADMIN HUB ACTIONS
     async function adminLoginAction() {
       const u = document.getElementById('adminUser').value.trim();
       const p = document.getElementById('adminPass').value.trim();
@@ -810,7 +895,7 @@
       finally { btn.innerText = "Login to Admin"; btn.disabled = false; }
     }
 
-    // ADMIN BACKGROUND NOTIFICATION POLLING (SPECIFIC FOR DEPOSITS & RECHARGES)
+    // ADMIN POLLING
     function startAdminPolling() {
       if (adminPollingTimer) clearInterval(adminPollingTimer);
       adminPollingTimer = setInterval(async () => {
@@ -823,14 +908,12 @@
           let pendingWallets = (data.wallets || []).filter(w => w.status === 'Pending').length;
           let pendingRecharges = (data.recharges || []).filter(r => r.status === 'Pending').length;
 
-          // 1. Notification on New Deposit Request
           if (lastKnownPendingWallets !== -1 && pendingWallets > lastKnownPendingWallets) {
             let diff = pendingWallets - lastKnownPendingWallets;
             triggerLockScreenNotification("💳 New Deposit Request!", `${diff} new UPI deposit slip(s) submitted for approval!`);
             fetchAdminData();
           }
 
-          // 2. Notification on New Recharge Request
           if (lastKnownPendingRecharges !== -1 && pendingRecharges > lastKnownPendingRecharges) {
             let diff = pendingRecharges - lastKnownPendingRecharges;
             triggerLockScreenNotification("⚡ New Recharge Order!", `${diff} new mobile recharge request(s) waiting for execution!`);
@@ -893,14 +976,14 @@
 
         // Plans Table
         const pBody = document.getElementById('adminPlanRows');
-        pBody.innerHTML = (data.plans && data.plans.length) ? "" : "<tr><td colspan='5'>No Plans Added</td></tr>";
+        pBody.innerHTML = (data.plans && data.plans.length) ? "" : "<tr><td colspan='5'>No Plans Added Yet</td></tr>";
         data.plans?.forEach(p => {
           pBody.innerHTML += `<tr><td><b>${p.op}</b></td><td>₹${p.amt}</td><td>${p.val}</td><td>${p.desc}</td><td><button class="btn-sm btn-danger" onclick="adminDeletePlan('${p.op}', ${p.amt})">Delete</button></td></tr>`;
         });
 
-        // Users Table
+        // Users Table (With Cashback Button)
         const uBody = document.getElementById('adminUserRows');
-        uBody.innerHTML = (data.users && data.users.length) ? "" : "<tr><td colspan='6'>No Users</td></tr>";
+        uBody.innerHTML = (data.users && data.users.length) ? "" : "<tr><td colspan='7'>No Users</td></tr>";
         data.users?.forEach(u => {
           const isFrz = u.status === 'Frozen';
           const userBal = Number(u.balance !== undefined ? u.balance : 0).toFixed(2);
@@ -912,6 +995,7 @@
               <td><b style="color:#10b981; font-family:monospace; font-size:13px;">₹${userBal}</b></td>
               <td>${u.status === 'Pending' ? `<button class="btn-sm btn-success" onclick="resolveUser('${u.id}', 'Approved')">Approve</button>` : '<span style="color:#64748b; font-size:11px;">Done</span>'}</td>
               <td><button class="btn-sm ${isFrz ? 'btn-success' : 'btn-warning'}" onclick="toggleFreezeUser('${u.id}', '${isFrz ? 'Approved' : 'Frozen'}')">${isFrz ? 'Unfreeze' : 'Freeze'}</button></td>
+              <td><button class="btn-sm btn-purple" onclick="openCashbackModal('${u.id}', '${u.name}')">🎁 Cashback</button></td>
             </tr>`;
         });
 
@@ -919,7 +1003,7 @@
         const wBody = document.getElementById('adminWalletRows');
         wBody.innerHTML = (data.wallets && data.wallets.length) ? "" : "<tr><td colspan='6'>No Requests</td></tr>";
         data.wallets?.forEach(w => {
-          wBody.innerHTML += `<tr><td>#${w.id}</td><td>${w.userId}</td><td>₹${w.amount}</td><td>${w.utr}</td><td>${w.status === 'Pending' ? `<button class="btn-sm btn-success" onclick="resolveWallet('${w.id}', 'Approved')">Approve</button>` : 'Done'}</td><td><button class="btn-sm btn-danger" onclick="adminDeleteWallet('${w.id}')">Delete</button></td></tr>`;
+          wBody.innerHTML += `<tr><td>#${w.id}</td><td>${w.userId}</td><td>₹${w.amount}</td><td style="font-size:11px;">${w.utr}</td><td>${w.status === 'Pending' ? `<button class="btn-sm btn-success" onclick="resolveWallet('${w.id}', 'Approved')">Approve</button>` : 'Done'}</td><td><button class="btn-sm btn-danger" onclick="adminDeleteWallet('${w.id}')">Delete</button></td></tr>`;
         });
 
         // Recharges Table
@@ -929,6 +1013,38 @@
           rBody.innerHTML += `<tr><td>#${r.id}</td><td>${r.userId}</td><td>${r.mobile}</td><td>${r.op}</td><td>₹${r.amount}</td><td>${r.opTxnId || '-'}</td><td>${r.status === 'Pending' ? `<button class="btn-sm btn-success" onclick="promptAdminSuccess('${r.id}')">Approve</button>` : 'Done'}</td><td><button class="btn-sm btn-danger" onclick="adminDeleteRecharge('${r.id}')">Delete</button></td></tr>`;
         });
       } catch(e) {}
+    }
+
+    function openCashbackModal(userId, name) {
+      targetCashbackUserId = userId;
+      document.getElementById('cbTargetUser').innerText = `${name} (${userId})`;
+      document.getElementById('cbAmount').value = "";
+      document.getElementById('cbNote').value = "Special Cashback Reward";
+      toggleModal('adminCashbackModal', true);
+    }
+
+    async function submitAdminCashback() {
+      const amt = Number(document.getElementById('cbAmount').value);
+      const note = document.getElementById('cbNote').value.trim();
+      if (!amt || amt <= 0) return showToast("Valid cashback amount bharein!");
+
+      const btn = document.getElementById('btnSubmitCb');
+      btn.innerText = "Processing..."; btn.disabled = true;
+
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: "admin_give_cashback", userId: targetCashbackUserId, amount: amt, note: note, adminToken })
+        });
+        const data = await res.json();
+        showToast(data.message);
+        toggleModal('adminCashbackModal', false);
+        fetchAdminData();
+      } catch(e) {
+        showToast("Cashback request failed");
+      } finally {
+        btn.innerText = "Credit Cashback"; btn.disabled = false;
+      }
     }
 
     async function toggleFreezeUser(userId, newStatus) {

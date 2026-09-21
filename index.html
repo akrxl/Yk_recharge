@@ -34,6 +34,31 @@
     .tab-pills { background: #1e293b; padding: 4px; border-radius: 12px; display: flex; gap: 4px; }
     .tab-btn { background: transparent; border: none; color: #94a3b8; padding: 7px 12px; border-radius: 9px; font-weight: 700; font-size: 12px; cursor: pointer; }
     .tab-btn.active { background: #4f46e5; color: #fff; box-shadow: 0 3px 10px rgba(79,70,229,0.35); }
+    
+    /* LIVE RUNNING TICKER MESSAGE */
+    .ticker-wrap {
+      width: 100%;
+      background: linear-gradient(90deg, #4338ca, #6366f1);
+      color: #fff;
+      padding: 7px 0;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .ticker {
+      display: inline-block;
+      white-space: nowrap;
+      padding-left: 100%;
+      animation: tickerAnim 22s linear infinite;
+      font-size: 12.5px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+    }
+    .ticker-wrap:hover .ticker { animation-play-state: paused; }
+    @keyframes tickerAnim {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-100%, 0, 0); }
+    }
+
     main { max-width: 960px; margin: 20px auto; padding: 0 16px; }
     .glass-box { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 22px; box-shadow: 0 12px 30px rgba(0,0,0,0.16); margin-bottom: 20px; }
     .hidden { display: none !important; }
@@ -45,10 +70,29 @@
     .contact-card { background: var(--contact-bg); border: 1.5px solid var(--border); border-radius: 16px; padding: 18px; display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 18px; }
     @media (min-width: 640px) { .contact-card { grid-template-columns: 1fr 1fr; align-items: center; } }
     .wa-btn { background: #25d366; color: #fff; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 18px; border-radius: 12px; font-weight: 700; font-size: 13px; }
-    .form-group { margin-bottom: 14px; }
+    
+    .form-group { margin-bottom: 14px; position: relative; }
     label { display: block; font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
     input, select { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1.5px solid var(--border); font-size: 14px; background: var(--input-bg); color: var(--text); outline: none; }
     input:focus, select:focus { border-color: #4f46e5; }
+    
+    /* PASSWORD WRAPPER & EYE ICON */
+    .password-wrapper { position: relative; width: 100%; }
+    .password-wrapper input { padding-right: 44px; }
+    .toggle-eye {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      color: var(--text-muted);
+      user-select: none;
+      padding: 4px;
+    }
+
     .btn { width: 100%; padding: 12px; border: none; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; }
     .btn-primary { background: #4f46e5; color: #fff; }
     .btn-success { background: #059669; color: #fff; }
@@ -88,7 +132,6 @@
     .badge-frozen { background: #fee2e2; color: #dc2626; }
     .badge-cashback { background: #f3e8ff; color: #7e22ce; border: 1px solid #d8b4fe; }
     
-    /* SEARCH INPUT */
     .search-input {
       width: 100%;
       padding: 9px 12px;
@@ -111,6 +154,13 @@
 <body>
 
   <div id="toast">🔔 Message</div>
+
+  <!-- LIVE RUNNING MESSAGE TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker" id="liveTickerMsg">
+      ⚡ YK RECHARGE PORTAL: Instant 24/7 Mobile Recharge, Direct Cashbacks, Fast UPI Wallet Top-ups. Helpline: +91 99393-11744 | Chanduli, Raxaul, Bihar
+    </div>
+  </div>
 
   <header>
     <div class="nav-container">
@@ -161,14 +211,26 @@
       </div>
       <form id="loginForm" onsubmit="event.preventDefault(); loginAction();">
         <div class="form-group"><label>Registered Mobile</label><input type="tel" id="lMobile" maxlength="10" placeholder="10-digit mobile" enterkeyhint="next" /></div>
-        <div class="form-group"><label>Password</label><input type="password" id="lPass" placeholder="••••••••" enterkeyhint="go" /></div>
+        <div class="form-group">
+          <label>Password</label>
+          <div class="password-wrapper">
+            <input type="password" id="lPass" placeholder="••••••••" enterkeyhint="go" />
+            <button type="button" class="toggle-eye" onclick="togglePasswordVisibility('lPass', this)">👁️</button>
+          </div>
+        </div>
         <button type="submit" class="btn btn-primary" id="btnLogin">Sign In</button>
       </form>
       <form id="regForm" class="hidden" onsubmit="event.preventDefault(); registerAction();">
         <div class="form-group"><label>Full Name</label><input type="text" id="rName" placeholder="Full name" enterkeyhint="next" /></div>
         <div class="form-group"><label>Mobile</label><input type="tel" id="rMobile" maxlength="10" placeholder="10-digit mobile" enterkeyhint="next" /></div>
         <div class="form-group"><label>Email Address</label><input type="email" id="rEmail" placeholder="name@email.com" enterkeyhint="next" /></div>
-        <div class="form-group"><label>Set Password</label><input type="password" id="rPass" placeholder="Set password" enterkeyhint="go" /></div>
+        <div class="form-group">
+          <label>Set Password</label>
+          <div class="password-wrapper">
+            <input type="password" id="rPass" placeholder="Set password" enterkeyhint="go" />
+            <button type="button" class="toggle-eye" onclick="togglePasswordVisibility('rPass', this)">👁️</button>
+          </div>
+        </div>
         <button type="submit" class="btn btn-primary" id="btnReg">Submit Registration</button>
       </form>
     </div>
@@ -235,7 +297,13 @@
       <form id="adminAuthBox" class="glass-box" style="max-width: 360px; margin: 25px auto;" onsubmit="event.preventDefault(); adminLoginAction();">
         <h3 style="font-weight: 800; text-align: center; margin-bottom: 12px;">🔐 Admin Hub</h3>
         <div class="form-group"><label>Username</label><input type="text" id="adminUser" placeholder="admin" enterkeyhint="next" /></div>
-        <div class="form-group"><label>Password</label><input type="password" id="adminPass" placeholder="••••••••" enterkeyhint="go" /></div>
+        <div class="form-group">
+          <label>Password</label>
+          <div class="password-wrapper">
+            <input type="password" id="adminPass" placeholder="••••••••" enterkeyhint="go" />
+            <button type="button" class="toggle-eye" onclick="togglePasswordVisibility('adminPass', this)">👁️</button>
+          </div>
+        </div>
         <button type="submit" class="btn btn-primary" id="btnAdm">Login to Admin</button>
       </form>
 
@@ -246,13 +314,14 @@
             <h3 style="font-weight:800; margin-top:2px;">Logged in: <span id="adminUserDisplay">admin</span></h3>
           </div>
           <div style="display:flex; gap:6px;">
+            <button class="btn btn-primary btn-sm" onclick="openAdminNoticeModal()">📢 Set Notice</button>
             <button class="btn btn-primary btn-sm" onclick="openAdminQrModal()">💳 Set QR</button>
             <button class="btn btn-primary btn-sm" onclick="fetchAdminData()">🔄 Refresh</button>
             <button class="btn btn-danger btn-sm" onclick="adminLogoutAction()">Logout</button>
           </div>
         </div>
 
-        <!-- 1. MANAGE RECHARGE PLANS (WITH DELETE) -->
+        <!-- 1. MANAGE RECHARGE PLANS -->
         <div class="glass-box">
           <h3 style="font-size:14px; font-weight:800; margin-bottom:10px; color:#38bdf8;">1. Manage Recharge Plans</h3>
           <form onsubmit="event.preventDefault(); adminAddPlan();" style="display:flex; gap:6px; margin-bottom:12px; flex-wrap:wrap;">
@@ -368,6 +437,21 @@
     </form>
   </div>
 
+  <!-- ADMIN SET LIVE NOTICE TICKER MODAL -->
+  <div id="adminNoticeModal" class="modal-overlay hidden">
+    <form class="modal-body" onsubmit="event.preventDefault(); saveAdminNotice();">
+      <h3 style="font-weight: 800; font-size: 15px; margin-bottom: 12px;">📢 Set Home Live Running Notice</h3>
+      <div class="form-group">
+        <label>Live Running Text</label>
+        <input type="text" id="setNoticeInput" placeholder="Type notice to scroll on Home page..." enterkeyhint="go" required />
+      </div>
+      <div style="display:flex; gap:6px; margin-top:12px;">
+        <button type="button" class="btn" style="background:var(--chip-bg); color:var(--text);" onclick="toggleModal('adminNoticeModal', false)">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="btnSaveNotice">Update Live Notice</button>
+      </div>
+    </form>
+  </div>
+
   <!-- ADD MONEY MODAL -->
   <div id="addMoneyModal" class="modal-overlay hidden">
     <form class="modal-body" onsubmit="event.preventDefault(); submitDeposit();">
@@ -448,7 +532,6 @@
     let lastApprovedTxns = new Set(JSON.parse(localStorage.getItem("yk_approved_txns") || "[]"));
     let targetCashbackUserId = null;
 
-    // Admin raw data cache for realtime search filter
     let adminCachedWallets = [];
     let adminCachedRecharges = [];
 
@@ -459,6 +542,38 @@
     };
 
     let livePlans = [];
+
+    // PASSWORD HIDE / UNHIDE ENGINE
+    function togglePasswordVisibility(inputId, btn) {
+      const field = document.getElementById(inputId);
+      if (field.type === "password") {
+        field.type = "text";
+        btn.innerText = "🙈";
+      } else {
+        field.type = "password";
+        btn.innerText = "👁️";
+      }
+    }
+
+    // LIVE TICKER NOTICE INITIALIZATION
+    function initLiveNotice() {
+      const savedNotice = localStorage.getItem("yk_live_notice") || "⚡ YK RECHARGE PORTAL: Instant 24/7 Mobile Recharge, Direct Cashbacks, Fast UPI Wallet Top-ups. Helpline: +91 99393-11744 | Chanduli, Raxaul, Bihar";
+      document.getElementById("liveTickerMsg").innerText = savedNotice;
+    }
+
+    function openAdminNoticeModal() {
+      document.getElementById("setNoticeInput").value = localStorage.getItem("yk_live_notice") || document.getElementById("liveTickerMsg").innerText;
+      toggleModal("adminNoticeModal", true);
+    }
+
+    function saveAdminNotice() {
+      const newNotice = document.getElementById("setNoticeInput").value.trim();
+      if (!newNotice) return showToast("Notice text bharein!");
+      localStorage.setItem("yk_live_notice", newNotice);
+      document.getElementById("liveTickerMsg").innerText = newNotice;
+      toggleModal("adminNoticeModal", false);
+      showToast("Live running notice updated!");
+    }
 
     function initTheme() {
       const savedTheme = localStorage.getItem("yk_theme") || "dark";
@@ -994,7 +1109,7 @@
       fetchAdminData();
     }
 
-    // FETCH ADMIN DATA (NEWEST ON TOP)
+    // FETCH ADMIN DATA
     async function fetchAdminData() {
       if (!adminToken) return;
       try {
@@ -1027,18 +1142,17 @@
             </tr>`;
         });
 
-        // WALLETS (NEWEST REQUESTS ON TOP)
+        // Wallets: Newest Requests First
         adminCachedWallets = (data.wallets || []).slice().reverse();
         renderWalletsTable(adminCachedWallets);
 
-        // RECHARGES (NEWEST REQUESTS ON TOP)
+        // Recharges: Newest Requests First
         adminCachedRecharges = (data.recharges || []).slice().reverse();
         renderRechargesTable(adminCachedRecharges);
 
       } catch(e) {}
     }
 
-    // RENDER WALLETS TABLE
     function renderWalletsTable(list) {
       const wBody = document.getElementById('adminWalletRows');
       wBody.innerHTML = (list && list.length) ? "" : "<tr><td colspan='6' style='text-align:center;'>No Deposit Requests</td></tr>";
@@ -1047,7 +1161,6 @@
       });
     }
 
-    // RENDER RECHARGES TABLE
     function renderRechargesTable(list) {
       const rBody = document.getElementById('adminRecRows');
       rBody.innerHTML = (list && list.length) ? "" : "<tr><td colspan='8' style='text-align:center;'>No Recharge Orders</td></tr>";
@@ -1056,7 +1169,6 @@
       });
     }
 
-    // REALTIME SEARCH FILTERS
     function filterDepositTable() {
       const query = (document.getElementById('searchDepositInput').value || "").toLowerCase().trim();
       if (!query) {
@@ -1196,6 +1308,7 @@
 
     window.addEventListener("DOMContentLoaded", () => {
       initTheme();
+      initLiveNotice();
       setupFormEnterNavigation();
       fetchLivePlans();
       selectOp('Jio');

@@ -252,7 +252,7 @@
           </div>
         </div>
 
-        <!-- 4. RECHARGE ORDERS (WITH DELETE & COMPULSORY UNIQUE OP TXN ID) -->
+        <!-- 4. RECHARGE ORDERS (WITH DELETE & MANDATORY UNIQUE OP TXN ID) -->
         <div class="glass-box">
           <h3 style="font-size:14px; font-weight:800; margin-bottom:8px; color:#38bdf8;">4. Recharge Execution Queue</h3>
           <div class="table-responsive">
@@ -359,7 +359,6 @@
   </div>
 
   <script>
-    // UPDATED SCRIPT URL
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxKpUFTVYFMAryvle79MnLhDBO0lCd0sPgTj_bU08iA-BTqYzgh9QTtCNDXbk8-joDX/exec";
     
     let currentUser = JSON.parse(localStorage.getItem("yk_user_session") || "null");
@@ -369,9 +368,10 @@
     let pendingApprovalTxn = null;
     let balanceSyncTimer = null;
     let adminPollingTimer = null;
-    let lastKnownPendingCount = -1;
+    let lastKnownPendingWallets = -1;
+    let lastKnownPendingRecharges = -1;
+    let lastApprovedTxns = new Set(JSON.parse(localStorage.getItem("yk_approved_txns") || "[]"));
 
-    // Hardcode Correct Default UPI
     localStorage.setItem("yk_upi", "9939311744@ybl");
     let liveQR = {
       upiId: "9939311744@ybl",
@@ -415,7 +415,9 @@
         osc.type = 'sine';
         osc.frequency.setValueAtTime(750, audioCtx.currentTime);
         gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-        osc.start(); osc.stop(audioCtx.currentTime + 0.45);
+        osc.start();
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.45);
+        osc.stop(audioCtx.currentTime + 0.45);
       } catch(e) {}
     }
 
@@ -505,9 +507,11 @@
       } catch(e) {}
     }
 
+    // USER LIVE POLLING: MONITORS WALLET BALANCE & RECHARGE APPROVALS
     async function syncBalanceLive() {
       if (!currentUser || !currentUser.userId) return;
       try {
+        // 1. Balance Sync
         const res = await fetch(SCRIPT_URL, {
           method: "POST",
           body: JSON.stringify({ action: "get_user_balance", userId: currentUser.userId })
@@ -534,6 +538,23 @@
             localStorage.setItem("yk_user_session", JSON.stringify(currentUser));
             renderUserData();
           }
+        }
+
+        // 2. Recharge Approval Notification for User
+        const hRes = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: "get_user_history", userId: currentUser.userId, mobile: currentUser.mobile })
+        });
+        const hData = await hRes.json();
+        if (hData.success && hData.recharges) {
+          hData.recharges.forEach(r => {
+            if (r.status === "Success" && !lastApprovedTxns.has(r.txnId)) {
+              lastApprovedTxns.add(r.txnId);
+              localStorage.setItem("yk_approved_txns", JSON.stringify(Array.from(lastApprovedTxns)));
+              const finalTxn = (r.opTxnId && String(r.opTxnId).trim() !== "") ? r.opTxnId : r.txnId;
+              triggerLockScreenNotification("⚡ Recharge Successful!", `Recharge of ₹${r.amount} for +91 ${r.mobile} is approved! Txn ID: ${finalTxn}`);
+            }
+          });
         }
       } catch(e) {}
     }
@@ -722,7 +743,7 @@
       }
     }
 
-    // USER RECEIPT: ADMIN OPERATOR TXN ID
+    // USER RECEIPT: ADMIN OPERATOR TXN ID FIRST PRIORITY
     function showReceipt(idx) {
       const r = userHistoryData.recharges[idx];
       if (!r) return;
@@ -764,7 +785,7 @@
       setTimeout(() => { pWin.print(); pWin.close(); }, 500);
     }
 
-    // ADMIN HUB ACTIONS & REALTIME NOTIFICATION
+    // ADMIN HUB ACTIONS & REALTIME NOTIFICATIONS
     async function adminLoginAction() {
       const u = document.getElementById('adminUser').value.trim();
       const p = document.getElementById('adminPass').value.trim();
@@ -789,7 +810,7 @@
       finally { btn.innerText = "Login to Admin"; btn.disabled = false; }
     }
 
-    // ADMIN BACKGROUND NOTIFICATION POLLING
+    // ADMIN BACKGROUND NOTIFICATION POLLING (SPECIFIC FOR DEPOSITS & RECHARGES)
     function startAdminPolling() {
       if (adminPollingTimer) clearInterval(adminPollingTimer);
       adminPollingTimer = setInterval(async () => {
@@ -799,17 +820,27 @@
           const data = await res.json();
           if (!data.success) return;
 
-          let pendingRecharges = (data.recharges || []).filter(r => r.status === 'Pending').length;
           let pendingWallets = (data.wallets || []).filter(w => w.status === 'Pending').length;
-          let totalPending = pendingRecharges + pendingWallets;
+          let pendingRecharges = (data.recharges || []).filter(r => r.status === 'Pending').length;
 
-          if (lastKnownPendingCount !== -1 && totalPending > lastKnownPendingCount) {
-            let diff = totalPending - lastKnownPendingCount;
-            triggerLockScreenNotification("🔔 New Order Alert!", `${diff} New request(s) received on YK Recharge Portal!`);
+          // 1. Notification on New Deposit Request
+          if (lastKnownPendingWallets !== -1 && pendingWallets > lastKnownPendingWallets) {
+            let diff = pendingWallets - lastKnownPendingWallets;
+            triggerLockScreenNotification("💳 New Deposit Request!", `${diff} new UPI deposit slip(s) submitted for approval!`);
+            fetchAdminData();
           }
-          lastKnownPendingCount = totalPending;
+
+          // 2. Notification on New Recharge Request
+          if (lastKnownPendingRecharges !== -1 && pendingRecharges > lastKnownPendingRecharges) {
+            let diff = pendingRecharges - lastKnownPendingRecharges;
+            triggerLockScreenNotification("⚡ New Recharge Order!", `${diff} new mobile recharge request(s) waiting for execution!`);
+            fetchAdminData();
+          }
+
+          lastKnownPendingWallets = pendingWallets;
+          lastKnownPendingRecharges = pendingRecharges;
         } catch(e) {}
-      }, 7000);
+      }, 5000);
     }
 
     async function adminAddPlan() {
@@ -921,7 +952,6 @@
       toggleModal('adminSuccessModal', true);
     }
 
-    // MANDATORY & UNIQUE OP TXN ID VERIFICATION
     async function confirmAdminSuccess() {
       const opTxnId = document.getElementById('asmOperatorId').value.trim();
       if (!opTxnId) return showToast("Operator Transaction ID dalna zaroori hai!");

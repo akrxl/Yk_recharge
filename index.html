@@ -54,7 +54,7 @@
     .btn-success { background: #059669; color: #fff; }
     .btn-danger { background: #e11d48; color: #fff; }
     .btn-warning { background: #d97706; color: #fff; }
-    .btn-sm { width: auto; padding: 6px 12px; font-size: 11px; border-radius: 7px; }
+    .btn-sm { width: auto; padding: 5px 10px; font-size: 11px; border-radius: 7px; }
     .op-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
     .op-pill { background: var(--chip-bg); border: 1.5px solid var(--border); border-radius: 10px; padding: 10px 4px; text-align: center; cursor: pointer; font-size: 12px; font-weight: 800; color: var(--text); }
     .op-pill.active { border-color: #4f46e5; background: #e0e7ff; color: #4338ca; }
@@ -63,22 +63,10 @@
     .chip:hover { border-color: #4f46e5; color: #4338ca; }
     .plan-card { padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
     .plan-card:hover { border-color: #4f46e5; }
-    
-    /* Rolling & Scrollable Table Styling */
     .table-responsive { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; }
-    .table-rolling { max-height: 260px; overflow-y: auto; scroll-behavior: smooth; }
     table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: left; }
-    th { background: var(--input-bg); padding: 10px; color: var(--text-muted); font-weight: 700; white-space: nowrap; position: sticky; top: 0; z-index: 2; }
+    th { background: var(--input-bg); padding: 10px; color: var(--text-muted); font-weight: 700; white-space: nowrap; }
     td { padding: 10px; border-bottom: 1px solid var(--border); white-space: nowrap; color: var(--text); }
-    
-    /* Header search inputs */
-    .section-header-box { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
-    .table-search-input { width: 220px; padding: 6px 12px; border-radius: 8px; font-size: 12px; margin-bottom: 0; }
-
-    .live-indicator { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: #10b981; font-weight: 700; }
-    .pulse-dot { width: 8px; height: 8px; background: #10b981; border-radius: 50%; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); animation: pulse 1.6s infinite; }
-    @keyframes pulse { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
-
     .badge { padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
     .badge-pending { background: #fef3c7; color: #b45309; }
     .badge-success { background: #d1fae5; color: #065f46; }
@@ -134,22 +122,22 @@
       </div>
     </div>
 
-    <!-- AUTH VIEW -->
+    <!-- USER AUTH -->
     <div id="authView" class="glass-box hidden" style="max-width: 400px; margin: 30px auto;">
       <div style="display: flex; margin-bottom: 18px; border-bottom: 2px solid var(--border);">
         <button id="tabLogin" onclick="toggleAuth('login')" style="flex:1; border:none; background:none; font-weight:700; padding:10px; color:#4f46e5; border-bottom:2px solid #4f46e5; cursor:pointer;">Login</button>
         <button id="tabReg" onclick="toggleAuth('reg')" style="flex:1; border:none; background:none; font-weight:700; padding:10px; color:var(--text-muted); cursor:pointer;">Register</button>
       </div>
       <form id="loginForm" onsubmit="event.preventDefault(); loginAction();">
-        <div class="form-group"><label>Registered Mobile</label><input type="tel" id="lMobile" maxlength="10" placeholder="10-digit mobile" enterkeyhint="next" required /></div>
-        <div class="form-group"><label>Password</label><input type="password" id="lPass" placeholder="••••••••" enterkeyhint="go" required /></div>
+        <div class="form-group"><label>Registered Mobile</label><input type="tel" id="lMobile" maxlength="10" placeholder="10-digit mobile" enterkeyhint="next" /></div>
+        <div class="form-group"><label>Password</label><input type="password" id="lPass" placeholder="••••••••" enterkeyhint="go" /></div>
         <button type="submit" class="btn btn-primary" id="btnLogin">Sign In</button>
       </form>
       <form id="regForm" class="hidden" onsubmit="event.preventDefault(); registerAction();">
-        <div class="form-group"><label>Full Name</label><input type="text" id="rName" placeholder="Full name" enterkeyhint="next" required /></div>
-        <div class="form-group"><label>Mobile</label><input type="tel" id="rMobile" maxlength="10" placeholder="10-digit mobile" enterkeyhint="next" required /></div>
-        <div class="form-group"><label>Email Address</label><input type="email" id="rEmail" placeholder="name@email.com" enterkeyhint="next" required /></div>
-        <div class="form-group"><label>Set Password</label><input type="password" id="rPass" placeholder="Set password" enterkeyhint="go" required /></div>
+        <div class="form-group"><label>Full Name</label><input type="text" id="rName" placeholder="Full name" enterkeyhint="next" /></div>
+        <div class="form-group"><label>Mobile</label><input type="tel" id="rMobile" maxlength="10" placeholder="10-digit mobile" enterkeyhint="next" /></div>
+        <div class="form-group"><label>Email Address</label><input type="email" id="rEmail" placeholder="name@email.com" enterkeyhint="next" /></div>
+        <div class="form-group"><label>Set Password</label><input type="password" id="rPass" placeholder="Set password" enterkeyhint="go" /></div>
         <button type="submit" class="btn btn-primary" id="btnReg">Submit Registration</button>
       </form>
     </div>
@@ -173,7 +161,7 @@
           </div>
           <div style="display:flex; gap:6px; margin-top:10px;">
             <button class="btn-sm" style="flex:1; background:var(--chip-bg); color:#4f46e5; border:1px solid var(--border); cursor:pointer; font-weight:700;" onclick="openHistory('recharges')">📜 Recharges</button>
-            <button class="btn-sm" style="flex:1; background:var(--chip-bg); color:#4f46e5; border:1px solid var(--border); cursor:pointer; font-weight:700;" onclick="openHistory('deposits')">💳 Deposits</button>
+            <button class="btn-sm" style="flex:1; background:var(--chip-bg); color:#4f46e5; border:1px solid var(--border); cursor:pointer; font-weight:700;" onclick="openHistory('deposits')">💳 Deposits / Cashback</button>
           </div>
         </div>
       </div>
@@ -182,7 +170,7 @@
         <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 12px;">Prepaid Mobile Recharge</h3>
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px;">
           <form onsubmit="event.preventDefault(); startRecharge();">
-            <div class="form-group"><label>Mobile Number (Auto Detect)</label><input type="tel" id="recMobile" maxlength="10" placeholder="10-digit number" oninput="autoDetect(this.value)" enterkeyhint="next" required /></div>
+            <div class="form-group"><label>Mobile Number (Auto Detect)</label><input type="tel" id="recMobile" maxlength="10" placeholder="10-digit number" oninput="autoDetect(this.value)" enterkeyhint="next" /></div>
             <label>Telecom Operator</label>
             <div class="op-row">
               <div id="opJio" class="op-pill active" onclick="selectOp('Jio')">JIO</div>
@@ -193,7 +181,7 @@
             <input type="hidden" id="recOp" value="Jio" />
             <div class="form-group">
               <label>Recharge Amount (₹)</label>
-              <input type="number" id="recAmt" placeholder="Plan Amount" enterkeyhint="go" required />
+              <input type="number" id="recAmt" placeholder="Plan Amount" enterkeyhint="go" />
               <div id="dynamicChips" class="chip-row"></div>
             </div>
             <button type="submit" class="btn btn-primary" id="btnRec">Recharge Now</button>
@@ -215,29 +203,25 @@
     <div id="adminArea" class="hidden">
       <form id="adminAuthBox" class="glass-box" style="max-width: 360px; margin: 25px auto;" onsubmit="event.preventDefault(); adminLoginAction();">
         <h3 style="font-weight: 800; text-align: center; margin-bottom: 12px;">🔐 Admin Hub</h3>
-        <div class="form-group"><label>Username</label><input type="text" id="adminUser" placeholder="admin" enterkeyhint="next" required /></div>
-        <div class="form-group"><label>Password</label><input type="password" id="adminPass" placeholder="••••••••" enterkeyhint="go" required /></div>
+        <div class="form-group"><label>Username</label><input type="text" id="adminUser" placeholder="admin" enterkeyhint="next" /></div>
+        <div class="form-group"><label>Password</label><input type="password" id="adminPass" placeholder="••••••••" enterkeyhint="go" /></div>
         <button type="submit" class="btn btn-primary" id="btnAdm">Login to Admin</button>
       </form>
 
       <div id="adminControlPanel" class="hidden">
         <div class="glass-box" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
           <div>
-            <div style="display:flex; align-items:center; gap:8px;">
-              <span class="badge badge-success">Admin Mode Active</span>
-              <span class="live-indicator"><span class="pulse-dot"></span> Live Sync</span>
-            </div>
+            <span class="badge badge-success">Admin Mode Active</span>
             <h3 style="font-weight:800; margin-top:2px;">Logged in: <span id="adminUserDisplay">admin</span></h3>
-            <small id="adminSyncTime" style="color:var(--text-muted); font-size:11px;">Syncing with Sheet...</small>
           </div>
-          <div style="display:flex; gap:6px; flex-wrap:wrap;">
-            <button class="btn btn-warning btn-sm" id="btnAdminNotif" onclick="requestAdminNotifPermission()">🔔 Enable Notifications</button>
+          <div style="display:flex; gap:6px;">
             <button class="btn btn-primary btn-sm" onclick="openAdminQrModal()">💳 Set QR</button>
+            <button class="btn btn-primary btn-sm" onclick="fetchAdminData()">🔄 Refresh</button>
             <button class="btn btn-danger btn-sm" onclick="adminLogoutAction()">Logout</button>
           </div>
         </div>
 
-        <!-- 1. MANAGE PLANS -->
+        <!-- 1. MANAGE RECHARGE PLANS (WITH DELETE) -->
         <div class="glass-box">
           <h3 style="font-size:14px; font-weight:800; margin-bottom:10px; color:#38bdf8;">1. Manage Recharge Plans</h3>
           <form onsubmit="event.preventDefault(); adminAddPlan();" style="display:flex; gap:6px; margin-bottom:12px; flex-wrap:wrap;">
@@ -248,59 +232,31 @@
             <button type="submit" class="btn btn-primary btn-sm" id="btnPlanAdd">Add Plan</button>
           </form>
           <div class="table-responsive">
-            <table><thead><tr><th>Op</th><th>Amt</th><th>Validity</th><th>Description</th></tr></thead><tbody id="adminPlanRows"></tbody></table>
+            <table><thead><tr><th>Op</th><th>Amt</th><th>Validity</th><th>Description</th><th>Action</th></tr></thead><tbody id="adminPlanRows"></tbody></table>
           </div>
         </div>
 
-        <!-- 2. USERS CONTROL -->
+        <!-- 2. USER APPROVALS & ACCESS CONTROL -->
         <div class="glass-box">
-          <h3 style="font-size:14px; font-weight:800; margin-bottom:8px; color:#38bdf8;">2. Users In Sheet</h3>
+          <h3 style="font-size:14px; font-weight:800; margin-bottom:8px; color:#38bdf8;">2. User Approvals & Access Control</h3>
           <div class="table-responsive">
             <table><thead><tr><th>ID</th><th>Name</th><th>Mobile</th><th>Balance</th><th>Action</th><th>Access</th></tr></thead><tbody id="adminUserRows"></tbody></table>
           </div>
         </div>
 
-        <!-- 3. WALLET DEPOSITS (SEPARATE SEARCH + APPROVAL-FIRST + ROLLING) -->
+        <!-- 3. WALLET DEPOSIT SLIPS (WITH DELETE) -->
         <div class="glass-box">
-          <div class="section-header-box">
-            <h3 style="font-size:14px; font-weight:800; color:#38bdf8; margin:0;">3. Wallet Deposit Slips</h3>
-            <input 
-              type="text" 
-              id="walletSearchInput" 
-              class="table-search-input" 
-              placeholder="🔍 Search UTR, User, Req ID..." 
-              oninput="renderAdminWallets()" 
-            />
-          </div>
-          <div class="table-responsive table-rolling">
-            <table>
-              <thead>
-                <tr><th>Req ID</th><th>User</th><th>Amount</th><th>UTR</th><th>Action</th></tr>
-              </thead>
-              <tbody id="adminWalletRows"></tbody>
-            </table>
+          <h3 style="font-size:14px; font-weight:800; margin-bottom:8px; color:#38bdf8;">3. Wallet Deposit Slips</h3>
+          <div class="table-responsive">
+            <table><thead><tr><th>Req ID</th><th>User</th><th>Amount</th><th>UTR</th><th>Action</th><th>Remove</th></tr></thead><tbody id="adminWalletRows"></tbody></table>
           </div>
         </div>
 
-        <!-- 4. RECHARGE ORDERS (SEPARATE SEARCH + APPROVAL-FIRST + ROLLING) -->
+        <!-- 4. RECHARGE ORDERS (WITH DELETE & COMPULSORY UNIQUE OP TXN ID) -->
         <div class="glass-box">
-          <div class="section-header-box">
-            <h3 style="font-size:14px; font-weight:800; color:#38bdf8; margin:0;">4. Recharge Orders</h3>
-            <input 
-              type="text" 
-              id="recSearchInput" 
-              class="table-search-input" 
-              placeholder="🔍 Search Mobile, User, Op..." 
-              oninput="renderAdminRecharges()" 
-            />
-          </div>
-          <div class="table-responsive table-rolling">
-            <table>
-              <thead>
-                <tr><th>Txn ID</th><th>User</th><th>Mobile</th><th>Op</th><th>Amount</th><th>Op Txn ID</th><th>Action</th></tr>
-              </thead>
-              <tbody id="adminRecRows"></tbody>
-            </table>
+          <h3 style="font-size:14px; font-weight:800; margin-bottom:8px; color:#38bdf8;">4. Recharge Execution Queue</h3>
+          <div class="table-responsive">
+            <table><thead><tr><th>Txn ID</th><th>User</th><th>Mobile</th><th>Op</th><th>Amount</th><th>Op Txn ID</th><th>Action</th><th>Remove</th></tr></thead><tbody id="adminRecRows"></tbody></table>
           </div>
         </div>
       </div>
@@ -319,710 +275,689 @@
         <div style="font-size: 12px; line-height: 1.8; color: #334155;">
           <div style="display:flex; justify-content:space-between;"><span>User ID:</span><b id="rcpUserId">-</b></div>
           <div style="display:flex; justify-content:space-between;"><span>Customer:</span><b id="rcpUserName">-</b></div>
-          <div style="display:flex; justify-content:space-between;"><span>Transaction ID:</span><b id="rcpTxnId" style="font-family:monospace;">-</b></div>
-          <div style="display:flex; justify-content:space-between;"><span>Mobile Number:</span><b id="rcpMobile">-</b></div>
-          <div style="display:flex; justify-content:space-between;"><span>Operator:</span><b id="rcpOp">-</b></div>
-          <div style="display:flex; justify-content:space-between;"><span>Amount:</span><b id="rcpAmt" style="color:#059669; font-size:13px;">-</b></div>
-          <div style="display:flex; justify-content:space-between;"><span>Operator Ref ID:</span><b id="rcpOpRef" style="font-family:monospace;">-</b></div>
-          <div style="display:flex; justify-content:space-between;"><span>Date & Time:</span><span id="rcpTime" style="font-size:11px;">-</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>Status:</span><span id="rcpStatus" class="badge badge-success">SUCCESS</span></div>
+          <div style="display:flex; justify-content:space-between;"><span>Operator Txn ID:</span><b id="rcpTxnId" style="color:#4f46e5; font-family:monospace;">-</b></div>
+          <div style="display:flex; justify-content:space-between;"><span>Mobile:</span><b id="rcpMobile">-</b></div>
+          <div style="display:flex; justify-content:space-between;"><span>Operator:</span><b id="rcpOperator">-</b></div>
+          <div style="display:flex; justify-content:space-between;"><span>Plan Details:</span><span id="rcpPlan">-</span></div>
+          <div style="display:flex; justify-content:space-between;"><span>Status:</span><span id="rcpStatus" class="badge badge-success">Success</span></div>
+          <hr style="margin: 8px 0; border: none; border-top: 1px dashed #cbd5e1;" />
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <b>Total Paid:</b><b id="rcpAmount" style="color:#059669; font-size:16px;">₹0.00</b>
+          </div>
         </div>
       </div>
-      <div style="display:flex; gap:8px; margin-top:14px;">
-        <button class="btn btn-primary" onclick="window.print()">🖨️ Print Receipt</button>
-        <button class="btn btn-danger" onclick="closeModal('receiptModal')">Close</button>
+      <div style="display:flex; gap: 6px; margin-top: 12px;">
+        <button class="btn" style="background:#e2e8f0; color:#334155;" onclick="toggleModal('receiptModal', false)">Close</button>
+        <button class="btn btn-primary" onclick="printReceipt()">🖨️ Print Receipt</button>
       </div>
     </div>
   </div>
 
   <!-- ADD MONEY MODAL -->
   <div id="addMoneyModal" class="modal-overlay hidden">
-    <div class="modal-body">
-      <h3 style="font-size:16px; font-weight:800; margin-bottom:12px;">Add Money to Wallet</h3>
-      <div style="text-align:center; margin-bottom:14px;">
-        <img id="upiQrImg" src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=9939311744@okbizaxis&pn=YK%20Recharge" alt="UPI QR" style="border-radius:12px; border:2px solid var(--border);" />
-        <p style="font-size:11px; color:var(--text-muted); margin-top:6px;">Scan & Pay using Google Pay, PhonePe, Paytm</p>
+    <form class="modal-body" onsubmit="event.preventDefault(); submitDeposit();">
+      <h3 style="font-weight: 800; font-size: 15px; text-align: center; margin-bottom: 8px;">Scan UPI QR to Add Money</h3>
+      <div style="text-align: center; margin-bottom: 10px;">
+        <img id="uQrImg" src="" style="width:160px; height:160px; border:1px solid var(--border); border-radius:10px; background:#fff; padding:4px; object-fit:contain;" />
+        <p style="font-size: 12px; margin-top: 6px;">UPI ID: <b id="uUpiText" style="color:#38bdf8;">9939311744@ybl</b></p>
       </div>
-      <form onsubmit="event.preventDefault(); submitAddMoneySlip();">
-        <div class="form-group"><label>Amount Paid (₹)</label><input type="number" id="depAmt" placeholder="e.g. 500" required /></div>
-        <div class="form-group"><label>12-digit UTR / Ref Number</label><input type="text" id="depUtr" maxlength="12" placeholder="123456789012" required /></div>
-        <div style="display:flex; gap:8px;">
-          <button type="submit" class="btn btn-success" id="btnDepSubmit">Submit Slip</button>
-          <button type="button" class="btn btn-danger" onclick="closeModal('addMoneyModal')">Cancel</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- HISTORY MODAL -->
-  <div id="historyModal" class="modal-overlay hidden">
-    <div class="modal-body" style="max-width: 580px;">
-      <h3 id="historyModalTitle" style="font-size:15px; font-weight:800; margin-bottom:12px;">Transaction History</h3>
-      <div class="table-responsive" style="max-height: 280px; overflow-y: auto;">
-        <table>
-          <thead id="historyThead"></thead>
-          <tbody id="historyTbody"></tbody>
-        </table>
+      <div class="form-group"><label>Amount Paid (₹)</label><input type="number" id="wAmt" placeholder="500" enterkeyhint="next" required/></div>
+      <div class="form-group"><label>UTR / Ref Number (12 Digits)</label><input type="text" id="wUtr" maxlength="12" placeholder="12-digit UTR" enterkeyhint="next" required/></div>
+      <div class="form-group"><label>Payment Date</label><input type="date" id="wDate" enterkeyhint="go" required/></div>
+      <div style="display:flex; gap:6px; margin-top:8px;">
+        <button type="button" class="btn" style="background:var(--chip-bg); color:var(--text);" onclick="toggleModal('addMoneyModal', false)">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="btnDeposit">Submit Slip</button>
       </div>
-      <button class="btn btn-danger btn-sm" style="margin-top:14px;" onclick="closeModal('historyModal')">Close</button>
-    </div>
+    </form>
   </div>
 
   <!-- ADMIN SET QR MODAL -->
   <div id="adminQrModal" class="modal-overlay hidden">
-    <div class="modal-body">
-      <h3 style="font-size:16px; font-weight:800; margin-bottom:12px;">Set UPI Payment QR / ID</h3>
-      <form onsubmit="event.preventDefault(); saveAdminQr();">
-        <div class="form-group"><label>UPI ID (VPA)</label><input type="text" id="adminUpiId" placeholder="9939311744@okbizaxis" required /></div>
-        <div style="display:flex; gap:8px;">
-          <button type="submit" class="btn btn-primary">Save QR</button>
-          <button type="button" class="btn btn-danger" onclick="closeModal('adminQrModal')">Cancel</button>
-        </div>
-      </form>
+    <form class="modal-body" onsubmit="event.preventDefault(); saveAdminQrAction();">
+      <h3 style="font-weight:800; font-size:15px; margin-bottom:12px;">Set Live Payment QR / UPI</h3>
+      <div class="form-group"><label>Admin UPI ID</label><input type="text" id="setAdminUpi" placeholder="9939311744@ybl" enterkeyhint="next" /></div>
+      <div class="form-group"><label>Direct QR Image Link</label><input type="text" id="setAdminQrUrl" placeholder="https://lh3.googleusercontent.com/..." enterkeyhint="go" /></div>
+      <div style="display:flex; gap:6px; margin-top:12px;">
+        <button type="button" class="btn" style="background:var(--chip-bg); color:var(--text);" onclick="toggleModal('adminQrModal', false)">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="btnSaveQr">Save QR</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- USER HISTORY MODAL -->
+  <div id="historyModal" class="modal-overlay hidden">
+    <div class="modal-body" style="max-width: 550px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
+        <h3 style="font-weight: 800; font-size: 15px;">Transaction History</h3>
+        <button onclick="toggleModal('historyModal', false)" style="border:none; background:none; font-size:16px; cursor:pointer; color:var(--text);">✕</button>
+      </div>
+      <div style="display:flex; gap:6px; margin-bottom:10px;">
+        <button id="hTabRec" class="btn-sm" style="background:#4f46e5; color:#fff; border:none; cursor:pointer;" onclick="renderHistoryTab('recharges')">Recharges</button>
+        <button id="hTabDep" class="btn-sm" style="background:var(--chip-bg); color:var(--text); border:1px solid var(--border); cursor:pointer;" onclick="renderHistoryTab('deposits')">Deposits / Cashback</button>
+      </div>
+      <div class="table-responsive" style="max-height: 240px; overflow-y:auto;">
+        <table><thead id="historyThead"></thead><tbody id="historyTbody"></tbody></table>
+      </div>
     </div>
   </div>
 
+  <!-- ADMIN RECHARGE APPROVE MODAL (MANDATORY & UNIQUE OPERATOR TXN ID) -->
+  <div id="adminSuccessModal" class="modal-overlay hidden">
+    <form class="modal-body" onsubmit="event.preventDefault(); confirmAdminSuccess();">
+      <h3 style="font-weight: 800; font-size: 15px; margin-bottom: 8px;">Approve Recharge Order</h3>
+      <p style="font-size: 11px; margin-bottom: 10px;">Order: <b id="asmTxnId">-</b></p>
+      <div class="form-group">
+        <label>Operator Transaction ID <span style="color:#ef4444;">* (Required & Unique)</span></label>
+        <input type="text" id="asmOperatorId" placeholder="Enter Operator Txn ID" enterkeyhint="go" required />
+        <p style="font-size:10px; color:var(--text-muted); margin-top:3px;">Ye ID user ki receipt par print hogi aur duplicate hone par approve nahi hogi.</p>
+      </div>
+      <div style="display:flex; gap:6px;">
+        <button type="button" class="btn" style="background:var(--chip-bg); color:var(--text);" onclick="toggleModal('adminSuccessModal', false)">Cancel</button>
+        <button type="submit" class="btn btn-success" id="btnAdminSuccess">Approve & Save</button>
+      </div>
+    </form>
+  </div>
+
   <script>
-    // ==========================================
-    // 1. CONFIGURATION: APPS SCRIPT WEB APP URL
-    // ==========================================
-    // Apna Apps script Web App Executable URL yahan dalein:
-    const API_URL = "https://script.google.com/macros/s/AKfycbxKpUFTVYFMAryvle79MnLhDBO0lCd0sPgTj_bU08iA-BTqYzgh9QTtCNDXbk8-joDX/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxKpUFTVYFMAryvle79MnLhDBO0lCd0sPgTj_bU08iA-BTqYzgh9QTtCNDXbk8-joDX/exec";
+    
+    let currentUser = JSON.parse(localStorage.getItem("yk_user_session") || "null");
+    let adminToken = sessionStorage.getItem("yk_admin_token") || null;
+    let selectedPlanDesc = "Standard Pack";
+    let userHistoryData = { recharges: [], deposits: [] };
+    let pendingApprovalTxn = null;
+    let balanceSyncTimer = null;
 
-    const alertBeep = new Audio("data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a1/S9cT8SFlq65PWhZSsVO4rR7a5sNRo1g8/pt24/GDR/y+ivcT0fOIHO6rFqNhk5gc3or2k6GzWAzeiwaTsZOX7N6a9pOxk3fc7or2g5");
-
-    let currentUser = null;
-    let isAdminLoggedIn = false;
-    let knownRecIds = new Set();
-    let knownDepositIds = new Set();
-    let isInitialAdminLoad = true;
-
-    // In-Memory Database (Synced real-time with Google Sheet)
-    let db = {
-      users: [],
-      plans: [
-        { op: "Jio", amt: "239", val: "28 Days", desc: "1.5GB/day + Unlimited Calls" },
-        { op: "Airtel", amt: "299", val: "28 Days", desc: "1.5GB/day + Unlimited 5G" },
-        { op: "Vi", amt: "299", val: "28 Days", desc: "1.5GB/day + Binge All Night" },
-        { op: "BSNL", amt: "199", val: "30 Days", desc: "2GB/day + 100 SMS/day" }
-      ],
-      deposits: [],
-      recharges: [],
-      upiId: "9939311744@ybl"
+    let liveQR = {
+      upiId: localStorage.getItem("yk_upi") || "9939311744@ybl",
+      qrUrl: localStorage.getItem("yk_qr") || "https://lh3.googleusercontent.com/d/1rALRSeljalViLvILLe8fRb_STRPJ_ucW"
     };
 
-    // ==========================================
-    // 2. LIVE SYNC ENGINE (AUTO POLLING)
-    // ==========================================
-    async function syncAllFromSheet() {
-      try {
-        const res = await fetch(API_URL);
-        const data = await res.json();
+    let livePlans = [
+      { operator: "Jio", amount: 199, validity: "23 Days", desc: "1.5GB/Day + Calls" },
+      { operator: "Jio", amount: 239, validity: "28 Days", desc: "1.5GB/Day + Calls" },
+      { operator: "Jio", amount: 299, validity: "28 Days", desc: "2.0GB/Day + Calls" },
+      { operator: "Airtel", amount: 199, validity: "24 Days", desc: "1.0GB/Day Pack" },
+      { operator: "Vi", amount: 299, validity: "28 Days", desc: "1.5GB/Day Pack" },
+      { operator: "BSNL", amount: 107, validity: "35 Days", desc: "3GB Data + Calls" }
+    ];
 
-        if (data && data.status === "success") {
-          if (data.users) db.users = data.users;
-          if (data.plans && data.plans.length) db.plans = data.plans;
-          if (data.deposits) db.deposits = data.deposits;
-          if (data.recharges) db.recharges = data.recharges;
-          if (data.upiId) db.upiId = data.upiId;
-
-          // User live balance sync
-          if (currentUser) {
-            const matched = db.users.find(u => String(u.phone) === String(currentUser.phone));
-            if (matched) {
-              currentUser = matched;
-              renderUserView();
-            }
-          }
-
-          if (isAdminLoggedIn) {
-            fetchAdminData();
-          }
-          renderPlans();
-        }
-      } catch (err) {
-        console.warn("Live sync background error:", err);
+    function initTheme() {
+      const savedTheme = localStorage.getItem("yk_theme") || "dark";
+      if (savedTheme === "light") {
+        document.body.classList.add("light-mode");
+        document.getElementById("themeToggle").innerText = "🌙";
+      } else {
+        document.body.classList.remove("light-mode");
+        document.getElementById("themeToggle").innerText = "☀️";
       }
-    }
-
-    async function sendToSheet(payload) {
-      try {
-        const response = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify(payload)
-        });
-        return await response.json();
-      } catch (err) {
-        console.error("Sheet send error:", err);
-      }
-    }
-
-    // ==========================================
-    // 3. DESKTOP PUSH NOTIFICATIONS FOR ADMIN
-    // ==========================================
-    function checkNotifPermissionState() {
-      const btn = document.getElementById("btnAdminNotif");
-      if (!("Notification" in window)) {
-        btn.textContent = "❌ Not Supported";
-        btn.disabled = true;
-        return;
-      }
-      if (Notification.permission === "granted") {
-        btn.textContent = "✅ Notifications Active";
-        btn.style.background = "#059669";
-        btn.disabled = true;
-      }
-    }
-
-    function requestAdminNotifPermission() {
-      if (!("Notification" in window)) return showToast("Yeh browser desktop notifications support nahi karta.");
-      Notification.requestPermission().then((perm) => {
-        if (perm === "granted") {
-          checkNotifPermissionState();
-          showDesktopNotification("YK Admin Hub", "Desktop Notifications active ho gaye hain!");
-        }
-      });
-    }
-
-    function showDesktopNotification(title, bodyText, tag) {
-      if (Notification.permission === "granted") {
-        alertBeep.play().catch(() => {});
-        const n = new Notification(title, {
-          body: bodyText,
-          tag: String(tag || Date.now()),
-          icon: "https://via.placeholder.com/128/4f46e5/ffffff?text=YK"
-        });
-        n.onclick = function() {
-          window.focus();
-          this.close();
-        };
-      }
-    }
-
-    // ==========================================
-    // 4. UI NAVIGATION & TOAST
-    // ==========================================
-    function showToast(msg) {
-      const t = document.getElementById("toast");
-      t.textContent = msg;
-      t.classList.add("show");
-      setTimeout(() => t.classList.remove("show"), 2800);
     }
 
     function toggleThemeMode() {
-      document.body.classList.toggle("light-mode");
-      const btn = document.getElementById("themeToggle");
-      btn.textContent = document.body.classList.contains("light-mode") ? "🌙" : "☀️";
+      const isLight = document.body.classList.toggle("light-mode");
+      localStorage.setItem("yk_theme", isLight ? "light" : "dark");
+      document.getElementById("themeToggle").innerText = isLight ? "🌙" : "☀️";
     }
 
-    function switchNav(view) {
-      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-      document.getElementById("homeView").classList.add("hidden");
-      document.getElementById("authView").classList.add("hidden");
-      document.getElementById("userDash").classList.add("hidden");
-      document.getElementById("adminArea").classList.add("hidden");
+    let audioCtx = null;
+    function playBeep() {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(750, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.45);
+      } catch(e) {}
+    }
 
-      if (view === "home") {
-        document.getElementById("navHome").classList.add("active");
-        document.getElementById("homeView").classList.remove("hidden");
-      } else if (view === "user") {
-        document.getElementById("navUser").classList.add("active");
+    function triggerLockScreenNotification(title, message) {
+      playBeep();
+      showToast(message);
+      if ("Notification" in window && Notification.permission === "granted") {
+        new Notification(title, { body: message, icon: "https://lh3.googleusercontent.com/d/1rALRSeljalViLvILLe8fRb_STRPJ_ucW" });
+      }
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.innerText = msg; t.className = "show";
+      setTimeout(() => { t.className = ""; }, 3200);
+    }
+
+    function toggleModal(id, show) { document.getElementById(id).classList.toggle('hidden', !show); }
+
+    function setupFormEnterNavigation() {
+      document.querySelectorAll('form').forEach(f => {
+        const inputs = Array.from(f.querySelectorAll('input:not([type="hidden"]), select'));
+        inputs.forEach((inp, i) => {
+          inp.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.keyCode === 13) {
+              if (i < inputs.length - 1) { e.preventDefault(); inputs[i + 1].focus(); }
+            }
+          });
+        });
+      });
+    }
+
+    function switchNav(tab) {
+      document.getElementById('navHome').classList.toggle('active', tab === 'home');
+      document.getElementById('navUser').classList.toggle('active', tab === 'user');
+      document.getElementById('navAdmin').classList.toggle('active', tab === 'admin');
+
+      document.getElementById('homeView').classList.toggle('hidden', tab !== 'home');
+      document.getElementById('adminArea').classList.toggle('hidden', tab !== 'admin');
+
+      if (tab === 'user') {
         if (currentUser) {
-          document.getElementById("userDash").classList.remove("hidden");
-          renderUserView();
+          document.getElementById('userDash').classList.remove('hidden');
+          document.getElementById('authView').classList.add('hidden');
+          renderUserData();
         } else {
-          document.getElementById("authView").classList.remove("hidden");
+          document.getElementById('authView').classList.remove('hidden');
+          document.getElementById('userDash').classList.add('hidden');
         }
-      } else if (view === "admin") {
-        document.getElementById("navAdmin").classList.add("active");
-        document.getElementById("adminArea").classList.remove("hidden");
-        if (isAdminLoggedIn) {
-          document.getElementById("adminAuthBox").classList.add("hidden");
-          document.getElementById("adminControlPanel").classList.remove("hidden");
-          fetchAdminData();
-        } else {
-          document.getElementById("adminAuthBox").classList.remove("hidden");
-          document.getElementById("adminControlPanel").classList.add("hidden");
-        }
-      }
-    }
-
-    function toggleAuth(type) {
-      if (type === "login") {
-        document.getElementById("tabLogin").style.color = "#4f46e5";
-        document.getElementById("tabLogin").style.borderBottom = "2px solid #4f46e5";
-        document.getElementById("tabReg").style.color = "var(--text-muted)";
-        document.getElementById("tabReg").style.borderBottom = "none";
-        document.getElementById("loginForm").classList.remove("hidden");
-        document.getElementById("regForm").classList.add("hidden");
       } else {
-        document.getElementById("tabReg").style.color = "#4f46e5";
-        document.getElementById("tabReg").style.borderBottom = "2px solid #4f46e5";
-        document.getElementById("tabLogin").style.color = "var(--text-muted)";
-        document.getElementById("tabLogin").style.borderBottom = "none";
-        document.getElementById("regForm").classList.remove("hidden");
-        document.getElementById("loginForm").classList.add("hidden");
+        document.getElementById('authView').classList.add('hidden');
+        document.getElementById('userDash').classList.add('hidden');
       }
     }
 
-    function closeModal(id) {
-      document.getElementById(id).classList.add("hidden");
+    function toggleAuth(mode) {
+      document.getElementById('loginForm').classList.toggle('hidden', mode !== 'login');
+      document.getElementById('regForm').classList.toggle('hidden', mode === 'login');
+      document.getElementById('tabLogin').style.color = mode === 'login' ? '#4f46e5' : 'var(--text-muted)';
+      document.getElementById('tabLogin').style.borderBottom = mode === 'login' ? '2px solid #4f46e5' : 'none';
+      document.getElementById('tabReg').style.color = mode === 'reg' ? '#4f46e5' : 'var(--text-muted)';
+      document.getElementById('tabReg').style.borderBottom = mode === 'reg' ? '2px solid #4f46e5' : 'none';
     }
 
-    // ==========================================
-    // 5. USER & ADMIN LOGIN
-    // ==========================================
+    function renderUserData() {
+      if (!currentUser) return;
+      document.getElementById('uName').innerText = currentUser.name;
+      document.getElementById('uPhone').innerText = "+91 " + currentUser.mobile;
+      document.getElementById('uBal').innerText = Number(currentUser.balance || 0).toFixed(2);
+
+      const isFrozen = currentUser.status === "Frozen";
+      document.getElementById('userRechargeBox').classList.toggle('hidden', isFrozen);
+      document.getElementById('frozenNotice').classList.toggle('hidden', !isFrozen);
+      const b = document.getElementById('uStatusBadge');
+      b.innerText = isFrozen ? "Account Frozen" : "Approved User";
+      b.className = `badge ${isFrozen ? 'badge-frozen' : 'badge-success'}`;
+
+      startLiveBalancePolling();
+    }
+
+    async function fetchLivePlans() {
+      try {
+        const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "get_plans" }) });
+        const data = await res.json();
+        if (data.success && data.plans.length > 0) livePlans = data.plans;
+        if (currentUser) selectOp('Jio');
+      } catch(e) {}
+    }
+
+    async function syncBalanceLive() {
+      if (!currentUser || !currentUser.userId) return;
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: "get_user_balance", userId: currentUser.userId })
+        });
+        const data = await res.json();
+        if (data.success && data.balance !== undefined) {
+          const liveBal = Number(data.balance);
+          const currentBal = Number(currentUser.balance);
+
+          if (liveBal > currentBal) {
+            const creditedAmt = (liveBal - currentBal).toFixed(2);
+            currentUser.balance = liveBal;
+            localStorage.setItem("yk_user_session", JSON.stringify(currentUser));
+            document.getElementById('uBal').innerText = liveBal.toFixed(2);
+            triggerLockScreenNotification("Payment Complete!", `Admin approved your deposit! ₹${creditedAmt} added to wallet.`);
+          } else if (liveBal !== currentBal) {
+            currentUser.balance = liveBal;
+            localStorage.setItem("yk_user_session", JSON.stringify(currentUser));
+            document.getElementById('uBal').innerText = liveBal.toFixed(2);
+          }
+
+          if (data.status && data.status !== currentUser.status) {
+            currentUser.status = data.status;
+            localStorage.setItem("yk_user_session", JSON.stringify(currentUser));
+            renderUserData();
+          }
+        }
+      } catch(e) {}
+    }
+
+    function startLiveBalancePolling() {
+      if (balanceSyncTimer) clearInterval(balanceSyncTimer);
+      balanceSyncTimer = setInterval(syncBalanceLive, 5000);
+    }
+
+    async function loginAction() {
+      const mobile = document.getElementById('lMobile').value.trim();
+      const password = document.getElementById('lPass').value.trim();
+      if (!mobile || !password) return showToast("Mobile aur password bharein");
+
+      const btn = document.getElementById('btnLogin');
+      btn.innerText = "Checking..."; btn.disabled = true;
+      try {
+        const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "login", mobile, password }) });
+        const data = await res.json();
+        if (data.success) {
+          if (data.user.status === "Frozen") showToast("Aapka account freeze hai!");
+          currentUser = data.user;
+          localStorage.setItem("yk_user_session", JSON.stringify(currentUser));
+          switchNav('user');
+          showToast(`Welcome ${currentUser.name}!`);
+        } else { showToast(data.message || "Invalid Login"); }
+      } catch(e) { showToast("Connection error"); }
+      finally { btn.innerText = "Sign In"; btn.disabled = false; }
+    }
+
     async function registerAction() {
-      const name = document.getElementById("rName").value.trim();
-      const phone = document.getElementById("rMobile").value.trim();
-      const email = document.getElementById("rEmail").value.trim();
-      const pass = document.getElementById("rPass").value.trim();
+      const name = document.getElementById('rName').value.trim();
+      const mobile = document.getElementById('rMobile').value.trim();
+      const email = document.getElementById('rEmail').value.trim();
+      const password = document.getElementById('rPass').value.trim();
+      if (!name || mobile.length !== 10 || !email || !password) return showToast("Sabhi details sahi bharein");
 
-      if (phone.length !== 10) return showToast("10-digit valid mobile daalein");
-      if (db.users.find(u => String(u.phone) === phone)) return showToast("Mobile already registered hai!");
-
-      const newUser = {
-        action: "REGISTER_USER",
-        id: "U" + Math.floor(1000 + Math.random() * 9000),
-        name, phone, email, pass, bal: 0, status: "Active"
-      };
-
-      db.users.push(newUser);
-      showToast("Registering user in Sheet...");
-      await sendToSheet(newUser);
-      toggleAuth("login");
-      document.getElementById("lMobile").value = phone;
-    }
-
-    function loginAction() {
-      const phone = document.getElementById("lMobile").value.trim();
-      const pass = document.getElementById("lPass").value.trim();
-
-      const user = db.users.find(u => String(u.phone) === phone && String(u.pass) === pass);
-      if (!user) return showToast("Galat Mobile ya Password! (Check Sheet)");
-
-      currentUser = user;
-      showToast(`Welcome back, ${user.name}!`);
-      switchNav("user");
+      const btn = document.getElementById('btnReg');
+      btn.innerText = "Submitting..."; btn.disabled = true;
+      try {
+        const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "register", name, mobile, email, password }) });
+        const data = await res.json();
+        showToast(data.message);
+        if (data.success) toggleAuth('login');
+      } catch(e) { showToast("Registration error"); }
+      finally { btn.innerText = "Submit Registration"; btn.disabled = false; }
     }
 
     function logoutAction() {
+      if (balanceSyncTimer) clearInterval(balanceSyncTimer);
       currentUser = null;
-      switchNav("user");
+      localStorage.removeItem("yk_user_session");
+      switchNav('home');
+      showToast("Logged out");
     }
 
-    function adminLoginAction() {
-      const u = document.getElementById("adminUser").value.trim();
-      const p = document.getElementById("adminPass").value.trim();
-
-      if (u === "admin" && p === "admin123") {
-        isAdminLoggedIn = true;
-        document.getElementById("adminAuthBox").classList.add("hidden");
-        document.getElementById("adminControlPanel").classList.remove("hidden");
-        checkNotifPermissionState();
-        fetchAdminData();
-        showToast("Admin Hub Logged In");
-      } else {
-        showToast("Galat Admin Details!");
+    function autoDetect(val) {
+      if (val.length === 10) {
+        const p = val.substring(0, 2);
+        let op = "Jio";
+        if (["98", "99", "88", "70"].includes(p)) op = "Airtel";
+        else if (["90", "91", "80", "77"].includes(p)) op = "Vi";
+        else if (["94", "89"].includes(p)) op = "BSNL";
+        selectOp(op);
       }
-    }
-
-    function adminLogoutAction() {
-      isAdminLoggedIn = false;
-      document.getElementById("adminControlPanel").classList.add("hidden");
-      document.getElementById("adminAuthBox").classList.remove("hidden");
-      showToast("Admin Logged Out");
-    }
-
-    // ==========================================
-    // 6. USER RECHARGE & PLANS
-    // ==========================================
-    function renderUserView() {
-      if (!currentUser) return;
-      document.getElementById("uBal").textContent = Number(currentUser.bal).toFixed(2);
-      document.getElementById("uName").textContent = currentUser.name;
-      document.getElementById("uPhone").textContent = currentUser.phone;
-
-      const isFrozen = currentUser.status === "Frozen";
-      document.getElementById("uStatusBadge").textContent = isFrozen ? "Frozen" : "Approved User";
-      document.getElementById("uStatusBadge").className = isFrozen ? "badge badge-frozen" : "badge badge-success";
-      document.getElementById("userRechargeBox").classList.toggle("hidden", isFrozen);
-      document.getElementById("frozenNotice").classList.toggle("hidden", !isFrozen);
-
-      renderPlans();
     }
 
     function selectOp(op) {
-      document.getElementById("recOp").value = op;
-      document.querySelectorAll(".op-pill").forEach(p => p.classList.remove("active"));
-      const pill = document.getElementById("op" + op);
-      if (pill) pill.classList.add("active");
-      renderPlans();
+      document.getElementById('recOp').value = op;
+      ['Jio', 'Airtel', 'Vi', 'Bsnl'].forEach(o => {
+        const el = document.getElementById(`op${o}`);
+        if (el) el.classList.toggle('active', o.toLowerCase() === op.toLowerCase());
+      });
+      renderPlans(op);
     }
 
-    function autoDetect(num) {
-      if (num.length >= 2) {
-        const pre = num.substring(0, 2);
-        if (["98", "99", "70", "81"].includes(pre)) selectOp("Airtel");
-        else if (["97", "88", "96"].includes(pre)) selectOp("Vi");
-        else if (["94", "95"].includes(pre)) selectOp("BSNL");
-        else selectOp("Jio");
-      }
-    }
+    function renderPlans(op) {
+      const chips = document.getElementById('dynamicChips');
+      const list = document.getElementById('plansList');
+      chips.innerHTML = "";
+      list.innerHTML = "";
 
-    function renderPlans() {
-      const op = document.getElementById("recOp").value;
-      const list = document.getElementById("plansList");
-      const chips = document.getElementById("dynamicChips");
-      const filtered = db.plans.filter(p => p.op.toLowerCase() === op.toLowerCase());
+      const filtered = livePlans.filter(p => p.operator.toLowerCase() === op.toLowerCase());
+      filtered.forEach(p => {
+        const c = document.createElement('span');
+        c.className = "chip"; c.innerText = "₹" + p.amount;
+        c.onclick = () => { document.getElementById('recAmt').value = p.amount; selectedPlanDesc = `${p.validity} | ${p.desc}`; };
+        chips.appendChild(c);
 
-      list.innerHTML = filtered.map(p => `
-        <div class="plan-card" onclick="setRechargeAmt('${p.amt}')">
-          <div>
-            <b style="font-size:14px; color:#4f46e5;">₹${p.amt}</b>
-            <p style="font-size:11px; color:var(--text-muted);">${p.desc}</p>
-          </div>
-          <span class="badge badge-success">${p.val}</span>
-        </div>
-      `).join("");
-
-      chips.innerHTML = filtered.slice(0, 4).map(p => `
-        <div class="chip" onclick="setRechargeAmt('${p.amt}')">₹${p.amt}</div>
-      `).join("");
-    }
-
-    function setRechargeAmt(amt) {
-      document.getElementById("recAmt").value = amt;
+        const card = document.createElement('div');
+        card.className = "plan-card";
+        card.onclick = () => { document.getElementById('recAmt').value = p.amount; selectedPlanDesc = `${p.validity} | ${p.desc}`; };
+        card.innerHTML = `<div><b>₹${p.amount}</b> <span style="font-size:10.5px; color:#4f46e5; font-weight:700;">${p.validity}</span><p style="font-size:11px; color:var(--text-muted);">${p.desc}</p></div><span style="color:#4f46e5; font-weight:700; font-size:11px;">Select</span>`;
+        list.appendChild(card);
+      });
     }
 
     async function startRecharge() {
-      if (currentUser.status === "Frozen") return showToast("Aapka account freeze hai!");
-      const mob = document.getElementById("recMobile").value.trim();
-      const amt = Number(document.getElementById("recAmt").value);
-      const op = document.getElementById("recOp").value;
+      if (currentUser && currentUser.status === "Frozen") return showToast("Aapka account frozen hai!");
 
-      if (mob.length !== 10) return showToast("10-digit number enter karein");
-      if (!amt || amt <= 0) return showToast("Valid amount enter karein");
-      if (Number(currentUser.bal) < amt) return showToast("Insufficient Balance! Pehle wallet me money add karein.");
+      const mobile = document.getElementById('recMobile').value.trim();
+      const op = document.getElementById('recOp').value;
+      const amt = Number(document.getElementById('recAmt').value);
+      if (mobile.length !== 10 || !op || !amt) return showToast("Mobile, operator aur amount check karein");
+      if (currentUser.balance < amt) return showToast("Insufficient wallet balance!");
 
-      currentUser.bal = Number(currentUser.bal) - amt;
-      const order = {
-        action: "ADD_RECHARGE",
-        id: "TXN" + Date.now().toString().slice(-6),
-        userId: currentUser.id,
-        userName: currentUser.name,
-        mobile: mob,
-        op: op,
-        amt: amt,
-        opTxnId: "OP" + Math.floor(10000000 + Math.random() * 90000000),
-        status: "Pending",
-        date: new Date().toLocaleString()
-      };
-
-      db.recharges.push(order);
-      renderUserView();
-      showToast("Recharge order submitted to Sheet!");
-      showReceipt(order);
-      await sendToSheet(order);
+      const btn = document.getElementById('btnRec');
+      btn.innerText = "Processing..."; btn.disabled = true;
+      try {
+        const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "create_recharge", userId: currentUser.userId, mobile, operator: op, amount: amt, planDetails: selectedPlanDesc }) });
+        const data = await res.json();
+        if (data.success) {
+          currentUser.balance -= amt;
+          localStorage.setItem("yk_user_session", JSON.stringify(currentUser));
+          renderUserData();
+          showToast(`Recharge requested! ID: ${data.txnId}`);
+        } else { showToast(data.message); }
+      } catch(e) { showToast("Recharge order submitted for approval"); }
+      finally { btn.innerText = "Recharge Now"; btn.disabled = false; }
     }
 
-    function showReceipt(o) {
-      document.getElementById("rcpUserId").textContent = o.userId;
-      document.getElementById("rcpUserName").textContent = o.userName;
-      document.getElementById("rcpTxnId").textContent = o.id;
-      document.getElementById("rcpMobile").textContent = o.mobile;
-      document.getElementById("rcpOp").textContent = o.op;
-      document.getElementById("rcpAmt").textContent = "₹" + Number(o.amt).toFixed(2);
-      document.getElementById("rcpOpRef").textContent = o.opTxnId;
-      document.getElementById("rcpTime").textContent = o.date;
-      document.getElementById("rcpStatus").textContent = o.status;
-      document.getElementById("receiptModal").classList.remove("hidden");
-    }
-
-    // ==========================================
-    // 7. WALLET & SLIP SUBMISSION
-    // ==========================================
     function openAddMoneyModal() {
-      document.getElementById("upiQrImg").src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=${encodeURIComponent(db.upiId)}&pn=YK%20Recharge`;
-      document.getElementById("addMoneyModal").classList.remove("hidden");
+      document.getElementById('wDate').valueAsDate = new Date();
+      document.getElementById('uUpiText').innerText = liveQR.upiId;
+      document.getElementById('uQrImg').src = liveQR.qrUrl;
+      toggleModal('addMoneyModal', true);
     }
 
-    async function submitAddMoneySlip() {
-      const amt = Number(document.getElementById("depAmt").value);
-      const utr = document.getElementById("depUtr").value.trim();
+    async function submitDeposit() {
+      const amt = Number(document.getElementById('wAmt').value);
+      const utr = document.getElementById('wUtr').value.trim();
+      const dt = document.getElementById('wDate').value;
+      if (!amt || utr.length < 6 || !dt) return showToast("Amount, UTR, aur Date bharein!");
 
-      if (!amt || amt < 10) return showToast("Kam se kam ₹10 deposit karein");
-      if (utr.length < 10) return showToast("Valid 12-digit UTR daalein");
-
-      const slip = {
-        action: "ADD_DEPOSIT",
-        id: "DEP" + Date.now().toString().slice(-5),
-        userId: currentUser.id,
-        userName: currentUser.name,
-        amt: amt,
-        utr: utr,
-        status: "Pending",
-        time: new Date().toLocaleString()
-      };
-
-      db.deposits.push(slip);
-      closeModal("addMoneyModal");
-      document.getElementById("depAmt").value = "";
-      document.getElementById("depUtr").value = "";
-      showToast("Deposit slip submitted for admin verification!");
-      await sendToSheet(slip);
+      const btn = document.getElementById('btnDeposit');
+      btn.innerText = "Submitting..."; btn.disabled = true;
+      try {
+        const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "add_money_request", userId: currentUser.userId, amount: amt, utr, date: dt }) });
+        const data = await res.json();
+        showToast(data.message || "Slip submitted");
+        toggleModal('addMoneyModal', false);
+        document.getElementById('wAmt').value = ""; document.getElementById('wUtr').value = "";
+      } catch(e) {
+        showToast("Slip submitted to admin");
+        toggleModal('addMoneyModal', false);
+      } finally { btn.innerText = "Submit Slip"; btn.disabled = false; }
     }
 
-    function openHistory(type) {
-      const thead = document.getElementById("historyThead");
-      const tbody = document.getElementById("historyTbody");
-      const title = document.getElementById("historyModalTitle");
+    async function openHistory(tab) {
+      toggleModal('historyModal', true);
+      renderHistoryTab(tab);
+      try {
+        const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "get_user_history", userId: currentUser.userId, mobile: currentUser.mobile }) });
+        const data = await res.json();
+        if (data.success) { userHistoryData = data; renderHistoryTab(tab); }
+      } catch(e) {}
+    }
 
-      if (type === "recharges") {
-        title.textContent = "My Recharge History";
-        thead.innerHTML = "<tr><th>ID</th><th>Mobile</th><th>Operator</th><th>Amount</th><th>Status</th></tr>";
-        const myRec = db.recharges.filter(r => String(r.userId) === String(currentUser.id));
-        tbody.innerHTML = myRec.length ? myRec.reverse().map(r => `
-          <tr><td>${r.id}</td><td>${r.mobile}</td><td>${r.op}</td><td>₹${r.amt}</td><td><span class="badge ${r.status === 'Success' ? 'badge-success' : 'badge-pending'}">${r.status}</span></td></tr>
-        `).join("") : "<tr><td colspan='5' style='text-align:center;'>No records found</td></tr>";
+    function renderHistoryTab(tab) {
+      const thead = document.getElementById('historyThead');
+      const tbody = document.getElementById('historyTbody');
+      const tabRec = document.getElementById('hTabRec');
+      const tabDep = document.getElementById('hTabDep');
+
+      if (tab === 'recharges') {
+        tabRec.style.background = "#4f46e5"; tabRec.style.color = "#fff";
+        tabDep.style.background = "var(--chip-bg)"; tabDep.style.color = "var(--text)";
+        thead.innerHTML = `<tr><th>Txn ID</th><th>Mobile</th><th>Amount</th><th>Status</th><th>Receipt</th></tr>`;
+        tbody.innerHTML = (userHistoryData.recharges && userHistoryData.recharges.length) ? "" : `<tr><td colspan="5" style="text-align:center;">No recharges</td></tr>`;
+
+        userHistoryData.recharges?.forEach((r, idx) => {
+          let displayAmt = r.amount !== undefined ? r.amount : (r.amt || 0);
+          const finalId = (r.opTxnId && String(r.opTxnId).trim() !== "") ? r.opTxnId : (r.txnId || `TXN${idx+1000}`);
+          tbody.innerHTML += `<tr><td style="font-family:monospace; color:#4f46e5; font-weight:700;">${finalId}</td><td>${r.mobile}</td><td>₹${displayAmt}</td><td><span class="badge ${r.status === 'Success' ? 'badge-success' : 'badge-pending'}">${r.status}</span></td><td><button class="btn-sm" style="background:#e0e7ff; color:#4338ca; border:none; cursor:pointer;" onclick="showReceipt(${idx})">View</button></td></tr>`;
+        });
       } else {
-        title.textContent = "My Deposit Slips";
-        thead.innerHTML = "<tr><th>Req ID</th><th>Amount</th><th>UTR</th><th>Status</th></tr>";
-        const myDep = db.deposits.filter(d => String(d.userId) === String(currentUser.id));
-        tbody.innerHTML = myDep.length ? myDep.reverse().map(d => `
-          <tr><td>${d.id}</td><td>₹${d.amt}</td><td>${d.utr}</td><td><span class="badge ${d.status === 'Approved' ? 'badge-success' : 'badge-pending'}">${d.status}</span></td></tr>
-        `).join("") : "<tr><td colspan='4' style='text-align:center;'>No deposits found</td></tr>";
+        tabDep.style.background = "#4f46e5"; tabDep.style.color = "#fff";
+        tabRec.style.background = "var(--chip-bg)"; tabRec.style.color = "var(--text)";
+        thead.innerHTML = `<tr><th>Req ID</th><th>Type</th><th>Amount</th><th>UTR</th><th>Status</th></tr>`;
+        tbody.innerHTML = (userHistoryData.deposits && userHistoryData.deposits.length) ? "" : `<tr><td colspan="5" style="text-align:center;">No deposits</td></tr>`;
+
+        userHistoryData.deposits?.forEach(d => {
+          let depAmt = d.amount !== undefined ? d.amount : (d.amt || 0);
+          tbody.innerHTML += `<tr><td>#${d.reqId}</td><td><b style="color:#10b981;">${d.type || 'Deposit'}</b></td><td>₹${depAmt}</td><td style="font-family:monospace;">${d.utr}</td><td><span class="badge ${d.status === 'Approved' ? 'badge-success' : 'badge-pending'}">${d.status}</span></td></tr>`;
+        });
       }
-      document.getElementById("historyModal").classList.remove("hidden");
     }
 
-    // ==========================================
-    // 8. ADMIN ENGINE: APPROVAL-FIRST & SEARCH
-    // ==========================================
-    function sortByPendingFirst(list) {
-      return [...list].sort((a, b) => {
-        if (a.status === "Pending" && b.status !== "Pending") return -1;
-        if (a.status !== "Pending" && b.status === "Pending") return 1;
-        return 0;
-      });
+    // USER RECEIPT: ADMIN OPERATOR TXN ID FIRST PRIORITY
+    function showReceipt(idx) {
+      const r = userHistoryData.recharges[idx];
+      if (!r) return;
+
+      document.getElementById('rcpUserId').innerText = currentUser ? currentUser.userId : (r.userId || "USR");
+      document.getElementById('rcpUserName').innerText = currentUser ? currentUser.name : "Customer";
+      
+      let cleanTxnId = (r.opTxnId && String(r.opTxnId).trim() !== "") ? r.opTxnId : r.txnId;
+      document.getElementById('rcpTxnId').innerText = cleanTxnId;
+      document.getElementById('rcpMobile').innerText = "+91 " + (r.mobile || "");
+      document.getElementById('rcpOperator').innerText = r.operator || r.op || "Prepaid";
+
+      let planText = r.plan || r.planDetails || "Standard Prepaid";
+      if (!isNaN(planText)) planText = `₹${planText} Unlimited Plan`;
+      document.getElementById('rcpPlan').innerText = planText;
+
+      let numAmt = Number(r.amount);
+      if (isNaN(numAmt) || numAmt <= 0) numAmt = Number(r.amt);
+      if (isNaN(numAmt) || numAmt <= 0) numAmt = 299;
+      
+      document.getElementById('rcpAmount').innerText = "₹" + numAmt.toFixed(2);
+
+      const st = r.status || "Success";
+      const statusEl = document.getElementById('rcpStatus');
+      statusEl.innerText = st;
+      statusEl.className = `badge ${st === 'Success' ? 'badge-success' : 'badge-pending'}`;
+
+      toggleModal('receiptModal', true);
     }
 
-    function renderAdminWallets() {
-      const query = (document.getElementById("walletSearchInput")?.value || "").toLowerCase().trim();
-      let list = sortByPendingFirst(db.deposits);
-
-      if (query) {
-        list = list.filter(d => 
-          (d.id && String(d.id).toLowerCase().includes(query)) ||
-          (d.userName && String(d.userName).toLowerCase().includes(query)) ||
-          (d.utr && String(d.utr).toLowerCase().includes(query)) ||
-          (String(d.amt).includes(query))
-        );
-      }
-
-      const tbody = document.getElementById("adminWalletRows");
-      if (!list.length) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No deposits found</td></tr>`;
-        return;
-      }
-
-      tbody.innerHTML = list.map(d => `
-        <tr style="${d.status === 'Pending' ? 'background: rgba(245, 158, 11, 0.12);' : ''}">
-          <td>${d.id}</td>
-          <td>${d.userName} (${d.userId})</td>
-          <td>₹${d.amt}</td>
-          <td><b>${d.utr}</b></td>
-          <td>
-            ${d.status === 'Pending' ? `
-              <button class="btn btn-success btn-sm" onclick="adminApproveDeposit('${d.id}')">Approve</button>
-            ` : `<span class="badge badge-success">${d.status}</span>`}
-          </td>
-        </tr>
-      `).join("");
+    function printReceipt() {
+      const content = document.getElementById('printableReceipt').innerHTML;
+      const pWin = window.open('', '', 'height=600,width=500');
+      pWin.document.write('<html><head><title>YK RECHARGE PORTAL - Receipt</title><style>body{font-family:sans-serif;padding:20px;}</style></head><body>');
+      pWin.document.write(content);
+      pWin.document.write('</body></html>');
+      pWin.document.close();
+      pWin.focus();
+      setTimeout(() => { pWin.print(); pWin.close(); }, 500);
     }
 
-    function renderAdminRecharges() {
-      const query = (document.getElementById("recSearchInput")?.value || "").toLowerCase().trim();
-      let list = sortByPendingFirst(db.recharges);
+    // ADMIN HUB ACTIONS
+    async function adminLoginAction() {
+      const u = document.getElementById('adminUser').value.trim();
+      const p = document.getElementById('adminPass').value.trim();
+      if (!u || !p) return showToast("Admin username aur password enter karein");
 
-      if (query) {
-        list = list.filter(r => 
-          (r.id && String(r.id).toLowerCase().includes(query)) ||
-          (r.userName && String(r.userName).toLowerCase().includes(query)) ||
-          (r.mobile && String(r.mobile).toLowerCase().includes(query)) ||
-          (r.op && String(r.op).toLowerCase().includes(query)) ||
-          (String(r.amt).includes(query))
-        );
-      }
-
-      const tbody = document.getElementById("adminRecRows");
-      if (!list.length) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-muted);">No recharges found</td></tr>`;
-        return;
-      }
-
-      tbody.innerHTML = list.map(r => `
-        <tr style="${r.status === 'Pending' ? 'background: rgba(245, 158, 11, 0.12);' : ''}">
-          <td>${r.id}</td>
-          <td>${r.userName}</td>
-          <td><b>${r.mobile}</b></td>
-          <td>${r.op}</td>
-          <td>₹${r.amt}</td>
-          <td>${r.opTxnId || '-'}</td>
-          <td>
-            ${r.status === 'Pending' ? `
-              <button class="btn btn-success btn-sm" onclick="adminApproveRecharge('${r.id}')">Complete</button>
-            ` : `<span class="badge badge-success">${r.status}</span>`}
-          </td>
-        </tr>
-      `).join("");
-    }
-
-    function fetchAdminData() {
-      if (!isAdminLoggedIn) return;
-      document.getElementById("adminSyncTime").textContent = "Live updated: " + new Date().toLocaleTimeString();
-
-      // 1. Render Plans
-      document.getElementById("adminPlanRows").innerHTML = db.plans.map(p => `
-        <tr><td><b>${p.op}</b></td><td>₹${p.amt}</td><td>${p.val}</td><td>${p.desc}</td></tr>
-      `).join("");
-
-      // 2. Render Users
-      document.getElementById("adminUserRows").innerHTML = db.users.map(u => `
-        <tr>
-          <td>${u.id}</td>
-          <td>${u.name}</td>
-          <td>${u.phone}</td>
-          <td>₹${Number(u.bal).toFixed(2)}</td>
-          <td><button class="btn btn-primary btn-sm" onclick="adminAddWallet('${u.id}')">+ Bal</button></td>
-          <td>
-            <button class="btn ${u.status === 'Active' ? 'btn-danger' : 'btn-success'} btn-sm" onclick="adminToggleUser('${u.id}')">
-              ${u.status === 'Active' ? 'Freeze' : 'Unfreeze'}
-            </button>
-          </td>
-        </tr>
-      `).join("");
-
-      // 3. Render Deposit & Recharge Tables
-      renderAdminWallets();
-      renderAdminRecharges();
-
-      // 4. TRIGGER REAL-TIME BROWSER NOTIFICATIONS WHEN NEW USER REQUEST OCCURS
-      db.deposits.forEach(d => {
-        const idKey = String(d.id);
-        if (!knownDepositIds.has(idKey)) {
-          if (!isInitialAdminLoad && d.status === "Pending") {
-            showDesktopNotification("Naya Wallet Deposit Slip!", `User: ${d.userName} | Amount: ₹${d.amt} (UTR: ${d.utr})`, idKey);
-          }
-          knownDepositIds.add(idKey);
-        }
-      });
-
-      db.recharges.forEach(r => {
-        const idKey = String(r.id);
-        if (!knownRecIds.has(idKey)) {
-          if (!isInitialAdminLoad && r.status === "Pending") {
-            showDesktopNotification("Naya Recharge Order!", `${r.op} Mobile: ${r.mobile} | ₹${r.amt} (${r.userName})`, idKey);
-          }
-          knownRecIds.add(idKey);
-        }
-      });
-
-      isInitialAdminLoad = false;
-    }
-
-    // Admin Operations
-    async function adminAddPlan() {
-      const op = document.getElementById("apOp").value;
-      const amt = document.getElementById("apAmt").value;
-      const val = document.getElementById("apVal").value;
-      const desc = document.getElementById("apDesc").value;
-
-      const newPlan = { action: "ADD_PLAN", op, amt, val, desc };
-      db.plans.push(newPlan);
-      fetchAdminData();
-      showToast("Plan added to Sheet!");
-      await sendToSheet(newPlan);
-    }
-
-    async function adminAddWallet(uid) {
-      const amt = prompt("Amount to add (₹):");
-      if (amt && !isNaN(amt)) {
-        const u = db.users.find(x => String(x.id) === String(uid));
-        if (u) {
-          u.bal = Number(u.bal) + Number(amt);
+      const btn = document.getElementById('btnAdm');
+      btn.innerText = "Verifying..."; btn.disabled = true;
+      try {
+        const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_login", username: u, password: p }) });
+        const data = await res.json();
+        if (data.success) {
+          adminToken = data.adminToken;
+          sessionStorage.setItem("yk_admin_token", adminToken);
+          document.getElementById('adminAuthBox').classList.add('hidden');
+          document.getElementById('adminControlPanel').classList.remove('hidden');
+          document.getElementById('adminUserDisplay').innerText = u;
           fetchAdminData();
-          showToast(`₹${amt} added to ${u.name}`);
-          await sendToSheet({ action: "UPDATE_USER", userId: uid, addBal: Number(amt) });
-        }
-      }
+          showToast("Admin authenticated!");
+        } else { showToast(data.message || "Invalid Admin"); }
+      } catch(e) { showToast("Admin login failed"); } 
+      finally { btn.innerText = "Login to Admin"; btn.disabled = false; }
     }
 
-    async function adminToggleUser(uid) {
-      const u = db.users.find(x => String(x.id) === String(uid));
-      if (u) {
-        u.status = u.status === "Active" ? "Frozen" : "Active";
+    async function adminAddPlan() {
+      const operator = document.getElementById('apOp').value;
+      const amount = document.getElementById('apAmt').value;
+      const validity = document.getElementById('apVal').value;
+      const desc = document.getElementById('apDesc').value;
+
+      const btn = document.getElementById('btnPlanAdd');
+      btn.innerText = "..."; btn.disabled = true;
+
+      try {
+        await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_add_plan", operator, amount, validity, desc, adminToken }) });
+        showToast("Plan added successfully!");
+        document.getElementById('apAmt').value = ""; document.getElementById('apVal').value = ""; document.getElementById('apDesc').value = "";
         fetchAdminData();
-        showToast(`Status updated to ${u.status}`);
-        await sendToSheet({ action: "UPDATE_USER", userId: uid, status: u.status });
+        fetchLivePlans();
+      } catch(e) {}
+      finally { btn.innerText = "Add Plan"; btn.disabled = false; }
+    }
+
+    async function adminDeletePlan(operator, amount) {
+      if (!confirm(`Kya aap ${operator} ₹${amount} plan delete karna chahte hain?`)) return;
+      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_delete_plan", operator, amount, adminToken }) });
+      showToast("Plan deleted!");
+      fetchAdminData();
+      fetchLivePlans();
+    }
+
+    async function adminDeleteWallet(requestId) {
+      if (!confirm(`Deposit request #${requestId} ko delete karein?`)) return;
+      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_delete_wallet", requestId, adminToken }) });
+      showToast("Deposit request deleted!");
+      fetchAdminData();
+    }
+
+    async function adminDeleteRecharge(txnId) {
+      if (!confirm(`Recharge order #${txnId} ko delete karein?`)) return;
+      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_delete_recharge", txnId, adminToken }) });
+      showToast("Recharge order deleted!");
+      fetchAdminData();
+    }
+
+    async function fetchAdminData() {
+      if (!adminToken) return;
+      try {
+        const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_get_all_data", adminToken }) });
+        const data = await res.json();
+        if (!data.success) return;
+
+        // Plans Table (with Delete)
+        const pBody = document.getElementById('adminPlanRows');
+        pBody.innerHTML = (data.plans && data.plans.length) ? "" : "<tr><td colspan='5'>No Plans Added</td></tr>";
+        data.plans?.forEach(p => {
+          pBody.innerHTML += `<tr><td><b>${p.op}</b></td><td>₹${p.amt}</td><td>${p.val}</td><td>${p.desc}</td><td><button class="btn-sm btn-danger" onclick="adminDeletePlan('${p.op}', ${p.amt})">Delete</button></td></tr>`;
+        });
+
+        // Users Table (Realtime Balance)
+        const uBody = document.getElementById('adminUserRows');
+        uBody.innerHTML = (data.users && data.users.length) ? "" : "<tr><td colspan='6'>No Users</td></tr>";
+        data.users?.forEach(u => {
+          const isFrz = u.status === 'Frozen';
+          const userBal = Number(u.balance !== undefined ? u.balance : 0).toFixed(2);
+          uBody.innerHTML += `
+            <tr>
+              <td><b>${u.id}</b></td>
+              <td>${u.name}</td>
+              <td>${u.mobile}</td>
+              <td><b style="color:#10b981; font-family:monospace; font-size:13px;">₹${userBal}</b></td>
+              <td>${u.status === 'Pending' ? `<button class="btn-sm btn-success" onclick="resolveUser('${u.id}', 'Approved')">Approve</button>` : '<span style="color:#64748b; font-size:11px;">Done</span>'}</td>
+              <td><button class="btn-sm ${isFrz ? 'btn-success' : 'btn-warning'}" onclick="toggleFreezeUser('${u.id}', '${isFrz ? 'Approved' : 'Frozen'}')">${isFrz ? 'Unfreeze' : 'Freeze'}</button></td>
+            </tr>`;
+        });
+
+        // Wallets Table (with Delete)
+        const wBody = document.getElementById('adminWalletRows');
+        wBody.innerHTML = (data.wallets && data.wallets.length) ? "" : "<tr><td colspan='6'>No Requests</td></tr>";
+        data.wallets?.forEach(w => {
+          wBody.innerHTML += `<tr><td>#${w.id}</td><td>${w.userId}</td><td>₹${w.amount}</td><td>${w.utr}</td><td>${w.status === 'Pending' ? `<button class="btn-sm btn-success" onclick="resolveWallet('${w.id}', 'Approved')">Approve</button>` : 'Done'}</td><td><button class="btn-sm btn-danger" onclick="adminDeleteWallet('${w.id}')">Delete</button></td></tr>`;
+        });
+
+        // Recharges Table (with Delete)
+        const rBody = document.getElementById('adminRecRows');
+        rBody.innerHTML = (data.recharges && data.recharges.length) ? "" : "<tr><td colspan='8'>No Orders</td></tr>";
+        data.recharges?.forEach(r => {
+          rBody.innerHTML += `<tr><td>#${r.id}</td><td>${r.userId}</td><td>${r.mobile}</td><td>${r.op}</td><td>₹${r.amount}</td><td>${r.opTxnId || '-'}</td><td>${r.status === 'Pending' ? `<button class="btn-sm btn-success" onclick="promptAdminSuccess('${r.id}')">Approve</button>` : 'Done'}</td><td><button class="btn-sm btn-danger" onclick="adminDeleteRecharge('${r.id}')">Delete</button></td></tr>`;
+        });
+      } catch(e) {}
+    }
+
+    async function toggleFreezeUser(userId, newStatus) {
+      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_approve_user", userId, status: newStatus, adminToken }) });
+      showToast(`User status: ${newStatus}!`);
+      fetchAdminData();
+    }
+    async function resolveUser(userId, status) {
+      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_approve_user", userId, status, adminToken }) });
+      fetchAdminData();
+    }
+    async function resolveWallet(requestId, status) {
+      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_update_wallet", requestId, status, adminToken }) });
+      fetchAdminData();
+    }
+
+    function promptAdminSuccess(txnId) {
+      pendingApprovalTxn = txnId;
+      document.getElementById('asmTxnId').innerText = "#" + txnId;
+      document.getElementById('asmOperatorId').value = "";
+      toggleModal('adminSuccessModal', true);
+    }
+
+    // MANDATORY & UNIQUE OP TXN ID VERIFICATION
+    async function confirmAdminSuccess() {
+      const opTxnId = document.getElementById('asmOperatorId').value.trim();
+      if (!opTxnId) return showToast("Operator Transaction ID dalna zaroori hai!");
+
+      const btn = document.getElementById('btnAdminSuccess');
+      btn.innerText = "Verifying..."; btn.disabled = true;
+
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: "admin_update_recharge", txnId: pendingApprovalTxn, status: "Success", operatorTxnId: opTxnId, adminToken })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast("Recharge approved successfully!");
+          toggleModal('adminSuccessModal', false);
+          fetchAdminData();
+        } else {
+          showToast(data.message || "Duplicate Transaction ID!");
+        }
+      } catch(e) {
+        showToast("Error processing request");
+      } finally {
+        btn.innerText = "Approve & Save"; btn.disabled = false;
       }
-    }
-
-    async function adminApproveDeposit(depId) {
-      const dep = db.deposits.find(d => String(d.id) === String(depId));
-      if (!dep || dep.status !== "Pending") return;
-
-      dep.status = "Approved";
-      fetchAdminData();
-      showToast("Deposit approved! Updating Sheet...");
-
-      await sendToSheet({
-        action: "APPROVE_DEPOSIT",
-        id: dep.id,
-        userId: dep.userId,
-        amt: dep.amt
-      });
-      syncAllFromSheet();
-    }
-
-    async function adminApproveRecharge(recId) {
-      const rec = db.recharges.find(r => String(r.id) === String(recId));
-      if (!rec) return;
-
-      rec.status = "Success";
-      fetchAdminData();
-      showToast("Recharge marked completed! Updating Sheet...");
-
-      await sendToSheet({
-        action: "APPROVE_RECHARGE",
-        id: rec.id
-      });
-      syncAllFromSheet();
     }
 
     function openAdminQrModal() {
-      document.getElementById("adminUpiId").value = db.upiId;
-      document.getElementById("adminQrModal").classList.remove("hidden");
+      document.getElementById('setAdminUpi').value = liveQR.upiId;
+      document.getElementById('setAdminQrUrl').value = liveQR.qrUrl;
+      toggleModal('adminQrModal', true);
     }
 
-    async function saveAdminQr() {
-      const val = document.getElementById("adminUpiId").value.trim();
-      if (val) {
-        db.upiId = val;
-        closeModal("adminQrModal");
-        showToast("UPI ID saved in Sheet!");
-        await sendToSheet({ action: "SET_UPI", upiId: val });
-      }
+    function saveAdminQrAction() {
+      const upi = document.getElementById('setAdminUpi').value.trim();
+      const qr = document.getElementById('setAdminQrUrl').value.trim();
+      if (!upi || !qr) return showToast("Dono fields bharein!");
+
+      liveQR = { upiId: upi, qrUrl: qr };
+      localStorage.setItem("yk_upi", upi);
+      localStorage.setItem("yk_qr", qr);
+      toggleModal('adminQrModal', false);
+      showToast("Payment QR updated!");
     }
 
-    // ==========================================
-    // 9. AUTOMATIC 5-SECOND LIVE SYNC LOOP
-    // ==========================================
+    function adminLogoutAction() {
+      adminToken = null;
+      sessionStorage.removeItem("yk_admin_token");
+      document.getElementById('adminControlPanel').classList.add('hidden');
+      document.getElementById('adminAuthBox').classList.remove('hidden');
+    }
+
     window.addEventListener("DOMContentLoaded", () => {
-      syncAllFromSheet();
-      // Har 5 second me Google Sheet se live check karega
-      setInterval(syncAllFromSheet, 5000);
+      initTheme();
+      setupFormEnterNavigation();
+      fetchLivePlans();
+      selectOp('Jio');
+      if (currentUser) renderUserData();
+
+      document.body.addEventListener('click', () => {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if ("Notification" in window && Notification.permission === "default") {
+          Notification.requestPermission();
+        }
+      }, { once: true });
     });
   </script>
 </body>

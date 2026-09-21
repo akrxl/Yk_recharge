@@ -341,7 +341,7 @@
     </div>
   </div>
 
-  <!-- ADMIN RECHARGE APPROVE MODAL (MANDATORY & UNIQUE OPERATOR TXN ID) -->
+  <!-- ADMIN RECHARGE APPROVE MODAL -->
   <div id="adminSuccessModal" class="modal-overlay hidden">
     <form class="modal-body" onsubmit="event.preventDefault(); confirmAdminSuccess();">
       <h3 style="font-weight: 800; font-size: 15px; margin-bottom: 8px;">Approve Recharge Order</h3>
@@ -359,6 +359,7 @@
   </div>
 
   <script>
+    // UPDATED SCRIPT URL
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxKpUFTVYFMAryvle79MnLhDBO0lCd0sPgTj_bU08iA-BTqYzgh9QTtCNDXbk8-joDX/exec";
     
     let currentUser = JSON.parse(localStorage.getItem("yk_user_session") || "null");
@@ -367,9 +368,13 @@
     let userHistoryData = { recharges: [], deposits: [] };
     let pendingApprovalTxn = null;
     let balanceSyncTimer = null;
+    let adminPollingTimer = null;
+    let lastKnownPendingCount = -1;
 
+    // Hardcode Correct Default UPI
+    localStorage.setItem("yk_upi", "9939311744@ybl");
     let liveQR = {
-      upiId: localStorage.getItem("yk_upi") || "9939311744@ybl",
+      upiId: "9939311744@ybl",
       qrUrl: localStorage.getItem("yk_qr") || "https://lh3.googleusercontent.com/d/1rALRSeljalViLvILLe8fRb_STRPJ_ucW"
     };
 
@@ -652,7 +657,7 @@
 
     function openAddMoneyModal() {
       document.getElementById('wDate').valueAsDate = new Date();
-      document.getElementById('uUpiText').innerText = liveQR.upiId;
+      document.getElementById('uUpiText').innerText = "9939311744@ybl";
       document.getElementById('uQrImg').src = liveQR.qrUrl;
       toggleModal('addMoneyModal', true);
     }
@@ -717,7 +722,7 @@
       }
     }
 
-    // USER RECEIPT: ADMIN OPERATOR TXN ID FIRST PRIORITY
+    // USER RECEIPT: ADMIN OPERATOR TXN ID
     function showReceipt(idx) {
       const r = userHistoryData.recharges[idx];
       if (!r) return;
@@ -759,7 +764,7 @@
       setTimeout(() => { pWin.print(); pWin.close(); }, 500);
     }
 
-    // ADMIN HUB ACTIONS
+    // ADMIN HUB ACTIONS & REALTIME NOTIFICATION
     async function adminLoginAction() {
       const u = document.getElementById('adminUser').value.trim();
       const p = document.getElementById('adminPass').value.trim();
@@ -777,10 +782,34 @@
           document.getElementById('adminControlPanel').classList.remove('hidden');
           document.getElementById('adminUserDisplay').innerText = u;
           fetchAdminData();
+          startAdminPolling();
           showToast("Admin authenticated!");
         } else { showToast(data.message || "Invalid Admin"); }
       } catch(e) { showToast("Admin login failed"); } 
       finally { btn.innerText = "Login to Admin"; btn.disabled = false; }
+    }
+
+    // ADMIN BACKGROUND NOTIFICATION POLLING
+    function startAdminPolling() {
+      if (adminPollingTimer) clearInterval(adminPollingTimer);
+      adminPollingTimer = setInterval(async () => {
+        if (!adminToken) return;
+        try {
+          const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_get_all_data", adminToken }) });
+          const data = await res.json();
+          if (!data.success) return;
+
+          let pendingRecharges = (data.recharges || []).filter(r => r.status === 'Pending').length;
+          let pendingWallets = (data.wallets || []).filter(w => w.status === 'Pending').length;
+          let totalPending = pendingRecharges + pendingWallets;
+
+          if (lastKnownPendingCount !== -1 && totalPending > lastKnownPendingCount) {
+            let diff = totalPending - lastKnownPendingCount;
+            triggerLockScreenNotification("🔔 New Order Alert!", `${diff} New request(s) received on YK Recharge Portal!`);
+          }
+          lastKnownPendingCount = totalPending;
+        } catch(e) {}
+      }, 7000);
     }
 
     async function adminAddPlan() {
@@ -831,14 +860,14 @@
         const data = await res.json();
         if (!data.success) return;
 
-        // Plans Table (with Delete)
+        // Plans Table
         const pBody = document.getElementById('adminPlanRows');
         pBody.innerHTML = (data.plans && data.plans.length) ? "" : "<tr><td colspan='5'>No Plans Added</td></tr>";
         data.plans?.forEach(p => {
           pBody.innerHTML += `<tr><td><b>${p.op}</b></td><td>₹${p.amt}</td><td>${p.val}</td><td>${p.desc}</td><td><button class="btn-sm btn-danger" onclick="adminDeletePlan('${p.op}', ${p.amt})">Delete</button></td></tr>`;
         });
 
-        // Users Table (Realtime Balance)
+        // Users Table
         const uBody = document.getElementById('adminUserRows');
         uBody.innerHTML = (data.users && data.users.length) ? "" : "<tr><td colspan='6'>No Users</td></tr>";
         data.users?.forEach(u => {
@@ -855,14 +884,14 @@
             </tr>`;
         });
 
-        // Wallets Table (with Delete)
+        // Wallets Table
         const wBody = document.getElementById('adminWalletRows');
         wBody.innerHTML = (data.wallets && data.wallets.length) ? "" : "<tr><td colspan='6'>No Requests</td></tr>";
         data.wallets?.forEach(w => {
           wBody.innerHTML += `<tr><td>#${w.id}</td><td>${w.userId}</td><td>₹${w.amount}</td><td>${w.utr}</td><td>${w.status === 'Pending' ? `<button class="btn-sm btn-success" onclick="resolveWallet('${w.id}', 'Approved')">Approve</button>` : 'Done'}</td><td><button class="btn-sm btn-danger" onclick="adminDeleteWallet('${w.id}')">Delete</button></td></tr>`;
         });
 
-        // Recharges Table (with Delete)
+        // Recharges Table
         const rBody = document.getElementById('adminRecRows');
         rBody.innerHTML = (data.recharges && data.recharges.length) ? "" : "<tr><td colspan='8'>No Orders</td></tr>";
         data.recharges?.forEach(r => {
@@ -921,11 +950,10 @@
     }
 
     function openAdminQrModal() {
-      document.getElementById('setAdminUpi').value = liveQR.upiId;
+      document.getElementById('setAdminUpi').value = "9939311744@ybl";
       document.getElementById('setAdminQrUrl').value = liveQR.qrUrl;
       toggleModal('adminQrModal', true);
     }
-
     function saveAdminQrAction() {
       const upi = document.getElementById('setAdminUpi').value.trim();
       const qr = document.getElementById('setAdminQrUrl').value.trim();
@@ -939,6 +967,7 @@
     }
 
     function adminLogoutAction() {
+      if (adminPollingTimer) clearInterval(adminPollingTimer);
       adminToken = null;
       sessionStorage.removeItem("yk_admin_token");
       document.getElementById('adminControlPanel').classList.add('hidden');

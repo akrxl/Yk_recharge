@@ -64,15 +64,44 @@
     .chip:hover { border-color: #4f46e5; color: #4338ca; }
     .plan-card { padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
     .plan-card:hover { border-color: #4f46e5; }
-    .table-responsive { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; }
+    
+    /* TABLE CONTAINER WITH SIDE & BOTTOM ROLLER (SCROLLBARS) */
+    .table-responsive {
+      overflow-x: auto;
+      overflow-y: auto;
+      max-height: 280px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      scrollbar-width: thin;
+      scrollbar-color: #4f46e5 var(--input-bg);
+    }
+    .table-responsive::-webkit-scrollbar { width: 8px; height: 8px; }
+    .table-responsive::-webkit-scrollbar-track { background: var(--input-bg); border-radius: 4px; }
+    .table-responsive::-webkit-scrollbar-thumb { background: #4f46e5; border-radius: 4px; }
+
     table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: left; }
-    th { background: var(--input-bg); padding: 10px; color: var(--text-muted); font-weight: 700; white-space: nowrap; }
+    th { background: var(--input-bg); padding: 10px; color: var(--text-muted); font-weight: 700; white-space: nowrap; position: sticky; top: 0; z-index: 10; }
     td { padding: 10px; border-bottom: 1px solid var(--border); white-space: nowrap; color: var(--text); }
     .badge { padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
     .badge-pending { background: #fef3c7; color: #b45309; }
     .badge-success { background: #d1fae5; color: #065f46; }
     .badge-frozen { background: #fee2e2; color: #dc2626; }
     .badge-cashback { background: #f3e8ff; color: #7e22ce; border: 1px solid #d8b4fe; }
+    
+    /* SEARCH INPUT */
+    .search-input {
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 12.5px;
+      background: var(--input-bg);
+      color: var(--text);
+      margin-bottom: 8px;
+      outline: none;
+    }
+    .search-input:focus { border-color: #38bdf8; }
+
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; padding: 16px; z-index: 100; }
     .modal-body { background: var(--card-bg); border-radius: 20px; width: 100%; max-width: 440px; padding: 22px; box-shadow: 0 20px 45px rgba(0,0,0,0.3); border: 1px solid var(--border); }
     #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); opacity: 0; z-index: 200; background: #1e293b; color: #fff; padding: 11px 20px; border-radius: 30px; font-size: 12.5px; font-weight: 600; transition: 0.3s; pointer-events: none; }
@@ -246,17 +275,19 @@
           </div>
         </div>
 
-        <!-- 3. WALLET DEPOSIT SLIPS (WITH DELETE) -->
+        <!-- 3. WALLET DEPOSIT SLIPS (WITH SEARCH & SIDE ROLLER) -->
         <div class="glass-box">
           <h3 style="font-size:14px; font-weight:800; margin-bottom:8px; color:#38bdf8;">3. Wallet Deposit Slips</h3>
+          <input type="text" id="searchDepositInput" class="search-input" placeholder="🔍 Search by Req ID, User ID, Amount, UTR..." oninput="filterDepositTable()" />
           <div class="table-responsive">
             <table><thead><tr><th>Req ID</th><th>User</th><th>Amount</th><th>UTR</th><th>Action</th><th>Remove</th></tr></thead><tbody id="adminWalletRows"></tbody></table>
           </div>
         </div>
 
-        <!-- 4. RECHARGE ORDERS (WITH DELETE & MANDATORY UNIQUE OP TXN ID) -->
+        <!-- 4. RECHARGE ORDERS (WITH SEARCH & SIDE ROLLER) -->
         <div class="glass-box">
           <h3 style="font-size:14px; font-weight:800; margin-bottom:8px; color:#38bdf8;">4. Recharge Execution Queue</h3>
+          <input type="text" id="searchRechargeInput" class="search-input" placeholder="🔍 Search by Txn ID, Mobile, Operator, Op Txn ID..." oninput="filterRechargeTable()" />
           <div class="table-responsive">
             <table><thead><tr><th>Txn ID</th><th>User</th><th>Mobile</th><th>Op</th><th>Amount</th><th>Op Txn ID</th><th>Action</th><th>Remove</th></tr></thead><tbody id="adminRecRows"></tbody></table>
           </div>
@@ -379,7 +410,7 @@
         <button id="hTabRec" class="btn-sm" style="background:#4f46e5; color:#fff; border:none; cursor:pointer;" onclick="renderHistoryTab('recharges')">Recharges</button>
         <button id="hTabDep" class="btn-sm" style="background:var(--chip-bg); color:var(--text); border:1px solid var(--border); cursor:pointer;" onclick="renderHistoryTab('deposits')">Deposits & Cashback</button>
       </div>
-      <div class="table-responsive" style="max-height: 240px; overflow-y:auto;">
+      <div class="table-responsive">
         <table><thead id="historyThead"></thead><tbody id="historyTbody"></tbody></table>
       </div>
     </div>
@@ -417,13 +448,16 @@
     let lastApprovedTxns = new Set(JSON.parse(localStorage.getItem("yk_approved_txns") || "[]"));
     let targetCashbackUserId = null;
 
+    // Admin raw data cache for realtime search filter
+    let adminCachedWallets = [];
+    let adminCachedRecharges = [];
+
     localStorage.setItem("yk_upi", "9939311744@ybl");
     let liveQR = {
       upiId: "9939311744@ybl",
       qrUrl: localStorage.getItem("yk_qr") || "https://lh3.googleusercontent.com/d/1rALRSeljalViLvILLe8fRb_STRPJ_ucW"
     };
 
-    // Live plans fetched from database (Defaults removed)
     let livePlans = [];
 
     function initTheme() {
@@ -537,7 +571,6 @@
       startLiveBalancePolling();
     }
 
-    // FETCH ONLY DATABASE PLANS (NO HARDCODED DEFAULTS)
     async function fetchLivePlans() {
       try {
         const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "get_plans" }) });
@@ -550,7 +583,6 @@
       } catch(e) {}
     }
 
-    // USER LIVE POLLING: MONITORS BALANCE & RECHARGE APPROVAL
     async function syncBalanceLive() {
       if (!currentUser || !currentUser.userId) return;
       try {
@@ -582,7 +614,6 @@
           }
         }
 
-        // Check if recharge was approved
         const hRes = await fetch(SCRIPT_URL, {
           method: "POST",
           body: JSON.stringify({ action: "get_user_history", userId: currentUser.userId, mobile: currentUser.mobile })
@@ -673,7 +704,6 @@
       renderPlans(op);
     }
 
-    // RENDER ONLY ADMIN PLANS
     function renderPlans(op) {
       const chips = document.getElementById('dynamicChips');
       const list = document.getElementById('plansList');
@@ -800,7 +830,6 @@
       }
     }
 
-    // USER RECHARGE RECEIPT
     function showReceipt(idx) {
       const r = userHistoryData.recharges[idx];
       if (!r) return;
@@ -831,7 +860,6 @@
       toggleModal('receiptModal', true);
     }
 
-    // USER DEPOSIT / CASHBACK RECEIPT
     function showDepositReceipt(idx) {
       const d = userHistoryData.deposits[idx];
       if (!d) return;
@@ -895,7 +923,6 @@
       finally { btn.innerText = "Login to Admin"; btn.disabled = false; }
     }
 
-    // ADMIN POLLING
     function startAdminPolling() {
       if (adminPollingTimer) clearInterval(adminPollingTimer);
       adminPollingTimer = setInterval(async () => {
@@ -967,6 +994,7 @@
       fetchAdminData();
     }
 
+    // FETCH ADMIN DATA (NEWEST ON TOP)
     async function fetchAdminData() {
       if (!adminToken) return;
       try {
@@ -981,7 +1009,7 @@
           pBody.innerHTML += `<tr><td><b>${p.op}</b></td><td>₹${p.amt}</td><td>${p.val}</td><td>${p.desc}</td><td><button class="btn-sm btn-danger" onclick="adminDeletePlan('${p.op}', ${p.amt})">Delete</button></td></tr>`;
         });
 
-        // Users Table (With Cashback Button)
+        // Users Table
         const uBody = document.getElementById('adminUserRows');
         uBody.innerHTML = (data.users && data.users.length) ? "" : "<tr><td colspan='7'>No Users</td></tr>";
         data.users?.forEach(u => {
@@ -999,20 +1027,66 @@
             </tr>`;
         });
 
-        // Wallets Table
-        const wBody = document.getElementById('adminWalletRows');
-        wBody.innerHTML = (data.wallets && data.wallets.length) ? "" : "<tr><td colspan='6'>No Requests</td></tr>";
-        data.wallets?.forEach(w => {
-          wBody.innerHTML += `<tr><td>#${w.id}</td><td>${w.userId}</td><td>₹${w.amount}</td><td style="font-size:11px;">${w.utr}</td><td>${w.status === 'Pending' ? `<button class="btn-sm btn-success" onclick="resolveWallet('${w.id}', 'Approved')">Approve</button>` : 'Done'}</td><td><button class="btn-sm btn-danger" onclick="adminDeleteWallet('${w.id}')">Delete</button></td></tr>`;
-        });
+        // WALLETS (NEWEST REQUESTS ON TOP)
+        adminCachedWallets = (data.wallets || []).slice().reverse();
+        renderWalletsTable(adminCachedWallets);
 
-        // Recharges Table
-        const rBody = document.getElementById('adminRecRows');
-        rBody.innerHTML = (data.recharges && data.recharges.length) ? "" : "<tr><td colspan='8'>No Orders</td></tr>";
-        data.recharges?.forEach(r => {
-          rBody.innerHTML += `<tr><td>#${r.id}</td><td>${r.userId}</td><td>${r.mobile}</td><td>${r.op}</td><td>₹${r.amount}</td><td>${r.opTxnId || '-'}</td><td>${r.status === 'Pending' ? `<button class="btn-sm btn-success" onclick="promptAdminSuccess('${r.id}')">Approve</button>` : 'Done'}</td><td><button class="btn-sm btn-danger" onclick="adminDeleteRecharge('${r.id}')">Delete</button></td></tr>`;
-        });
+        // RECHARGES (NEWEST REQUESTS ON TOP)
+        adminCachedRecharges = (data.recharges || []).slice().reverse();
+        renderRechargesTable(adminCachedRecharges);
+
       } catch(e) {}
+    }
+
+    // RENDER WALLETS TABLE
+    function renderWalletsTable(list) {
+      const wBody = document.getElementById('adminWalletRows');
+      wBody.innerHTML = (list && list.length) ? "" : "<tr><td colspan='6' style='text-align:center;'>No Deposit Requests</td></tr>";
+      list.forEach(w => {
+        wBody.innerHTML += `<tr><td>#${w.id}</td><td>${w.userId}</td><td>₹${w.amount}</td><td style="font-size:11px;">${w.utr}</td><td>${w.status === 'Pending' ? `<button class="btn-sm btn-success" onclick="resolveWallet('${w.id}', 'Approved')">Approve</button>` : '<span style="color:#10b981; font-size:11px; font-weight:700;">Done</span>'}</td><td><button class="btn-sm btn-danger" onclick="adminDeleteWallet('${w.id}')">Delete</button></td></tr>`;
+      });
+    }
+
+    // RENDER RECHARGES TABLE
+    function renderRechargesTable(list) {
+      const rBody = document.getElementById('adminRecRows');
+      rBody.innerHTML = (list && list.length) ? "" : "<tr><td colspan='8' style='text-align:center;'>No Recharge Orders</td></tr>";
+      list.forEach(r => {
+        rBody.innerHTML += `<tr><td>#${r.id}</td><td>${r.userId}</td><td>${r.mobile}</td><td>${r.op}</td><td>₹${r.amount}</td><td>${r.opTxnId || '-'}</td><td>${r.status === 'Pending' ? `<button class="btn-sm btn-success" onclick="promptAdminSuccess('${r.id}')">Approve</button>` : '<span style="color:#10b981; font-size:11px; font-weight:700;">Done</span>'}</td><td><button class="btn-sm btn-danger" onclick="adminDeleteRecharge('${r.id}')">Delete</button></td></tr>`;
+      });
+    }
+
+    // REALTIME SEARCH FILTERS
+    function filterDepositTable() {
+      const query = (document.getElementById('searchDepositInput').value || "").toLowerCase().trim();
+      if (!query) {
+        renderWalletsTable(adminCachedWallets);
+        return;
+      }
+      const filtered = adminCachedWallets.filter(w => 
+        String(w.id || "").toLowerCase().includes(query) ||
+        String(w.userId || "").toLowerCase().includes(query) ||
+        String(w.amount || "").toLowerCase().includes(query) ||
+        String(w.utr || "").toLowerCase().includes(query)
+      );
+      renderWalletsTable(filtered);
+    }
+
+    function filterRechargeTable() {
+      const query = (document.getElementById('searchRechargeInput').value || "").toLowerCase().trim();
+      if (!query) {
+        renderRechargesTable(adminCachedRecharges);
+        return;
+      }
+      const filtered = adminCachedRecharges.filter(r => 
+        String(r.id || "").toLowerCase().includes(query) ||
+        String(r.userId || "").toLowerCase().includes(query) ||
+        String(r.mobile || "").toLowerCase().includes(query) ||
+        String(r.op || "").toLowerCase().includes(query) ||
+        String(r.amount || "").toLowerCase().includes(query) ||
+        String(r.opTxnId || "").toLowerCase().includes(query)
+      );
+      renderRechargesTable(filtered);
     }
 
     function openCashbackModal(userId, name) {

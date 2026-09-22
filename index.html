@@ -35,29 +35,10 @@
     .tab-btn { background: transparent; border: none; color: #94a3b8; padding: 7px 12px; border-radius: 9px; font-weight: 700; font-size: 12px; cursor: pointer; }
     .tab-btn.active { background: #4f46e5; color: #fff; box-shadow: 0 3px 10px rgba(79,70,229,0.35); }
     
-    /* LIVE RUNNING TICKER MESSAGE */
-    .ticker-wrap {
-      width: 100%;
-      background: linear-gradient(90deg, #4338ca, #6366f1);
-      color: #fff;
-      padding: 7px 0;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    }
-    .ticker {
-      display: inline-block;
-      white-space: nowrap;
-      padding-left: 100%;
-      animation: tickerAnim 22s linear infinite;
-      font-size: 12.5px;
-      font-weight: 700;
-      letter-spacing: 0.4px;
-    }
+    .ticker-wrap { width: 100%; background: linear-gradient(90deg, #4338ca, #6366f1); color: #fff; padding: 7px 0; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+    .ticker { display: inline-block; white-space: nowrap; padding-left: 100%; animation: tickerAnim 22s linear infinite; font-size: 12.5px; font-weight: 700; letter-spacing: 0.4px; }
     .ticker-wrap:hover .ticker { animation-play-state: paused; }
-    @keyframes tickerAnim {
-      0% { transform: translate3d(0, 0, 0); }
-      100% { transform: translate3d(-100%, 0, 0); }
-    }
+    @keyframes tickerAnim { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
 
     main { max-width: 960px; margin: 20px auto; padding: 0 16px; }
     .glass-box { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 22px; box-shadow: 0 12px 30px rgba(0,0,0,0.16); margin-bottom: 20px; }
@@ -76,22 +57,9 @@
     input, select { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1.5px solid var(--border); font-size: 14px; background: var(--input-bg); color: var(--text); outline: none; }
     input:focus, select:focus { border-color: #4f46e5; }
     
-    /* PASSWORD WRAPPER & EYE ICON */
     .password-wrapper { position: relative; width: 100%; }
     .password-wrapper input { padding-right: 44px; }
-    .toggle-eye {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-      color: var(--text-muted);
-      user-select: none;
-      padding: 4px;
-    }
+    .toggle-eye { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 16px; color: var(--text-muted); user-select: none; padding: 4px; }
 
     .btn { width: 100%; padding: 12px; border: none; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; }
     .btn-primary { background: #4f46e5; color: #fff; }
@@ -109,7 +77,6 @@
     .plan-card { padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
     .plan-card:hover { border-color: #4f46e5; }
     
-    /* TABLE CONTAINER WITH SIDE & BOTTOM ROLLER (SCROLLBARS) */
     .table-responsive {
       overflow-x: auto;
       overflow-y: auto;
@@ -132,17 +99,7 @@
     .badge-frozen { background: #fee2e2; color: #dc2626; }
     .badge-cashback { background: #f3e8ff; color: #7e22ce; border: 1px solid #d8b4fe; }
     
-    .search-input {
-      width: 100%;
-      padding: 9px 12px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      font-size: 12.5px;
-      background: var(--input-bg);
-      color: var(--text);
-      margin-bottom: 8px;
-      outline: none;
-    }
+    .search-input { width: 100%; padding: 9px 12px; border-radius: 8px; border: 1px solid var(--border); font-size: 12.5px; background: var(--input-bg); color: var(--text); margin-bottom: 8px; outline: none; }
     .search-input:focus { border-color: #38bdf8; }
 
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; padding: 16px; z-index: 100; }
@@ -437,6 +394,25 @@
     </form>
   </div>
 
+  <!-- ADMIN WALLET APPROVE MODAL (MANDATORY MATCHING UTR) -->
+  <div id="adminWalletApproveModal" class="modal-overlay hidden">
+    <form class="modal-body" onsubmit="event.preventDefault(); confirmWalletApprovalWithUtr();">
+      <h3 style="font-weight: 800; font-size: 15px; margin-bottom: 8px;">💳 Verify & Approve Deposit</h3>
+      <p style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 12px;">
+        Request: <b id="awReqId" style="color:#38bdf8;">-</b> | User: <b id="awUserId">-</b> | Amount: <b id="awAmount" style="color:#10b981;">₹0.00</b>
+      </p>
+      <div class="form-group">
+        <label>Paste / Enter Matching 12-Digit UTR <span style="color:#ef4444;">* (Required)</span></label>
+        <input type="text" id="awInputUtr" placeholder="Paste user UTR here" maxlength="20" enterkeyhint="go" required />
+        <p style="font-size: 10.5px; color: var(--text-muted); margin-top: 4px;">User submitted UTR: <code id="awActualUtrDisplay" style="color:#38bdf8; font-weight:bold;">-</code></p>
+      </div>
+      <div style="display:flex; gap:6px; margin-top:12px;">
+        <button type="button" class="btn" style="background:var(--chip-bg); color:var(--text);" onclick="toggleModal('adminWalletApproveModal', false)">Cancel</button>
+        <button type="submit" class="btn btn-success" id="btnConfirmWalletApprove">Verify & Approve</button>
+      </div>
+    </form>
+  </div>
+
   <!-- ADMIN SET LIVE NOTICE TICKER MODAL -->
   <div id="adminNoticeModal" class="modal-overlay hidden">
     <form class="modal-body" onsubmit="event.preventDefault(); saveAdminNotice();">
@@ -532,6 +508,8 @@
     let lastApprovedTxns = new Set(JSON.parse(localStorage.getItem("yk_approved_txns") || "[]"));
     let targetCashbackUserId = null;
 
+    let targetWalletReq = null;
+
     let adminCachedWallets = [];
     let adminCachedRecharges = [];
 
@@ -543,7 +521,6 @@
 
     let livePlans = [];
 
-    // PASSWORD HIDE / UNHIDE ENGINE
     function togglePasswordVisibility(inputId, btn) {
       const field = document.getElementById(inputId);
       if (field.type === "password") {
@@ -555,7 +532,6 @@
       }
     }
 
-    // LIVE TICKER NOTICE INITIALIZATION
     function initLiveNotice() {
       const savedNotice = localStorage.getItem("yk_live_notice") || "⚡ YK RECHARGE PORTAL: Instant 24/7 Mobile Recharge, Direct Cashbacks, Fast UPI Wallet Top-ups. Helpline: +91 99393-11744 | Chanduli, Raxaul, Bihar";
       document.getElementById("liveTickerMsg").innerText = savedNotice;
@@ -1142,11 +1118,9 @@
             </tr>`;
         });
 
-        // Wallets: Newest Requests First
         adminCachedWallets = (data.wallets || []).slice().reverse();
         renderWalletsTable(adminCachedWallets);
 
-        // Recharges: Newest Requests First
         adminCachedRecharges = (data.recharges || []).slice().reverse();
         renderRechargesTable(adminCachedRecharges);
 
@@ -1157,7 +1131,15 @@
       const wBody = document.getElementById('adminWalletRows');
       wBody.innerHTML = (list && list.length) ? "" : "<tr><td colspan='6' style='text-align:center;'>No Deposit Requests</td></tr>";
       list.forEach(w => {
-        wBody.innerHTML += `<tr><td>#${w.id}</td><td>${w.userId}</td><td>₹${w.amount}</td><td style="font-size:11px;">${w.utr}</td><td>${w.status === 'Pending' ? `<button class="btn-sm btn-success" onclick="resolveWallet('${w.id}', 'Approved')">Approve</button>` : '<span style="color:#10b981; font-size:11px; font-weight:700;">Done</span>'}</td><td><button class="btn-sm btn-danger" onclick="adminDeleteWallet('${w.id}')">Delete</button></td></tr>`;
+        const isPending = w.status === 'Pending';
+        wBody.innerHTML += `<tr>
+          <td>#${w.id}</td>
+          <td>${w.userId}</td>
+          <td>₹${w.amount}</td>
+          <td style="font-size:11px; font-family:monospace;">${w.utr}</td>
+          <td>${isPending ? `<button class="btn-sm btn-success" onclick="openWalletApproveModal('${w.id}', '${w.userId}', ${w.amount}, '${w.utr}')">Approve</button>` : '<span style="color:#10b981; font-size:11px; font-weight:700;">Done</span>'}</td>
+          <td><button class="btn-sm btn-danger" onclick="adminDeleteWallet('${w.id}')">Delete</button></td>
+        </tr>`;
       });
     }
 
@@ -1201,6 +1183,59 @@
       renderRechargesTable(filtered);
     }
 
+    // OPEN WALLET APPROVE MODAL WITH MANDATORY UTR INPUT
+    function openWalletApproveModal(reqId, userId, amount, utr) {
+      targetWalletReq = { reqId, userId, amount, utr: String(utr).trim() };
+      document.getElementById('awReqId').innerText = "#" + reqId;
+      document.getElementById('awUserId').innerText = userId;
+      document.getElementById('awAmount').innerText = "₹" + Number(amount).toFixed(2);
+      document.getElementById('awActualUtrDisplay').innerText = utr;
+      document.getElementById('awInputUtr').value = "";
+      toggleModal('adminWalletApproveModal', true);
+    }
+
+    // VERIFY AND CONFIRM WALLET APPROVAL
+    async function confirmWalletApprovalWithUtr() {
+      if (!targetWalletReq) return;
+      const enteredUtr = document.getElementById('awInputUtr').value.trim();
+      
+      if (!enteredUtr) {
+        return showToast("Please paste the UTR number!");
+      }
+
+      if (enteredUtr !== targetWalletReq.utr) {
+        return showToast("❌ UTR does not match! Please enter the correct UTR.");
+      }
+
+      const btn = document.getElementById('btnConfirmWalletApprove');
+      btn.innerText = "Verifying..."; btn.disabled = true;
+
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            action: "admin_update_wallet",
+            requestId: targetWalletReq.reqId,
+            status: "Approved",
+            confirmUtr: enteredUtr,
+            adminToken
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(data.message || "Wallet deposit approved!");
+          toggleModal('adminWalletApproveModal', false);
+          fetchAdminData();
+        } else {
+          showToast(data.message || "Approval failed!");
+        }
+      } catch(e) {
+        showToast("Error processing request");
+      } finally {
+        btn.innerText = "Verify & Approve"; btn.disabled = false;
+      }
+    }
+
     function openCashbackModal(userId, name) {
       targetCashbackUserId = userId;
       document.getElementById('cbTargetUser').innerText = `${name} (${userId})`;
@@ -1212,7 +1247,7 @@
     async function submitAdminCashback() {
       const amt = Number(document.getElementById('cbAmount').value);
       const note = document.getElementById('cbNote').value.trim();
-      if (!amt || amt <= 0) return showToast("Valid cashback amount bharein!");
+      if (!amt || amt <= 0) return showToast("Enter a valid cashback amount!");
 
       const btn = document.getElementById('btnSubmitCb');
       btn.innerText = "Processing..."; btn.disabled = true;
@@ -1242,10 +1277,6 @@
       await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_approve_user", userId, status, adminToken }) });
       fetchAdminData();
     }
-    async function resolveWallet(requestId, status) {
-      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_update_wallet", requestId, status, adminToken }) });
-      fetchAdminData();
-    }
 
     function promptAdminSuccess(txnId) {
       pendingApprovalTxn = txnId;
@@ -1256,7 +1287,7 @@
 
     async function confirmAdminSuccess() {
       const opTxnId = document.getElementById('asmOperatorId').value.trim();
-      if (!opTxnId) return showToast("Operator Transaction ID dalna zaroori hai!");
+      if (!opTxnId) return showToast("Operator Transaction ID is required!");
 
       const btn = document.getElementById('btnAdminSuccess');
       btn.innerText = "Verifying..."; btn.disabled = true;
@@ -1289,7 +1320,7 @@
     function saveAdminQrAction() {
       const upi = document.getElementById('setAdminUpi').value.trim();
       const qr = document.getElementById('setAdminQrUrl').value.trim();
-      if (!upi || !qr) return showToast("Dono fields bharein!");
+      if (!upi || !qr) return showToast("Both fields are required!");
 
       liveQR = { upiId: upi, qrUrl: qr };
       localStorage.setItem("yk_upi", upi);

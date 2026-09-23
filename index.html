@@ -4,6 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>YK RECHARGE PORTAL - Chanduli, Raxaul</title>
+
+  <!-- OFFICIAL YK BRANDED VECTOR ICON (FAVICON & APP SHORTCUT) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cdefs%3E%3ClinearGradient id='bgGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%231e1b4b'/%3E%3Cstop offset='50%25' stop-color='%23312e81'/%3E%3Cstop offset='100%25' stop-color='%234338ca'/%3E%3C/defs%3E%3ClinearGradient id='boltGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23facc15'/%3E%3Cstop offset='100%25' stop-color='%23ea580c'/%3E%3C/defs%3E%3Crect width='200' height='200' rx='45' fill='url(%23bgGrad)'/%3E%3Ccircle cx='100' cy='100' r='88' fill='none' stroke='%2338bdf8' stroke-width='4' opacity='0.4' stroke-dasharray='8 6'/%3E%3Cpath d='M108 24 L60 102 L98 102 L92 176 L144 94 L104 94 Z' fill='url(%23boltGrad)' filter='drop-shadow(0 4px 10px rgba(245, 158, 11, 0.6))'/%3E%3Ctext x='100' y='142' font-family='system-ui, -apple-system, sans-serif' font-size='38' font-weight='900' fill='%23ffffff' text-anchor='middle' letter-spacing='1'%3EYK%3C/text%3E%3Ctext x='100' y='170' font-family='system-ui, -apple-system, sans-serif' font-size='15' font-weight='800' fill='%2338bdf8' text-anchor='middle' letter-spacing='2'%3ERECHARGE%3C/text%3E%3C/svg%3E" />
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cdefs%3E%3ClinearGradient id='bgGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%231e1b4b'/%3E%3Cstop offset='50%25' stop-color='%23312e81'/%3E%3Cstop offset='100%25' stop-color='%234338ca'/%3E%3C/defs%3E%3ClinearGradient id='boltGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23facc15'/%3E%3Cstop offset='100%25' stop-color='%23ea580c'/%3E%3C/defs%3E%3Crect width='200' height='200' rx='45' fill='url(%23bgGrad)'/%3E%3Ccircle cx='100' cy='100' r='88' fill='none' stroke='%2338bdf8' stroke-width='4' opacity='0.4' stroke-dasharray='8 6'/%3E%3Cpath d='M108 24 L60 102 L98 102 L92 176 L144 94 L104 94 Z' fill='url(%23boltGrad)' filter='drop-shadow(0 4px 10px rgba(245, 158, 11, 0.6))'/%3E%3Ctext x='100' y='142' font-family='system-ui, -apple-system, sans-serif' font-size='38' font-weight='900' fill='%23ffffff' text-anchor='middle' letter-spacing='1'%3EYK%3C/text%3E%3Ctext x='100' y='170' font-family='system-ui, -apple-system, sans-serif' font-size='15' font-weight='800' fill='%2338bdf8' text-anchor='middle' letter-spacing='2'%3ERECHARGE%3C/text%3E%3C/svg%3E" />
+
   <style>
     :root {
       --bg: #0b1329;
@@ -26,9 +31,15 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; transition: background 0.25s, color 0.25s; }
     body { background: var(--bg); min-height: 100vh; color: var(--text); padding-bottom: 60px; }
     header { background: var(--header-bg); position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.06); }
-    .nav-container { max-width: 960px; margin: auto; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
-    .logo { font-size: 1.15rem; font-weight: 900; display: flex; align-items: center; gap: 6px; }
-    body.light-mode .logo { color: #4338ca; } body:not(.light-mode) .logo { color: #38bdf8; }
+    .nav-container { max-width: 960px; margin: auto; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; }
+    
+    /* BRANDED HEADER LOGO */
+    .logo-container { display: flex; align-items: center; gap: 8px; text-decoration: none; cursor: pointer; }
+    .brand-icon { width: 34px; height: 34px; border-radius: 9px; box-shadow: 0 3px 10px rgba(67, 56, 202, 0.4); flex-shrink: 0; }
+    .brand-title { font-size: 1.12rem; font-weight: 900; letter-spacing: 0.3px; line-height: 1.15; }
+    body.light-mode .brand-title { color: #4338ca; }
+    body:not(.light-mode) .brand-title { color: #38bdf8; }
+
     .header-controls { display: flex; align-items: center; gap: 8px; }
     .theme-toggle-btn { background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 50%; width: 34px; height: 34px; display: flex; justify-content: center; align-items: center; font-size: 15px; cursor: pointer; color: var(--text); }
     .tab-pills { background: #1e293b; padding: 4px; border-radius: 12px; display: flex; gap: 4px; }
@@ -121,7 +132,29 @@
 
   <header>
     <div class="nav-container">
-      <div class="logo">⚡ YK RECHARGE PORTAL</div>
+      <div class="logo-container" onclick="switchNav('home')">
+        <!-- INLINE BRAND SVG LOGO -->
+        <svg class="brand-icon" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="headerBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#1e1b4b"/>
+              <stop offset="50%" stop-color="#312e81"/>
+              <stop offset="100%" stop-color="#4338ca"/>
+            </linearGradient>
+            <linearGradient id="headerBoltGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#facc15"/>
+              <stop offset="100%" stop-color="#ea580c"/>
+            </linearGradient>
+          </defs>
+          <rect width="200" height="200" rx="45" fill="url(#headerBgGrad)"/>
+          <circle cx="100" cy="100" r="88" fill="none" stroke="#38bdf8" stroke-width="4" opacity="0.4" stroke-dasharray="8 6"/>
+          <path d="M108 24 L60 102 L98 102 L92 176 L144 94 L104 94 Z" fill="url(#headerBoltGrad)"/>
+          <text x="100" y="142" font-family="system-ui, sans-serif" font-size="38" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="1">YK</text>
+          <text x="100" y="170" font-family="system-ui, sans-serif" font-size="15" font-weight="800" fill="#38bdf8" text-anchor="middle" letter-spacing="2">RECHARGE</text>
+        </svg>
+        <span class="brand-title">YK RECHARGE PORTAL</span>
+      </div>
+
       <div class="header-controls">
         <button id="themeToggle" class="theme-toggle-btn" onclick="toggleThemeMode()" title="Theme">☀️</button>
         <div class="tab-pills">
@@ -496,6 +529,9 @@
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxKpUFTVYFMAryvle79MnLhDBO0lCd0sPgTj_bU08iA-BTqYzgh9QTtCNDXbk8-joDX/exec";
     
+    // DEFINITIVE EMBEDDED BRANDED SVG LOGO FOR PUSH NOTIFICATIONS & ICONS
+    const BRAND_LOGO_DATA_URL = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cdefs%3E%3ClinearGradient id='bgGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%231e1b4b'/%3E%3Cstop offset='50%25' stop-color='%23312e81'/%3E%3Cstop offset='100%25' stop-color='%234338ca'/%3E%3C/defs%3E%3ClinearGradient id='boltGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23facc15'/%3E%3Cstop offset='100%25' stop-color='%23ea580c'/%3E%3C/defs%3E%3Crect width='200' height='200' rx='45' fill='url(%23bgGrad)'/%3E%3Ccircle cx='100' cy='100' r='88' fill='none' stroke='%2338bdf8' stroke-width='4' opacity='0.4' stroke-dasharray='8 6'/%3E%3Cpath d='M108 24 L60 102 L98 102 L92 176 L144 94 L104 94 Z' fill='url(%23boltGrad)' filter='drop-shadow(0 4px 10px rgba(245, 158, 11, 0.6))'/%3E%3Ctext x='100' y='142' font-family='system-ui, -apple-system, sans-serif' font-size='38' font-weight='900' fill='%23ffffff' text-anchor='middle' letter-spacing='1'%3EYK%3C/text%3E%3Ctext x='100' y='170' font-family='system-ui, -apple-system, sans-serif' font-size='15' font-weight='800' fill='%2338bdf8' text-anchor='middle' letter-spacing='2'%3ERECHARGE%3C/text%3E%3C/svg%3E";
+
     let currentUser = JSON.parse(localStorage.getItem("yk_user_session") || "null");
     let adminToken = sessionStorage.getItem("yk_admin_token") || null;
     let selectedPlanDesc = "Custom Plan";
@@ -585,11 +621,12 @@
       } catch(e) {}
     }
 
+    // TRIGGER NOTIFICATION WITH OFFICIAL YK RECHARGE BRANDED LOGO
     function triggerLockScreenNotification(title, message) {
       playBeep();
       showToast(message);
       if ("Notification" in window && Notification.permission === "granted") {
-        new Notification(title, { body: message, icon: "https://lh3.googleusercontent.com/d/1rALRSeljalViLvILLe8fRb_STRPJ_ucW" });
+        new Notification(title, { body: message, icon: BRAND_LOGO_DATA_URL, badge: BRAND_LOGO_DATA_URL });
       }
     }
 
@@ -1085,7 +1122,6 @@
       fetchAdminData();
     }
 
-    // FETCH ADMIN DATA
     async function fetchAdminData() {
       if (!adminToken) return;
       try {
@@ -1183,7 +1219,6 @@
       renderRechargesTable(filtered);
     }
 
-    // OPEN WALLET APPROVE MODAL WITH MANDATORY UTR INPUT
     function openWalletApproveModal(reqId, userId, amount, utr) {
       targetWalletReq = { reqId, userId, amount, utr: String(utr).trim() };
       document.getElementById('awReqId').innerText = "#" + reqId;
@@ -1194,7 +1229,6 @@
       toggleModal('adminWalletApproveModal', true);
     }
 
-    // VERIFY AND CONFIRM WALLET APPROVAL
     async function confirmWalletApprovalWithUtr() {
       if (!targetWalletReq) return;
       const enteredUtr = document.getElementById('awInputUtr').value.trim();

@@ -33,7 +33,6 @@
     header { background: var(--header-bg); position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.06); }
     .nav-container { max-width: 960px; margin: auto; padding: 8px 14px; display: flex; justify-content: space-between; align-items: center; }
     
-    /* SLEEK & COMPACT BRAND LOGO */
     .logo-container { display: flex; align-items: center; gap: 7px; text-decoration: none; cursor: pointer; flex-shrink: 0; }
     .brand-icon { width: 30px; height: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(67, 56, 202, 0.4); flex-shrink: 0; }
     .brand-title { font-size: 1.05rem; font-weight: 900; letter-spacing: 0.2px; white-space: nowrap; }
@@ -46,7 +45,6 @@
     .tab-btn { background: transparent; border: none; color: #94a3b8; padding: 6px 10px; border-radius: 8px; font-weight: 700; font-size: 11.5px; cursor: pointer; white-space: nowrap; }
     .tab-btn.active { background: #4f46e5; color: #fff; box-shadow: 0 2px 8px rgba(79,70,229,0.35); }
     
-    /* MOBILE COMPACT HEADER STYLING */
     @media (max-width: 600px) {
       .nav-container { padding: 6px 10px; }
       .brand-icon { width: 26px; height: 26px; border-radius: 6px; }
@@ -56,7 +54,6 @@
       .tab-btn { padding: 5px 7px; font-size: 10px; border-radius: 6px; }
     }
 
-    /* RUNNING TICKER MESSAGE */
     .ticker-wrap { width: 100%; background: linear-gradient(90deg, #4338ca, #6366f1); color: #fff; padding: 6px 0; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
     .ticker { display: inline-block; white-space: nowrap; padding-left: 100%; animation: tickerAnim 22s linear infinite; font-size: 12px; font-weight: 700; letter-spacing: 0.3px; }
     .ticker-wrap:hover .ticker { animation-play-state: paused; }
@@ -76,8 +73,8 @@
     
     .form-group { margin-bottom: 13px; position: relative; }
     label { display: block; font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 5px; letter-spacing: 0.5px; }
-    input, select { width: 100%; padding: 11px 13px; border-radius: 10px; border: 1.5px solid var(--border); font-size: 13.5px; background: var(--input-bg); color: var(--text); outline: none; }
-    input:focus, select:focus { border-color: #4f46e5; }
+    input, select, textarea { width: 100%; padding: 11px 13px; border-radius: 10px; border: 1.5px solid var(--border); font-size: 13.5px; background: var(--input-bg); color: var(--text); outline: none; }
+    input:focus, select:focus, textarea:focus { border-color: #4f46e5; }
     
     .password-wrapper { position: relative; width: 100%; }
     .password-wrapper input { padding-right: 42px; }
@@ -118,7 +115,7 @@
     .badge { padding: 3px 7px; border-radius: 6px; font-size: 9.5px; font-weight: 700; text-transform: uppercase; }
     .badge-pending { background: #fef3c7; color: #b45309; }
     .badge-success { background: #d1fae5; color: #065f46; }
-    .badge-frozen { background: #fee2e2; color: #dc2626; }
+    .badge-frozen, .badge-declined { background: #fee2e2; color: #dc2626; }
     .badge-cashback { background: #f3e8ff; color: #7e22ce; border: 1px solid #d8b4fe; }
     
     .search-input { width: 100%; padding: 8px 11px; border-radius: 8px; border: 1px solid var(--border); font-size: 12px; background: var(--input-bg); color: var(--text); margin-bottom: 8px; outline: none; }
@@ -349,7 +346,7 @@
           <h3 style="font-size:14px; font-weight:800; margin-bottom:8px; color:#38bdf8;">3. Wallet Deposit Slips</h3>
           <input type="text" id="searchDepositInput" class="search-input" placeholder="🔍 Search by Req ID, User ID, Amount, UTR..." oninput="filterDepositTable()" />
           <div class="table-responsive">
-            <table><thead><tr><th>Req ID</th><th>User</th><th>Amount</th><th>UTR</th><th>Action</th><th>Remove</th></tr></thead><tbody id="adminWalletRows"></tbody></table>
+            <table><thead><tr><th>Req ID</th><th>User</th><th>Amount</th><th>UTR</th><th>Action</th><th>Decline</th></tr></thead><tbody id="adminWalletRows"></tbody></table>
           </div>
         </div>
 
@@ -358,12 +355,29 @@
           <h3 style="font-size:14px; font-weight:800; margin-bottom:8px; color:#38bdf8;">4. Recharge Execution Queue</h3>
           <input type="text" id="searchRechargeInput" class="search-input" placeholder="🔍 Search by Txn ID, Mobile, Operator, Op Txn ID..." oninput="filterRechargeTable()" />
           <div class="table-responsive">
-            <table><thead><tr><th>Txn ID</th><th>User</th><th>Mobile</th><th>Op</th><th>Amount</th><th>Op Txn ID</th><th>Action</th><th>Remove</th></tr></thead><tbody id="adminRecRows"></tbody></table>
+            <table><thead><tr><th>Txn ID</th><th>User</th><th>Mobile</th><th>Op</th><th>Amount</th><th>Op Txn ID</th><th>Action</th><th>Decline</th></tr></thead><tbody id="adminRecRows"></tbody></table>
           </div>
         </div>
       </div>
     </div>
   </main>
+
+  <!-- DECLINE REASON MODAL (COMMON FOR WALLET & RECHARGE) -->
+  <div id="adminDeclineModal" class="modal-overlay hidden">
+    <form class="modal-body" onsubmit="event.preventDefault(); confirmDeclineAction();">
+      <h3 style="font-weight: 800; font-size: 15px; margin-bottom: 8px; color:#ef4444;">❌ Decline Request</h3>
+      <p style="font-size: 12px; margin-bottom: 10px;">Target ID: <b id="admDecTargetId" style="color:#38bdf8;">-</b></p>
+      <div class="form-group">
+        <label>Reason / Remark <span style="color:#ef4444;">* (Required)</span></label>
+        <textarea id="admDecRemark" rows="3" placeholder="Enter reason for declining..." required></textarea>
+        <p style="font-size: 10.5px; color: var(--text-muted); margin-top: 4px;">This remark will be recorded and shown in the transaction status.</p>
+      </div>
+      <div style="display:flex; gap:6px; margin-top:12px;">
+        <button type="button" class="btn" style="background:var(--chip-bg); color:var(--text);" onclick="toggleModal('adminDeclineModal', false)">Cancel</button>
+        <button type="submit" class="btn btn-danger" id="btnConfirmDecline">Confirm Decline</button>
+      </div>
+    </form>
+  </div>
 
   <!-- RECHARGE RECEIPT MODAL -->
   <div id="receiptModal" class="modal-overlay hidden">
@@ -554,6 +568,7 @@
     let targetCashbackUserId = null;
 
     let targetWalletReq = null;
+    let currentDeclineContext = null; // { type: 'wallet'|'recharge', id: string }
 
     let adminCachedWallets = [];
     let adminCachedRecharges = [];
@@ -943,7 +958,8 @@
         userHistoryData.recharges?.forEach((r, idx) => {
           let displayAmt = r.amount !== undefined ? r.amount : (r.amt || 0);
           const finalId = (r.opTxnId && String(r.opTxnId).trim() !== "") ? r.opTxnId : (r.txnId || `TXN${idx+1000}`);
-          tbody.innerHTML += `<tr><td style="font-family:monospace; color:#4f46e5; font-weight:700;">${finalId}</td><td>${r.mobile}</td><td>₹${displayAmt}</td><td><span class="badge ${r.status === 'Success' ? 'badge-success' : 'badge-pending'}">${r.status}</span></td><td><button class="btn-sm" style="background:#e0e7ff; color:#4338ca; border:none; cursor:pointer;" onclick="showReceipt(${idx})">View</button></td></tr>`;
+          const isDec = r.status === 'Declined';
+          tbody.innerHTML += `<tr><td style="font-family:monospace; color:#4f46e5; font-weight:700;">${finalId}</td><td>${r.mobile}</td><td>₹${displayAmt}</td><td><span class="badge ${r.status === 'Success' ? 'badge-success' : (isDec ? 'badge-declined' : 'badge-pending')}">${r.status}</span></td><td><button class="btn-sm" style="background:#e0e7ff; color:#4338ca; border:none; cursor:pointer;" onclick="showReceipt(${idx})">View</button></td></tr>`;
         });
       } else {
         tabDep.style.background = "#4f46e5"; tabDep.style.color = "#fff";
@@ -954,12 +970,13 @@
         userHistoryData.deposits?.forEach((d, idx) => {
           let depAmt = d.amount !== undefined ? d.amount : (d.amt || 0);
           const isCb = d.isCashback;
+          const isDec = String(d.status || '').toLowerCase().includes('declined');
           tbody.innerHTML += `<tr>
             <td>#${d.reqId}</td>
             <td><b style="color:${isCb ? '#a855f7' : '#10b981'};">${d.type || 'Deposit'}</b></td>
             <td>₹${depAmt}</td>
             <td style="font-family:monospace; font-size:11px;">${d.utr}</td>
-            <td><span class="badge ${isCb ? 'badge-cashback' : (d.status === 'Approved' ? 'badge-success' : 'badge-pending')}">${d.status}</span></td>
+            <td><span class="badge ${isCb ? 'badge-cashback' : (d.status === 'Approved' ? 'badge-success' : (isDec ? 'badge-declined' : 'badge-pending'))}">${d.status}</span></td>
             <td><button class="btn-sm" style="background:#e0e7ff; color:#4338ca; border:none; cursor:pointer;" onclick="showDepositReceipt(${idx})">Receipt</button></td>
           </tr>`;
         });
@@ -991,7 +1008,7 @@
       const st = r.status || "Success";
       const statusEl = document.getElementById('rcpStatus');
       statusEl.innerText = st;
-      statusEl.className = `badge ${st === 'Success' ? 'badge-success' : 'badge-pending'}`;
+      statusEl.className = `badge ${st === 'Success' ? 'badge-success' : (st === 'Declined' ? 'badge-declined' : 'badge-pending')}`;
 
       toggleModal('receiptModal', true);
     }
@@ -1008,6 +1025,7 @@
       
       const badge = document.getElementById('dpRcpBadge');
       const statusEl = document.getElementById('dpRcpStatus');
+      const isDec = String(d.status || '').toLowerCase().includes('declined');
       if (d.isCashback) {
         badge.innerText = "CASHBACK REWARD SLIP";
         badge.style.color = "#7e22ce";
@@ -1016,7 +1034,7 @@
       } else {
         badge.innerText = "WALLET DEPOSIT CONFIRMATION";
         badge.style.color = "#059669";
-        statusEl.className = `badge ${d.status === 'Approved' ? 'badge-success' : 'badge-pending'}`;
+        statusEl.className = `badge ${d.status === 'Approved' ? 'badge-success' : (isDec ? 'badge-declined' : 'badge-pending')}`;
         statusEl.innerText = d.status;
       }
 
@@ -1116,20 +1134,52 @@
       fetchLivePlans();
     }
 
-    async function adminDeleteWallet(requestId) {
-      if (!confirm(`Deposit request #${requestId} ko delete karein?`)) return;
-      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_delete_wallet", requestId, adminToken }) });
-      showToast("Deposit request deleted!");
-      fetchAdminData();
+    // DECLINE MODAL HANDLERS (WALLET & RECHARGE)
+    function promptDeclineWallet(requestId) {
+      currentDeclineContext = { type: 'wallet', id: requestId };
+      document.getElementById('admDecTargetId').innerText = 'Wallet Deposit #' + requestId;
+      document.getElementById('admDecRemark').value = '';
+      toggleModal('adminDeclineModal', true);
     }
 
-    async function adminDeleteRecharge(txnId) {
-      if (!confirm(`Recharge order #${txnId} ko delete karein?`)) return;
-      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_delete_recharge", txnId, adminToken }) });
-      showToast("Recharge order deleted!");
-      fetchAdminData();
+    function promptDeclineRecharge(txnId) {
+      currentDeclineContext = { type: 'recharge', id: txnId };
+      document.getElementById('admDecTargetId').innerText = 'Recharge Order #' + txnId;
+      document.getElementById('admDecRemark').value = '';
+      toggleModal('adminDeclineModal', true);
     }
 
+    async function confirmDeclineAction() {
+      if (!currentDeclineContext) return;
+      const remark = document.getElementById('admDecRemark').value.trim();
+      if (!remark) return showToast('Remark lekhantu!');
+
+      const btn = document.getElementById('btnConfirmDecline');
+      btn.innerText = 'Processing...'; btn.disabled = true;
+
+      try {
+        let actionName = currentDeclineContext.type === 'wallet' ? 'admin_decline_wallet' : 'admin_decline_recharge';
+        let bodyPayload = currentDeclineContext.type === 'wallet' 
+          ? { action: actionName, requestId: currentDeclineContext.id, remark, adminToken }
+          : { action: actionName, txnId: currentDeclineContext.id, remark, adminToken };
+
+        const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(bodyPayload) });
+        const data = await res.json();
+        if (data.success) {
+          showToast(data.message || 'Declined successfully!');
+          toggleModal('adminDeclineModal', false);
+          fetchAdminData();
+        } else {
+          showToast(data.message || 'Error occurred');
+        }
+      } catch(e) {
+        showToast('Decline action failed');
+      } finally {
+        btn.innerText = 'Confirm Decline'; btn.disabled = false;
+      }
+    }
+
+    // FETCH ADMIN DATA
     async function fetchAdminData() {
       if (!adminToken) return;
       try {
@@ -1176,13 +1226,14 @@
       wBody.innerHTML = (list && list.length) ? "" : "<tr><td colspan='6' style='text-align:center;'>No Deposit Requests</td></tr>";
       list.forEach(w => {
         const isPending = w.status === 'Pending';
+        const isDec = String(w.status || '').toLowerCase().includes('declined');
         wBody.innerHTML += `<tr>
           <td>#${w.id}</td>
           <td>${w.userId}</td>
           <td>₹${w.amount}</td>
           <td style="font-size:11px; font-family:monospace;">${w.utr}</td>
-          <td>${isPending ? `<button class="btn-sm btn-success" onclick="openWalletApproveModal('${w.id}', '${w.userId}', ${w.amount}, '${w.utr}')">Approve</button>` : '<span style="color:#10b981; font-size:11px; font-weight:700;">Done</span>'}</td>
-          <td><button class="btn-sm btn-danger" onclick="adminDeleteWallet('${w.id}')">Delete</button></td>
+          <td>${isPending ? `<button class="btn-sm btn-success" onclick="openWalletApproveModal('${w.id}', '${w.userId}', ${w.amount}, '${w.utr}')">Approve</button>` : `<span class="badge ${isDec ? 'badge-declined' : 'badge-success'}">${w.status}</span>`}</td>
+          <td>${isPending ? `<button class="btn-sm btn-danger" onclick="promptDeclineWallet('${w.id}')">Decline</button>` : '<span style="color:var(--text-muted); font-size:11px;">Closed</span>'}</td>
         </tr>`;
       });
     }
@@ -1191,7 +1242,18 @@
       const rBody = document.getElementById('adminRecRows');
       rBody.innerHTML = (list && list.length) ? "" : "<tr><td colspan='8' style='text-align:center;'>No Recharge Orders</td></tr>";
       list.forEach(r => {
-        rBody.innerHTML += `<tr><td>#${r.id}</td><td>${r.userId}</td><td>${r.mobile}</td><td>${r.op}</td><td>₹${r.amount}</td><td>${r.opTxnId || '-'}</td><td>${r.status === 'Pending' ? `<button class="btn-sm btn-success" onclick="promptAdminSuccess('${r.id}')">Approve</button>` : '<span style="color:#10b981; font-size:11px; font-weight:700;">Done</span>'}</td><td><button class="btn-sm btn-danger" onclick="adminDeleteRecharge('${r.id}')">Delete</button></td></tr>`;
+        const isPending = r.status === 'Pending';
+        const isDec = r.status === 'Declined';
+        rBody.innerHTML += `<tr>
+          <td>#${r.id}</td>
+          <td>${r.userId}</td>
+          <td>${r.mobile}</td>
+          <td>${r.op}</td>
+          <td>₹${r.amount}</td>
+          <td>${r.opTxnId || '-'}</td>
+          <td>${isPending ? `<button class="btn-sm btn-success" onclick="promptAdminSuccess('${r.id}')">Approve</button>` : `<span class="badge ${isDec ? 'badge-declined' : 'badge-success'}">${r.status}</span>`}</td>
+          <td>${isPending ? `<button class="btn-sm btn-danger" onclick="promptDeclineRecharge('${r.id}')">Decline</button>` : '<span style="color:var(--text-muted); font-size:11px;">Closed</span>'}</td>
+        </tr>`;
       });
     }
 

@@ -93,6 +93,29 @@
     .chip-row { display: flex; gap: 6px; margin-top: 7px; flex-wrap: wrap; }
     .chip { background: var(--chip-bg); border: 1px solid var(--border); padding: 5px 11px; border-radius: 16px; font-size: 11.5px; font-weight: 700; cursor: pointer; color: var(--text); }
     .chip:hover { border-color: #4f46e5; color: #4338ca; }
+    
+    /* FILTER SECTION STYLES (DAYS-WISE & DATA-WISE) */
+    .filter-header-label { font-size: 10.5px; font-weight: 800; color: #38bdf8; text-transform: uppercase; margin: 8px 0 4px; letter-spacing: 0.5px; }
+    .plan-filter-row { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 6px; scrollbar-width: none; }
+    .plan-filter-row::-webkit-scrollbar { display: none; }
+    .filter-pill {
+      background: var(--chip-bg);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 4px 9px;
+      border-radius: 14px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .filter-pill.active {
+      background: #4f46e5;
+      color: #fff;
+      border-color: #4f46e5;
+      box-shadow: 0 2px 6px rgba(79,70,229,0.3);
+    }
+
     .plan-card { padding: 9px 11px; border: 1px solid var(--border); border-radius: 9px; margin-bottom: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
     .plan-card:hover { border-color: #4f46e5; }
     
@@ -276,9 +299,34 @@
             </div>
             <button type="submit" class="btn btn-primary" id="btnRec">Recharge Now</button>
           </form>
+
+          <!-- PLANS WITH DAYS-WISE & DATA-WISE FILTERS -->
           <div>
-            <label>Available Plans (Added by Admin)</label>
-            <div id="plansList" style="max-height: 240px; overflow-y: auto;"></div>
+            <label style="margin-bottom:2px;">Available Plans</label>
+
+            <!-- 1. DAYS-WISE VALIDITY FILTER -->
+            <div class="filter-header-label">📅 Validity (Days)</div>
+            <div class="plan-filter-row" id="daysFilterRow">
+              <div class="filter-pill active" onclick="setValidityFilter('all', this)">All</div>
+              <div class="filter-pill" onclick="setValidityFilter('28', this)">28 Days</div>
+              <div class="filter-pill" onclick="setValidityFilter('56', this)">56 Days</div>
+              <div class="filter-pill" onclick="setValidityFilter('84', this)">84 Days</div>
+              <div class="filter-pill" onclick="setValidityFilter('365', this)">Annual (365D)</div>
+              <div class="filter-pill" onclick="setValidityFilter('other', this)">Short/Other</div>
+            </div>
+
+            <!-- 2. DATA-WISE FILTER -->
+            <div class="filter-header-label">📶 Data Quota</div>
+            <div class="plan-filter-row" id="dataFilterRow">
+              <div class="filter-pill active" onclick="setDataFilter('all', this)">All</div>
+              <div class="filter-pill" onclick="setDataFilter('1gb', this)">1 GB/Day</div>
+              <div class="filter-pill" onclick="setDataFilter('1.5gb', this)">1.5 GB/Day</div>
+              <div class="filter-pill" onclick="setDataFilter('2gb', this)">2 GB/Day</div>
+              <div class="filter-pill" onclick="setDataFilter('3gb', this)">3 GB/Day</div>
+              <div class="filter-pill" onclick="setDataFilter('addon', this)">Data Booster</div>
+            </div>
+
+            <div id="plansList" style="max-height: 230px; overflow-y: auto; margin-top: 6px;"></div>
           </div>
         </div>
       </div>
@@ -325,8 +373,8 @@
           <form onsubmit="event.preventDefault(); adminAddPlan();" style="display:flex; gap:6px; margin-bottom:12px; flex-wrap:wrap;">
             <select id="apOp" style="flex:1; min-width:80px;"><option>Jio</option><option>Airtel</option><option>Vi</option><option>BSNL</option></select>
             <input type="number" id="apAmt" placeholder="Amt(₹)" style="flex:1; min-width:70px;" required/>
-            <input type="text" id="apVal" placeholder="Validity" style="flex:1; min-width:80px;" required/>
-            <input type="text" id="apDesc" placeholder="Description" style="flex:2; min-width:120px;" required/>
+            <input type="text" id="apVal" placeholder="Validity (e.g. 28 Days)" style="flex:1; min-width:80px;" required/>
+            <input type="text" id="apDesc" placeholder="Desc (e.g. 1.5GB/Day, Voice)" style="flex:2; min-width:120px;" required/>
             <button type="submit" class="btn btn-primary btn-sm" id="btnPlanAdd">Add Plan</button>
           </form>
           <div class="table-responsive">
@@ -363,7 +411,7 @@
     </div>
   </main>
 
-  <!-- ADMIN CHANGE USERNAME & PASSWORD MODAL (WITH SECURITY VERIFICATION) -->
+  <!-- ADMIN CHANGE USERNAME & PASSWORD MODAL -->
   <div id="adminSecurityModal" class="modal-overlay hidden">
     <form class="modal-body" onsubmit="event.preventDefault(); submitChangeAdminCredentials();">
       <h3 style="font-weight: 800; font-size: 15px; margin-bottom: 8px;">🔑 Change Admin Login</h3>
@@ -379,7 +427,7 @@
 
       <div class="form-group">
         <label>New Username <span style="color:#ef4444;">*</span></label>
-        <input type="text" id="admNewUser" placeholder="New username (e.g. boss_admin)" enterkeyhint="next" required />
+        <input type="text" id="admNewUser" placeholder="New username" enterkeyhint="next" required />
       </div>
 
       <div class="form-group">
@@ -397,7 +445,7 @@
     </form>
   </div>
 
-  <!-- DECLINE REASON MODAL (COMMON FOR WALLET & RECHARGE) -->
+  <!-- DECLINE REASON MODAL -->
   <div id="adminDeclineModal" class="modal-overlay hidden">
     <form class="modal-body" onsubmit="event.preventDefault(); confirmDeclineAction();">
       <h3 style="font-weight: 800; font-size: 15px; margin-bottom: 8px; color:#ef4444;">❌ Decline Request</h3>
@@ -588,7 +636,7 @@
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxKpUFTVYFMAryvle79MnLhDBO0lCd0sPgTj_bU08iA-BTqYzgh9QTtCNDXbk8-joDX/exec";
     
-    const BRAND_LOGO_DATA_URL = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cdefs%3E%3ClinearGradient id='bgGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%231e1b4b'/%3E%3Cstop offset='50%25' stop-color='%23312e81'/%3E%3Cstop offset='100%25' stop-color='%234338ca'/%3E%3C/defs%3E%3ClinearGradient id='boltGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23facc15'/%3E%3Cstop offset='100%25' stop-color='%23ea580c'/%3E%3C/defs%3E%3Crect width='200' height='200' rx='45' fill='url(%23bgGrad)'/%3E%3Ccircle cx='100' cy='100' r='88' fill='none' stroke='%2338bdf8' stroke-width='4' opacity='0.4' stroke-dasharray='8 6'/%3E%3Cpath d='M108 24 L60 102 L98 102 L92 176 L144 94 L104 94 Z' fill='url(%23boltGrad)' filter='drop-shadow(0 4px 10px rgba(245, 158, 11, 0.6))'/%3E%3Ctext x='100' y='142' font-family='system-ui, sans-serif' font-size='38' font-weight='900' fill='%23ffffff' text-anchor='middle' letter-spacing='1'%3EYK%3C/text%3E%3Ctext x='100' y='170' font-family='system-ui, sans-serif' font-size='15' font-weight='800' fill='%2338bdf8' text-anchor='middle' letter-spacing='2'%3ERECHARGE%3C/text%3E%3C/svg%3E";
+    const BRAND_LOGO_DATA_URL = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cdefs%3E%3ClinearGradient id='bgGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%231e1b4b'/%3E%3Cstop offset='50%25' stop-color='%23312e81'/%3E%3Cstop offset='100%25' stop-color='%234338ca'/%3E%3C/defs%3E%3ClinearGradient id='boltGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23facc15'/%3E%3Cstop offset='100%25' stop-color='%23ea580c'/%3E%3C/defs%3E%3Crect width='200' height='200' rx='45' fill='url(%23bgGrad)'/%3E%3Ccircle cx='100' cy='100' r='88' fill='none' stroke='%2338bdf8' stroke-width='4' opacity='0.4' stroke-dasharray='8 6'/%3E%3Cpath d='M108 24 L60 102 L98 102 L92 176 L144 94 L104 94 Z' fill='url(%23boltGrad)' filter='drop-shadow(0 4px 10px rgba(245, 158, 11, 0.6))'/%3E%3Ctext x='100' y='142' font-family='system-ui, -apple-system, sans-serif' font-size='38' font-weight='900' fill='%23ffffff' text-anchor='middle' letter-spacing='1'%3EYK%3C/text%3E%3Ctext x='100' y='170' font-family='system-ui, -apple-system, sans-serif' font-size='15' font-weight='800' fill='%2338bdf8' text-anchor='middle' letter-spacing='2'%3ERECHARGE%3C/text%3E%3C/svg%3E";
 
     let currentUser = JSON.parse(localStorage.getItem("yk_user_session") || "null");
     let adminToken = sessionStorage.getItem("yk_admin_token") || null;
@@ -607,6 +655,10 @@
 
     let adminCachedWallets = [];
     let adminCachedRecharges = [];
+
+    // Filter states
+    let activeValidityFilter = 'all';
+    let activeDataFilter = 'all';
 
     localStorage.setItem("yk_upi", "9939311744@ybl");
     let liveQR = {
@@ -698,7 +750,7 @@
 
     function setupFormEnterNavigation() {
       document.querySelectorAll('form').forEach(f => {
-        const inputs = Array.from(f.querySelectorAll('input:not([type="hidden"]), select'));
+        const inputs = Array.from(f.querySelectorAll('input:not([type="hidden"]), select, textarea'));
         inputs.forEach((inp, i) => {
           inp.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.keyCode === 13) {
@@ -764,7 +816,7 @@
         if (data.success) {
           livePlans = data.plans || [];
           const currentOp = document.getElementById('recOp').value || 'Jio';
-          renderPlans(currentOp);
+          renderFilteredPlans(currentOp);
         }
       } catch(e) {}
     }
@@ -887,19 +939,65 @@
         const el = document.getElementById(`op${o}`);
         if (el) el.classList.toggle('active', o.toLowerCase() === op.toLowerCase());
       });
-      renderPlans(op);
+      renderFilteredPlans(op);
     }
 
-    function renderPlans(op) {
+    // DAYS-WISE FILTER HANDLER
+    function setValidityFilter(val, el) {
+      activeValidityFilter = val;
+      document.querySelectorAll('#daysFilterRow .filter-pill').forEach(p => p.classList.remove('active'));
+      el.classList.add('active');
+      const op = document.getElementById('recOp').value || 'Jio';
+      renderFilteredPlans(op);
+    }
+
+    // DATA-WISE FILTER HANDLER
+    function setDataFilter(val, el) {
+      activeDataFilter = val;
+      document.querySelectorAll('#dataFilterRow .filter-pill').forEach(p => p.classList.remove('active'));
+      el.classList.add('active');
+      const op = document.getElementById('recOp').value || 'Jio';
+      renderFilteredPlans(op);
+    }
+
+    // RENDER FILTERED PLANS (OPERATOR + DAYS + DATA)
+    function renderFilteredPlans(op) {
       const chips = document.getElementById('dynamicChips');
       const list = document.getElementById('plansList');
       chips.innerHTML = "";
       list.innerHTML = "";
 
-      const filtered = livePlans.filter(p => p.operator.toLowerCase() === op.toLowerCase());
+      // 1. Filter by Operator
+      let filtered = livePlans.filter(p => p.operator.toLowerCase() === op.toLowerCase());
+
+      // 2. Filter by Validity Days
+      if (activeValidityFilter !== 'all') {
+        filtered = filtered.filter(p => {
+          const valText = (p.validity || "").toLowerCase();
+          if (activeValidityFilter === '28') return valText.includes('28');
+          if (activeValidityFilter === '56') return valText.includes('56');
+          if (activeValidityFilter === '84') return valText.includes('84');
+          if (activeValidityFilter === '365') return valText.includes('365') || valText.includes('annual') || valText.includes('1 year');
+          if (activeValidityFilter === 'other') return !valText.includes('28') && !valText.includes('56') && !valText.includes('84') && !valText.includes('365');
+          return true;
+        });
+      }
+
+      // 3. Filter by Data
+      if (activeDataFilter !== 'all') {
+        filtered = filtered.filter(p => {
+          const text = ((p.desc || "") + " " + (p.validity || "")).toLowerCase().replace(/\s+/g, '');
+          if (activeDataFilter === '1gb') return text.includes('1gb') && !text.includes('1.5gb');
+          if (activeDataFilter === '1.5gb') return text.includes('1.5gb');
+          if (activeDataFilter === '2gb') return text.includes('2gb') || text.includes('2.5gb');
+          if (activeDataFilter === '3gb') return text.includes('3gb');
+          if (activeDataFilter === 'addon') return text.includes('booster') || text.includes('add-on') || text.includes('dataonly');
+          return true;
+        });
+      }
 
       if (filtered.length === 0) {
-        list.innerHTML = `<p style="font-size:12px; color:var(--text-muted); padding:10px;">No plans added yet by Admin for ${op}.</p>`;
+        list.innerHTML = `<p style="font-size:11.5px; color:var(--text-muted); padding:12px; text-align:center;">No matching plans found for this filter.</p>`;
         return;
       }
 
@@ -912,7 +1010,13 @@
         const card = document.createElement('div');
         card.className = "plan-card";
         card.onclick = () => { document.getElementById('recAmt').value = p.amount; selectedPlanDesc = `${p.validity} | ${p.desc}`; };
-        card.innerHTML = `<div><b>₹${p.amount}</b> <span style="font-size:10.5px; color:#4f46e5; font-weight:700;">${p.validity}</span><p style="font-size:11px; color:var(--text-muted);">${p.desc}</p></div><span style="color:#4f46e5; font-weight:700; font-size:11px;">Select</span>`;
+        card.innerHTML = `
+          <div>
+            <b>₹${p.amount}</b> 
+            <span style="font-size:10.5px; color:#4f46e5; font-weight:700; margin-left:4px;">${p.validity}</span>
+            <p style="font-size:11px; color:var(--text-muted); margin-top:2px;">${p.desc}</p>
+          </div>
+          <span style="color:#4f46e5; font-weight:700; font-size:11px;">Select</span>`;
         list.appendChild(card);
       });
     }
@@ -1145,7 +1249,6 @@
           showToast(data.message);
           toggleModal('adminSecurityModal', false);
           document.getElementById('adminUserDisplay').innerText = data.newUsername;
-          // Prompt relogin for safety
           setTimeout(() => {
             adminLogoutAction();
             showToast("Please login with your new credentials");

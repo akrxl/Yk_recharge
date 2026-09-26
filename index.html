@@ -228,6 +228,8 @@
         <button id="tabLogin" onclick="toggleAuth('login')" style="flex:1; border:none; background:none; font-weight:700; padding:9px; color:#4f46e5; border-bottom:2px solid #4f46e5; cursor:pointer;">Login</button>
         <button id="tabReg" onclick="toggleAuth('reg')" style="flex:1; border:none; background:none; font-weight:700; padding:9px; color:var(--text-muted); cursor:pointer;">Register</button>
       </div>
+      
+      <!-- LOGIN FORM -->
       <form id="loginForm" onsubmit="event.preventDefault(); loginAction();">
         <div class="form-group"><label>Registered Mobile</label><input type="tel" id="lMobile" maxlength="10" placeholder="10-digit mobile" enterkeyhint="next" /></div>
         <div class="form-group">
@@ -237,8 +239,13 @@
             <button type="button" class="toggle-eye" onclick="togglePasswordVisibility('lPass', this)">👁️</button>
           </div>
         </div>
+        <div style="text-align: right; margin-top: -6px; margin-bottom: 12px;">
+          <a href="javascript:void(0)" onclick="openForgotModal()" style="font-size: 11.5px; color: #38bdf8; text-decoration: none; font-weight: 700;">Forgot Password?</a>
+        </div>
         <button type="submit" class="btn btn-primary" id="btnLogin">Sign In</button>
       </form>
+
+      <!-- REGISTRATION FORM -->
       <form id="regForm" class="hidden" onsubmit="event.preventDefault(); registerAction();">
         <div class="form-group"><label>Full Name</label><input type="text" id="rName" placeholder="Full name" enterkeyhint="next" /></div>
         <div class="form-group"><label>Mobile</label><input type="tel" id="rMobile" maxlength="10" placeholder="10-digit mobile" enterkeyhint="next" /></div>
@@ -271,7 +278,6 @@
             </div>
             <button onclick="logoutAction()" style="border:none; background:#fee2e2; color:#ef4444; padding:4px 9px; border-radius:6px; font-size:11px; font-weight:700; cursor:pointer;">Logout</button>
           </div>
-          <!-- ACTION BUTTONS: RECHARGES, DEPOSITS & CHANGE PASSWORD -->
           <div style="display:flex; gap:6px; margin-top:8px; flex-wrap:wrap;">
             <button class="btn-sm" style="flex:1; background:var(--chip-bg); color:#4f46e5; border:1px solid var(--border); cursor:pointer; font-weight:700;" onclick="openHistory('recharges')">📜 Recharges</button>
             <button class="btn-sm" style="flex:1; background:var(--chip-bg); color:#4f46e5; border:1px solid var(--border); cursor:pointer; font-weight:700;" onclick="openHistory('deposits')">💳 Deposits</button>
@@ -303,8 +309,6 @@
 
           <div>
             <label style="margin-bottom:2px;">Available Plans</label>
-
-            <!-- 1. DAYS-WISE VALIDITY FILTER -->
             <div class="filter-header-label">📅 Validity (Days)</div>
             <div class="plan-filter-row" id="daysFilterRow">
               <div class="filter-pill active" onclick="setValidityFilter('all', this)">All</div>
@@ -315,7 +319,6 @@
               <div class="filter-pill" onclick="setValidityFilter('other', this)">Short/Other</div>
             </div>
 
-            <!-- 2. DATA-WISE FILTER -->
             <div class="filter-header-label">📶 Data Quota</div>
             <div class="plan-filter-row" id="dataFilterRow">
               <div class="filter-pill active" onclick="setDataFilter('all', this)">All</div>
@@ -337,7 +340,60 @@
       </div>
     </div>
 
-    <!-- USER CHANGE PASSWORD MODAL -->
+    <!-- FORGOT PASSWORD MODAL (EMAIL OTP) -->
+    <div id="forgotPasswordModal" class="modal-overlay hidden">
+      <div class="modal-body">
+        <h3 style="font-weight: 800; font-size: 15px; margin-bottom: 6px; color:#38bdf8;">🔐 Forgot Password</h3>
+        <p style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 12px;">Reset your password using an email verification code.</p>
+
+        <!-- STEP 1: ENTER MOBILE NUMBER -->
+        <form id="forgotStep1" onsubmit="event.preventDefault(); sendForgotOtpAction();">
+          <div class="form-group">
+            <label>Registered Mobile (10 Digits)</label>
+            <input type="tel" id="fpMobile" maxlength="10" placeholder="10-digit mobile" enterkeyhint="go" required />
+          </div>
+          <div style="display:flex; gap:6px; margin-top:12px;">
+            <button type="button" class="btn" style="background:var(--chip-bg); color:var(--text);" onclick="toggleModal('forgotPasswordModal', false)">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="btnSendOtp">Send OTP</button>
+          </div>
+        </form>
+
+        <!-- STEP 2: ENTER OTP & NEW PASSWORD -->
+        <form id="forgotStep2" class="hidden" onsubmit="event.preventDefault(); resetForgotPassAction();">
+          <div style="background: rgba(79,70,229,0.15); border: 1px solid #4f46e5; border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; font-size: 11.5px; line-height: 1.4;">
+            OTP sent to: <b id="fpMaskedEmailText" style="color:#38bdf8;">-</b>
+          </div>
+
+          <div class="form-group">
+            <label>6-Digit Email OTP</label>
+            <input type="text" id="fpOtp" maxlength="6" placeholder="Enter 6-digit OTP" enterkeyhint="next" required />
+          </div>
+
+          <div class="form-group">
+            <label>New Password</label>
+            <div class="password-wrapper">
+              <input type="password" id="fpNewPass" placeholder="Enter new password" enterkeyhint="next" required />
+              <button type="button" class="toggle-eye" onclick="togglePasswordVisibility('fpNewPass', this)">👁️</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Confirm New Password</label>
+            <div class="password-wrapper">
+              <input type="password" id="fpConfirmNewPass" placeholder="Confirm new password" enterkeyhint="go" required />
+              <button type="button" class="toggle-eye" onclick="togglePasswordVisibility('fpConfirmNewPass', this)">👁️</button>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:6px; margin-top:12px;">
+            <button type="button" class="btn" style="background:var(--chip-bg); color:var(--text);" onclick="toggleModal('forgotPasswordModal', false)">Cancel</button>
+            <button type="submit" class="btn btn-success" id="btnResetPass">Reset Password</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- USER CHANGE PASSWORD MODAL (INSIDE DASHBOARD) -->
     <div id="userPasswordModal" class="modal-overlay hidden">
       <form class="modal-body" onsubmit="event.preventDefault(); submitUserChangePassword();">
         <h3 style="font-weight: 800; font-size: 15px; margin-bottom: 6px; color:#9333ea;">🔑 Change Password</h3>
@@ -698,6 +754,7 @@
     // Filter states
     let activeValidityFilter = 'all';
     let activeDataFilter = 'all';
+    let forgotMobileStored = "";
 
     localStorage.setItem("yk_upi", "9939311744@ybl");
     let liveQR = {
@@ -848,7 +905,87 @@
       startLiveBalancePolling();
     }
 
-    // USER CHANGE PASSWORD MODAL OPENER & SUBMITTER
+    // FORGOT PASSWORD MODAL ACTIONS
+    function openForgotModal() {
+      forgotMobileStored = "";
+      document.getElementById('fpMobile').value = "";
+      document.getElementById('fpOtp').value = "";
+      document.getElementById('fpNewPass').value = "";
+      document.getElementById('fpConfirmNewPass').value = "";
+      document.getElementById('forgotStep1').classList.remove('hidden');
+      document.getElementById('forgotStep2').classList.add('hidden');
+      toggleModal('forgotPasswordModal', true);
+    }
+
+    async function sendForgotOtpAction() {
+      const mobile = document.getElementById('fpMobile').value.trim();
+      if (mobile.length !== 10) return showToast("10-digit mobile number enter karein!");
+
+      const btn = document.getElementById('btnSendOtp');
+      btn.innerText = "Sending OTP..."; btn.disabled = true;
+
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: "user_forgot_send_otp", mobile })
+        });
+        const data = await res.json();
+        if (data.success) {
+          forgotMobileStored = mobile;
+          document.getElementById('fpMaskedEmailText').innerText = data.maskedEmail;
+          document.getElementById('forgotStep1').classList.add('hidden');
+          document.getElementById('forgotStep2').classList.remove('hidden');
+          showToast("OTP sent to your registered email!");
+        } else {
+          showToast(data.message || "Failed to send OTP!");
+        }
+      } catch(e) {
+        showToast("Error sending OTP. Try again.");
+      } finally {
+        btn.innerText = "Send OTP"; btn.disabled = false;
+      }
+    }
+
+    async function resetForgotPassAction() {
+      const otp = document.getElementById('fpOtp').value.trim();
+      const newPass = document.getElementById('fpNewPass').value.trim();
+      const confirmPass = document.getElementById('fpConfirmNewPass').value.trim();
+
+      if (!otp || otp.length !== 6) return showToast("6-digit OTP bharein!");
+      if (!newPass || !confirmPass) return showToast("New password enter karein!");
+      if (newPass !== confirmPass) return showToast("Passwords match nahi ho rahe!");
+      if (newPass.length < 4) return showToast("Password kam se kam 4 characters ka ho!");
+
+      const btn = document.getElementById('btnResetPass');
+      btn.innerText = "Resetting..."; btn.disabled = true;
+
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            action: "user_forgot_verify_reset",
+            mobile: forgotMobileStored,
+            otp,
+            newPassword: newPass
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(data.message);
+          toggleModal('forgotPasswordModal', false);
+          document.getElementById('lMobile').value = forgotMobileStored;
+          document.getElementById('lPass').value = "";
+        } else {
+          showToast(data.message || "Reset failed!");
+        }
+      } catch(e) {
+        showToast("Error resetting password.");
+      } finally {
+        btn.innerText = "Reset Password"; btn.disabled = false;
+      }
+    }
+
+    // USER DASHBOARD PASSWORD CHANGE
     function openUserPasswordModal() {
       if (!currentUser) return;
       document.getElementById('uPassUserIdDisplay').innerText = currentUser.userId;
@@ -863,17 +1000,9 @@
       const newPass = document.getElementById('uNewPass').value.trim();
       const confirmPass = document.getElementById('uConfirmNewPass').value.trim();
 
-      if (!currPass || !newPass || !confirmPass) {
-        return showToast("All password fields are required!");
-      }
-
-      if (newPass !== confirmPass) {
-        return showToast("New passwords do not match!");
-      }
-
-      if (newPass.length < 4) {
-        return showToast("New password must be at least 4 characters!");
-      }
+      if (!currPass || !newPass || !confirmPass) return showToast("Sabhi fields bharein!");
+      if (newPass !== confirmPass) return showToast("New passwords match nahi kar rahe!");
+      if (newPass.length < 4) return showToast("Password kam se kam 4 characters ka ho!");
 
       const btn = document.getElementById('btnSaveUserPass');
       btn.innerText = "Updating..."; btn.disabled = true;
@@ -896,7 +1025,7 @@
           showToast(data.message || "Failed to update password!");
         }
       } catch(e) {
-        showToast("Error updating password. Try again.");
+        showToast("Error updating password.");
       } finally {
         btn.innerText = "Update Password"; btn.disabled = false;
       }
@@ -1462,14 +1591,12 @@
           document.getElementById('adminUserDisplay').innerText = data.adminUsername;
         }
 
-        // Plans Table
         const pBody = document.getElementById('adminPlanRows');
         pBody.innerHTML = (data.plans && data.plans.length) ? "" : "<tr><td colspan='5'>No Plans Added Yet</td></tr>";
         data.plans?.forEach(p => {
           pBody.innerHTML += `<tr><td><b>${p.op}</b></td><td>₹${p.amt}</td><td>${p.val}</td><td>${p.desc}</td><td><button class="btn-sm btn-danger" onclick="adminDeletePlan('${p.op}', ${p.amt})">Delete</button></td></tr>`;
         });
 
-        // Users Table
         const uBody = document.getElementById('adminUserRows');
         uBody.innerHTML = (data.users && data.users.length) ? "" : "<tr><td colspan='7'>No Users</td></tr>";
         data.users?.forEach(u => {
@@ -1578,13 +1705,8 @@
       if (!targetWalletReq) return;
       const enteredUtr = document.getElementById('awInputUtr').value.trim();
       
-      if (!enteredUtr) {
-        return showToast("Please paste the UTR number!");
-      }
-
-      if (enteredUtr !== targetWalletReq.utr) {
-        return showToast("❌ UTR does not match! Please enter the correct UTR.");
-      }
+      if (!enteredUtr) return showToast("Please paste the UTR number!");
+      if (enteredUtr !== targetWalletReq.utr) return showToast("❌ UTR does not match! Please enter the correct UTR.");
 
       const btn = document.getElementById('btnConfirmWalletApprove');
       btn.innerText = "Verifying..."; btn.disabled = true;

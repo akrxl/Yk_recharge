@@ -245,8 +245,8 @@
         <button type="submit" class="btn btn-primary" id="btnLogin">Sign In</button>
       </form>
 
-      <!-- REGISTRATION FORM WITH GMAIL VALIDATION -->
-      <form id="regForm" class="hidden" onsubmit="event.preventDefault(); registerAction();">
+      <!-- REGISTRATION FORM WITH OTP VERIFICATION -->
+      <form id="regForm" class="hidden" onsubmit="event.preventDefault(); requestRegisterOtp();">
         <div class="form-group"><label>Full Name</label><input type="text" id="rName" placeholder="Full name" enterkeyhint="next" required /></div>
         <div class="form-group"><label>Mobile (10 Digits)</label><input type="tel" id="rMobile" maxlength="10" placeholder="10-digit mobile" enterkeyhint="next" required /></div>
         <div class="form-group">
@@ -260,7 +260,27 @@
             <button type="button" class="toggle-eye" onclick="togglePasswordVisibility('rPass', this)">👁️</button>
           </div>
         </div>
-        <button type="submit" class="btn btn-primary" id="btnReg">Submit Registration</button>
+        <button type="submit" class="btn btn-primary" id="btnReg">Verify Gmail & Register</button>
+      </form>
+    </div>
+
+    <!-- REGISTRATION OTP VERIFICATION MODAL -->
+    <div id="regOtpModal" class="modal-overlay hidden">
+      <form class="modal-body" onsubmit="event.preventDefault(); confirmRegisterWithOtp();">
+        <h3 style="font-weight: 800; font-size: 15px; margin-bottom: 6px; color:#4f46e5;">📩 Verify Your Gmail</h3>
+        <p style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 12px;">
+          OTP sent to: <b id="regTargetEmailDisplay" style="color:#38bdf8;">-</b>
+        </p>
+
+        <div class="form-group">
+          <label>6-Digit Email OTP <span style="color:#ef4444;">*</span></label>
+          <input type="text" id="regInputOtp" maxlength="6" placeholder="Enter 6-digit OTP" enterkeyhint="go" required />
+        </div>
+
+        <div style="display:flex; gap:6px; margin-top:12px;">
+          <button type="button" class="btn" style="background:var(--chip-bg); color:var(--text);" onclick="toggleModal('regOtpModal', false)">Cancel</button>
+          <button type="submit" class="btn btn-success" id="btnConfirmReg">Verify & Activate Account</button>
+        </div>
       </form>
     </div>
 
@@ -345,33 +365,52 @@
       </div>
     </div>
 
-    <!-- USER CHANGE GMAIL MODAL (WITH CURRENT PASSWORD) -->
+    <!-- USER CHANGE GMAIL MODAL (WITH CURRENT PASSWORD & OTP VERIFICATION) -->
     <div id="userEmailModal" class="modal-overlay hidden">
-      <form class="modal-body" onsubmit="event.preventDefault(); submitUserChangeEmail();">
+      <div class="modal-body">
         <h3 style="font-weight: 800; font-size: 15px; margin-bottom: 6px; color:#38bdf8;">📧 Change Gmail Address</h3>
         <p style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 12px;">
           User ID: <b id="uEmailUserIdDisplay" style="color:#4f46e5;">-</b> | Current: <b id="uEmailCurrentDisplay" style="color:var(--text);">-</b>
         </p>
 
-        <div class="form-group">
-          <label>Current Password <span style="color:#ef4444;">*</span></label>
-          <div class="password-wrapper">
-            <input type="password" id="uEmailCurrPass" placeholder="Enter current password" enterkeyhint="next" required />
-            <button type="button" class="toggle-eye" onclick="togglePasswordVisibility('uEmailCurrPass', this)">👁️</button>
+        <!-- STEP 1: PASSWORD & NEW GMAIL -->
+        <form id="chgEmailStep1" onsubmit="event.preventDefault(); sendEmailChangeOtpAction();">
+          <div class="form-group">
+            <label>Current Password <span style="color:#ef4444;">*</span></label>
+            <div class="password-wrapper">
+              <input type="password" id="uEmailCurrPass" placeholder="Enter current password" enterkeyhint="next" required />
+              <button type="button" class="toggle-eye" onclick="togglePasswordVisibility('uEmailCurrPass', this)">👁️</button>
+            </div>
           </div>
-        </div>
 
-        <div class="form-group">
-          <label>New Gmail Address (@gmail.com only) <span style="color:#ef4444;">*</span></label>
-          <input type="email" id="uNewEmail" placeholder="newemail@gmail.com" enterkeyhint="go" required />
-          <p style="font-size:10.5px; color:var(--text-muted); margin-top:3px;">Must be a unique Gmail not used by any other user.</p>
-        </div>
+          <div class="form-group">
+            <label>New Gmail Address (@gmail.com only) <span style="color:#ef4444;">*</span></label>
+            <input type="email" id="uNewEmail" placeholder="newemail@gmail.com" enterkeyhint="go" required />
+          </div>
 
-        <div style="display:flex; gap:6px; margin-top:12px;">
-          <button type="button" class="btn" style="background:var(--chip-bg); color:var(--text);" onclick="toggleModal('userEmailModal', false)">Cancel</button>
-          <button type="submit" class="btn btn-primary" id="btnSaveUserEmail">Update Gmail</button>
-        </div>
-      </form>
+          <div style="display:flex; gap:6px; margin-top:12px;">
+            <button type="button" class="btn" style="background:var(--chip-bg); color:var(--text);" onclick="toggleModal('userEmailModal', false)">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="btnSendEmailOtp">Send Verification OTP</button>
+          </div>
+        </form>
+
+        <!-- STEP 2: VERIFY OTP ON NEW GMAIL -->
+        <form id="chgEmailStep2" class="hidden" onsubmit="event.preventDefault(); confirmEmailChangeWithOtp();">
+          <div style="background: rgba(56,189,248,0.12); border: 1px solid #38bdf8; border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; font-size: 11.5px; line-height: 1.4;">
+            OTP sent to new email: <b id="chgEmailNewDisplay" style="color:#38bdf8;">-</b>
+          </div>
+
+          <div class="form-group">
+            <label>6-Digit Email OTP</label>
+            <input type="text" id="chgEmailInputOtp" maxlength="6" placeholder="Enter 6-digit OTP" enterkeyhint="go" required />
+          </div>
+
+          <div style="display:flex; gap:6px; margin-top:12px;">
+            <button type="button" class="btn" style="background:var(--chip-bg); color:var(--text);" onclick="toggleModal('userEmailModal', false)">Cancel</button>
+            <button type="submit" class="btn btn-success" id="btnConfirmEmailChange">Verify & Save Gmail</button>
+          </div>
+        </form>
+      </div>
     </div>
 
     <!-- FORGOT PASSWORD MODAL (EMAIL OTP) -->
@@ -763,9 +802,9 @@
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxKpUFTVYFMAryvle79MnLhDBO0lCd0sPgTj_bU08iA-BTqYzgh9QTtCNDXbk8-joDX/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw9qV8JLqn4jBZsUBLR0YSF5i4rbuXFyAbgpcEmjmd4XJYxED9kvsKd_XLpNROkJxPqSg/exec";
     
-    const BRAND_LOGO_DATA_URL = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cdefs%3E%3ClinearGradient id='bgGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%231e1b4b'/%3E%3Cstop offset='50%25' stop-color='%23312e81'/%3E%3Cstop offset='100%25' stop-color='%234338ca'/%3E%3C/defs%3E%3ClinearGradient id='boltGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23facc15'/%3E%3Cstop offset='100%25' stop-color='%23ea580c'/%3E%3C/defs%3E%3Crect width='200' height='200' rx='45' fill='url(%23bgGrad)'/%3E%3Ccircle cx='100' cy='100' r='88' fill='none' stroke='%2338bdf8' stroke-width='4' opacity='0.4' stroke-dasharray='8 6'/%3E%3Cpath d='M108 24 L60 102 L98 102 L92 176 L144 94 L104 94 Z' fill='url(%23boltGrad)' filter='drop-shadow(0 4px 10px rgba(245, 158, 11, 0.6))'/%3E%3Ctext x='100' y='142' font-family='system-ui, -apple-system, sans-serif' font-size='38' font-weight='900' fill='%23ffffff' text-anchor='middle' letter-spacing='1'%3EYK%3C/text%3E%3Ctext x='100' y='170' font-family='system-ui, -apple-system, sans-serif' font-size='15' font-weight='800' fill='%2338bdf8' text-anchor='middle' letter-spacing='2'%3ERECHARGE%3C/text%3E%3C/svg%3E";
+    const BRAND_LOGO_DATA_URL = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cdefs%3E%3ClinearGradient id='bgGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%231e1b4b'/%3E%3Cstop offset='50%25' stop-color='%23312e81'/%3E%3Cstop offset='100%25' stop-color='%234338ca'/%3E%3C/defs%3E%3ClinearGradient id='boltGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23facc15'/%3E%3Cstop offset='100%25' stop-color='%23ea580c'/%3E%3C/defs%3E%3Crect width='200' height='200' rx='45' fill='url(%23bgGrad)'/%3E%3Ccircle cx='100' cy='100' r='88' fill='none' stroke='%2338bdf8' stroke-width='4' opacity='0.4' stroke-dasharray='8 6'/%3E%3Cpath d='M108 24 L60 102 L98 102 L92 176 L144 94 L104 94 Z' fill='url(%23boltGrad)' filter='drop-shadow(0 4px 10px rgba(245, 158, 11, 0.6))'/%3E%3Ctext x='100' y='142' font-family='system-ui, sans-serif' font-size='38' font-weight='900' fill='%23ffffff' text-anchor='middle' letter-spacing='1'%3EYK%3C/text%3E%3Ctext x='100' y='170' font-family='system-ui, sans-serif' font-size='15' font-weight='800' fill='%2338bdf8' text-anchor='middle' letter-spacing='2'%3ERECHARGE%3C/text%3E%3C/svg%3E";
 
     let currentUser = JSON.parse(localStorage.getItem("yk_user_session") || "null");
     let adminToken = sessionStorage.getItem("yk_admin_token") || null;
@@ -785,10 +824,12 @@
     let adminCachedWallets = [];
     let adminCachedRecharges = [];
 
-    // Filter states
+    // Filter and Temporary States
     let activeValidityFilter = 'all';
     let activeDataFilter = 'all';
     let forgotMobileStored = "";
+    let pendingRegData = null;
+    let pendingChangeNewEmail = "";
 
     localStorage.setItem("yk_upi", "9939311744@ybl");
     let liveQR = {
@@ -944,34 +985,116 @@
       startLiveBalancePolling();
     }
 
-    // USER EMAIL CHANGE MODAL ACTIONS
+    // --- REGISTRATION STEP 1: REQUEST OTP ---
+    async function requestRegisterOtp() {
+      const name = document.getElementById('rName').value.trim();
+      const mobile = document.getElementById('rMobile').value.trim();
+      const email = document.getElementById('rEmail').value.trim().toLowerCase();
+      const password = document.getElementById('rPass').value.trim();
+
+      if (!name || mobile.length !== 10 || !email || !password) {
+        return showToast("Sabhi details dhyan se bharein!");
+      }
+
+      if (!isValidGmailFormat(email)) {
+        return showToast("Sirf valid @gmail.com address allow hai!");
+      }
+
+      const btn = document.getElementById('btnReg');
+      btn.innerText = "Sending Verification Code..."; btn.disabled = true;
+
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            action: "register_send_otp",
+            name, mobile, email
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          pendingRegData = { name, mobile, email, password };
+          document.getElementById('regTargetEmailDisplay').innerText = email;
+          document.getElementById('regInputOtp').value = "";
+          toggleModal('regOtpModal', true);
+          showToast("OTP aapke Gmail par bhej diya gaya hai!");
+        } else {
+          showToast(data.message || "Failed to send verification code!");
+        }
+      } catch(e) {
+        showToast("Error sending OTP. Authorization check karein.");
+      } finally {
+        btn.innerText = "Verify Gmail & Register"; btn.disabled = false;
+      }
+    }
+
+    // --- REGISTRATION STEP 2: VERIFY OTP & CREATE ACCOUNT ---
+    async function confirmRegisterWithOtp() {
+      if (!pendingRegData) return;
+      const otp = document.getElementById('regInputOtp').value.trim();
+      if (!otp || otp.length !== 6) return showToast("6-digit OTP enter karein!");
+
+      const btn = document.getElementById('btnConfirmReg');
+      btn.innerText = "Verifying & Creating..."; btn.disabled = true;
+
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            action: "register_verify_and_create",
+            name: pendingRegData.name,
+            mobile: pendingRegData.mobile,
+            email: pendingRegData.email,
+            password: pendingRegData.password,
+            otp: otp
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(data.message);
+          toggleModal('regOtpModal', false);
+          toggleAuth('login');
+          document.getElementById('lMobile').value = pendingRegData.mobile;
+          document.getElementById('lPass').value = "";
+          pendingRegData = null;
+        } else {
+          showToast(data.message || "Verification failed!");
+        }
+      } catch(e) {
+        showToast("Account activation failed. Try again.");
+      } finally {
+        btn.innerText = "Verify & Activate Account"; btn.disabled = false;
+      }
+    }
+
+    // --- USER CHANGE EMAIL MODAL ACTIONS (WITH OTP) ---
     function openUserEmailModal() {
       if (!currentUser) return;
       document.getElementById('uEmailUserIdDisplay').innerText = currentUser.userId;
       document.getElementById('uEmailCurrentDisplay').innerText = currentUser.email || "Not set";
       document.getElementById('uEmailCurrPass').value = '';
       document.getElementById('uNewEmail').value = '';
+      document.getElementById('chgEmailStep1').classList.remove('hidden');
+      document.getElementById('chgEmailStep2').classList.add('hidden');
+      pendingChangeNewEmail = "";
       toggleModal('userEmailModal', true);
     }
 
-    async function submitUserChangeEmail() {
+    async function sendEmailChangeOtpAction() {
       const currPass = document.getElementById('uEmailCurrPass').value.trim();
       const newEmail = document.getElementById('uNewEmail').value.trim().toLowerCase();
 
-      if (!currPass || !newEmail) return showToast("All fields are required!");
+      if (!currPass || !newEmail) return showToast("Sabhi fields bharein!");
+      if (!isValidGmailFormat(newEmail)) return showToast("Sirf valid @gmail.com address chalega!");
 
-      if (!isValidGmailFormat(newEmail)) {
-        return showToast("Please enter a valid Gmail (@gmail.com) address!");
-      }
-
-      const btn = document.getElementById('btnSaveUserEmail');
-      btn.innerText = "Updating..."; btn.disabled = true;
+      const btn = document.getElementById('btnSendEmailOtp');
+      btn.innerText = "Sending Code..."; btn.disabled = true;
 
       try {
         const res = await fetch(SCRIPT_URL, {
           method: "POST",
           body: JSON.stringify({
-            action: "user_change_email",
+            action: "user_change_email_send_otp",
             userId: currentUser.userId,
             currentPassword: currPass,
             newEmail: newEmail
@@ -979,18 +1102,52 @@
         });
         const data = await res.json();
         if (data.success) {
+          pendingChangeNewEmail = newEmail;
+          document.getElementById('chgEmailNewDisplay').innerText = newEmail;
+          document.getElementById('chgEmailInputOtp').value = "";
+          document.getElementById('chgEmailStep1').classList.add('hidden');
+          document.getElementById('chgEmailStep2').classList.remove('hidden');
+          showToast(data.message);
+        } else {
+          showToast(data.message || "Failed to send OTP!");
+        }
+      } catch(e) {
+        showToast("Error processing request. Check connection.");
+      } finally {
+        btn.innerText = "Send Verification OTP"; btn.disabled = false;
+      }
+    }
+
+    async function confirmEmailChangeWithOtp() {
+      const otp = document.getElementById('chgEmailInputOtp').value.trim();
+      if (!otp || otp.length !== 6) return showToast("6-digit OTP enter karein!");
+
+      const btn = document.getElementById('btnConfirmEmailChange');
+      btn.innerText = "Verifying & Updating..."; btn.disabled = true;
+
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            action: "user_change_email_verify_and_save",
+            userId: currentUser.userId,
+            otp: otp
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
           currentUser.email = data.newEmail;
           localStorage.setItem("yk_user_session", JSON.stringify(currentUser));
           renderUserData();
-          showToast(data.message || "Gmail updated successfully!");
+          showToast(data.message);
           toggleModal('userEmailModal', false);
         } else {
-          showToast(data.message || "Failed to update email!");
+          showToast(data.message || "Verification failed!");
         }
       } catch(e) {
-        showToast("Error updating email. Try again.");
+        showToast("Error updating Gmail address.");
       } finally {
-        btn.innerText = "Update Gmail"; btn.disabled = false;
+        btn.innerText = "Verify & Save Gmail"; btn.disabled = false;
       }
     }
 
@@ -1211,31 +1368,6 @@
         } else { showToast(data.message || "Invalid Login"); }
       } catch(e) { showToast("Connection error"); }
       finally { btn.innerText = "Sign In"; btn.disabled = false; }
-    }
-
-    async function registerAction() {
-      const name = document.getElementById('rName').value.trim();
-      const mobile = document.getElementById('rMobile').value.trim();
-      const email = document.getElementById('rEmail').value.trim().toLowerCase();
-      const password = document.getElementById('rPass').value.trim();
-      
-      if (!name || mobile.length !== 10 || !email || !password) {
-        return showToast("Sabhi details sahi se bharein!");
-      }
-
-      if (!isValidGmailFormat(email)) {
-        return showToast("Please use a valid @gmail.com address!");
-      }
-
-      const btn = document.getElementById('btnReg');
-      btn.innerText = "Submitting..."; btn.disabled = true;
-      try {
-        const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "register", name, mobile, email, password }) });
-        const data = await res.json();
-        showToast(data.message);
-        if (data.success) toggleAuth('login');
-      } catch(e) { showToast("Registration error"); }
-      finally { btn.innerText = "Submit Registration"; btn.disabled = false; }
     }
 
     function logoutAction() {

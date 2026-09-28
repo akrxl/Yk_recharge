@@ -148,7 +148,8 @@
     #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); opacity: 0; z-index: 200; background: #1e293b; color: #fff; padding: 10px 18px; border-radius: 30px; font-size: 12px; font-weight: 600; transition: 0.3s; pointer-events: none; }
     #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-    .cooldown-text { font-size: 11.5px; font-weight: 700; color: #f59e0b; margin-top: 6px; text-align: center; }
+    .cooldown-text { font-size: 11.5px; font-weight: 700; color: #f59e0b; margin-top: 6px; text-align: center; transition: color 0.3s ease; }
+    .cooldown-text.expired { color: #10b981; }
   </style>
 </head>
 <body>
@@ -266,7 +267,7 @@
       </form>
     </div>
 
-    <!-- REGISTRATION OTP MODAL (WITH 120s TIMER) -->
+    <!-- REGISTRATION OTP MODAL (WITH 120s COLOR TRANSITION TIMER) -->
     <div id="regOtpModal" class="modal-overlay hidden">
       <form class="modal-body" onsubmit="event.preventDefault(); confirmRegisterWithOtp();">
         <h3 style="font-weight: 800; font-size: 15px; margin-bottom: 6px; color:#4f46e5;">📩 Verify Email Address</h3>
@@ -279,7 +280,7 @@
           <input type="text" id="regInputOtp" maxlength="6" placeholder="Enter 6-digit OTP" enterkeyhint="go" required />
         </div>
 
-        <div id="regTimerText" class="cooldown-text">Resend code available in: <b>02:00</b></div>
+        <div id="regTimerText" class="cooldown-text">Resend available in: <b>02:00</b></div>
 
         <div style="display:flex; gap:6px; margin-top:12px;">
           <button type="button" class="btn" style="background:var(--chip-bg); color:var(--text);" onclick="toggleModal('regOtpModal', false)">Cancel</button>
@@ -428,7 +429,7 @@
         <!-- STEP 2: INSTANT FILLING BOX + 120s TIMER -->
         <form id="forgotStep2" class="hidden" onsubmit="event.preventDefault(); resetForgotPassAction();">
           <div style="background: rgba(79,70,229,0.15); border: 1px solid #4f46e5; border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; font-size: 11.5px; line-height: 1.4;">
-            Verification code dispatched to registered email: <b id="fpMaskedEmailText" style="color:#38bdf8;">-</b>
+            Verification code dispatched to: <b id="fpMaskedEmailText" style="color:#38bdf8;">your registered email</b>
           </div>
 
           <div class="form-group">
@@ -452,7 +453,7 @@
             </div>
           </div>
 
-          <div id="fpTimerText" class="cooldown-text">Resend code available in: <b>02:00</b></div>
+          <div id="fpTimerText" class="cooldown-text">Resend available in: <b>02:00</b></div>
 
           <div style="display:flex; gap:6px; margin-top:12px;">
             <button type="button" class="btn" style="background:var(--chip-bg); color:var(--text);" onclick="toggleModal('forgotPasswordModal', false)">Cancel</button>
@@ -849,12 +850,14 @@
     </form>
   </div>
 
-  <!-- ADD MONEY MODAL -->
+  <!-- ADD MONEY MODAL (SAFE UPI QR AUTO-FALLBACK) -->
   <div id="addMoneyModal" class="modal-overlay hidden">
     <form class="modal-body" onsubmit="event.preventDefault(); submitDeposit();">
       <h3 style="font-weight: 800; font-size: 15px; text-align: center; margin-bottom: 8px;">Scan Official UPI QR to Add Funds</h3>
       <div style="text-align: center; margin-bottom: 10px;">
-        <img id="uQrImg" src="" style="width:150px; height:150px; border:1px solid var(--border); border-radius:10px; background:#fff; padding:4px; object-fit:contain;" />
+        <div style="width:150px; height:150px; margin: 0 auto; border:1.5px solid var(--border); border-radius:12px; background:#ffffff; padding:6px; display:flex; align-items:center; justify-content:center;">
+          <img id="uQrImg" src="" alt="Payment QR" onerror="fallbackGenerateQr(this)" style="width:100%; height:100%; object-fit:contain; border-radius:8px;" />
+        </div>
         <p style="font-size: 12px; margin-top: 6px;">Official Merchant UPI ID: <b id="uUpiText" style="color:#38bdf8;">-</b></p>
       </div>
       <div class="form-group"><label>Amount Transferred (₹)</label><input type="number" id="wAmt" placeholder="500" enterkeyhint="next" required/></div>
@@ -916,7 +919,7 @@
 
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw9qV8JLqn4jBZsUBLR0YSF5i4rbuXFyAbgpcEmjmd4XJYxED9kvsKd_XLpNROkJxPqSg/exec";
-    const BRAND_LOGO_DATA_URL = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cdefs%3E%3ClinearGradient id='bgGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%231e1b4b'/%3E%3Cstop offset='50%25' stop-color='%23312e81'/%3E%3Cstop offset='100%25' stop-color='%234338ca'/%3E%3C/defs%3E%3ClinearGradient id='boltGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23facc15'/%3E%3Cstop offset='100%25' stop-color='%23ea580c'/%3E%3C/defs%3E%3Crect width='200' height='200' rx='45' fill='url(%23bgGrad)'/%3E%3Ccircle cx='100' cy='100' r='88' fill='none' stroke='%2338bdf8' stroke-width='4' opacity='0.4' stroke-dasharray='8 6'/%3E%3Cpath d='M108 24 L60 102 L98 102 L92 176 L144 94 L104 94 Z' fill='url(%23boltGrad)' filter='drop-shadow(0 4px 10px rgba(245, 158, 11, 0.6))'/%3E%3Ctext x='100' y='142' font-family='system-ui, sans-serif' font-size='38' font-weight='900' fill='%23ffffff' text-anchor='middle' letter-spacing='1'%3EYK%3C/text%3E%3Ctext x='100' y='170' font-family='system-ui, sans-serif' font-size='15' font-weight='800' fill='%2338bdf8' text-anchor='middle' letter-spacing='2'%3ERECHARGE%3C/text%3E%3C/svg%3E";
+    const BRAND_LOGO_DATA_URL = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cdefs%3E%3ClinearGradient id='bgGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%231e1b4b'/%3E%3Cstop offset='50%25' stop-color='%23312e81'/%3E%3Cstop offset='100%25' stop-color='%234338ca'/%3E%3C/defs%3E%3ClinearGradient id='boltGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23facc15'/%3E%3Cstop offset='100%25' stop-color='%23ea580c'/%3E%3C/defs%3E%3Crect width='200' height='200' rx='45' fill='url(%23bgGrad)'/%3E%3Ccircle cx='100' cy='100' r='88' fill='none' stroke='%2338bdf8' stroke-width='4' opacity='0.4' stroke-dasharray='8 6'/%3E%3Cpath d='M108 24 L60 102 L98 102 L92 176 L144 94 L104 94 Z' fill='url(%23boltGrad)' filter='drop-shadow(0 4px 10px rgba(245, 158, 11, 0.6))'/%3E%3Ctext x='100' y='142' font-family='system-ui, -apple-system, sans-serif' font-size='38' font-weight='900' fill='%23ffffff' text-anchor='middle' letter-spacing='1'%3EYK%3C/text%3E%3Ctext x='100' y='170' font-family='system-ui, -apple-system, sans-serif' font-size='15' font-weight='800' fill='%2338bdf8' text-anchor='middle' letter-spacing='2'%3ERECHARGE%3C/text%3E%3C/svg%3E";
 
     let currentUser = JSON.parse(localStorage.getItem("yk_user_session") || "null");
     
@@ -1126,15 +1129,19 @@
       startLiveBalancePolling();
     }
 
-    // --- GENERIC 120-SECOND TIMER CONTROLLER ---
+    // --- GENERIC 120-SECOND TIMER CONTROLLER WITH YELLOW -> GREEN TRANSITION ---
     function startTimerCountdown(durationSeconds, timerTextEl, resendBtnEl, intervalRefSetter) {
       let remaining = durationSeconds;
       resendBtnEl.disabled = true;
 
+      // Start state: Warning Yellow
+      timerTextEl.classList.remove('expired');
+      timerTextEl.style.color = '#f59e0b';
+
       const updateUI = () => {
         const m = Math.floor(remaining / 60).toString().padStart(2, '0');
         const s = (remaining % 60).toString().padStart(2, '0');
-        timerTextEl.innerHTML = `Resend available in: <b style="color:#38bdf8;">${m}:${s}</b>`;
+        timerTextEl.innerHTML = `Resend available in: <b style="color:#f59e0b;">${m}:${s}</b>`;
       };
 
       updateUI();
@@ -1142,7 +1149,10 @@
         remaining--;
         if (remaining <= 0) {
           clearInterval(interval);
-          timerTextEl.innerHTML = `<span style="color:#10b981; font-weight:bold;">Code expired. You can resend now.</span>`;
+          // Expired state: Transition to Fresh Green
+          timerTextEl.classList.add('expired');
+          timerTextEl.style.color = '#10b981';
+          timerTextEl.innerHTML = `<span style="color:#10b981; font-weight:800;">Code expired. You can resend now.</span>`;
           resendBtnEl.disabled = false;
         } else {
           updateUI();
@@ -1150,6 +1160,43 @@
       }, 1000);
 
       intervalRefSetter(interval);
+    }
+
+    // --- UPI QR FALLBACK & SANITIZATION HANDLER ---
+    function sanitizeQrUrl(url) {
+      if (!url) return "";
+      let trimmed = url.trim();
+      if (trimmed.includes("drive.google.com/file/d/")) {
+        const idMatch = trimmed.match(/\/d\/([a-zA-Z0-9_-]+)/);
+        if (idMatch && idMatch[1]) {
+          return `https://drive.google.com/uc?export=view&id=${idMatch[1]}`;
+        }
+      }
+      return trimmed;
+    }
+
+    function fallbackGenerateQr(imgEl) {
+      const upiId = (liveSettings.upiId || "9939311744@ybl").trim();
+      const upiString = encodeURIComponent(`upi://pay?pa=${upiId}&pn=YK%20RECHARGE%20PORTAL&cu=INR`);
+      imgEl.onerror = null; // Prevent recursion
+      imgEl.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${upiString}`;
+    }
+
+    function openAddMoneyModal() {
+      document.getElementById('wDate').valueAsDate = new Date();
+      const upi = (liveSettings.upiId || "9939311744@ybl").trim();
+      document.getElementById('uUpiText').innerText = upi;
+      
+      const qrEl = document.getElementById('uQrImg');
+      const cleanUrl = sanitizeQrUrl(liveSettings.qrUrl);
+      
+      if (cleanUrl && cleanUrl.startsWith("http")) {
+        qrEl.src = cleanUrl;
+      } else {
+        fallbackGenerateQr(qrEl);
+      }
+      
+      toggleModal('addMoneyModal', true);
     }
 
     // --- FETCH LIVE PLANS, SETTINGS & CATEGORIES ---
@@ -1227,11 +1274,10 @@
       document.getElementById('regInputOtp').value = "";
       toggleModal('regOtpModal', true);
 
-      // Start 120-second timer
+      // Start 120-second timer with color switch
       if (regCooldownInterval) clearInterval(regCooldownInterval);
       startTimerCountdown(120, document.getElementById('regTimerText'), document.getElementById('btnResendRegOtp'), (i) => regCooldownInterval = i);
 
-      // Dispatch in background
       try {
         const res = await fetch(SCRIPT_URL, {
           method: "POST",
@@ -1244,7 +1290,7 @@
           showToast(data.message || "Failed to dispatch code.");
         }
       } catch(e) {
-        showToast("Code dispatched. Please check your Gmail inbox.");
+        showToast("Verification code dispatched to your Gmail.");
       }
     }
 
@@ -1399,7 +1445,7 @@
       document.getElementById('fpMaskedEmailText').innerText = "your registered email";
       document.getElementById('fpOtp').value = "";
 
-      // 2. START 120-SECOND LIVE TIMER
+      // 2. START 120-SECOND LIVE TIMER WITH COLOR SWITCH
       if (fpCooldownInterval) clearInterval(fpCooldownInterval);
       startTimerCountdown(120, document.getElementById('fpTimerText'), document.getElementById('btnResendFpOtp'), (i) => fpCooldownInterval = i);
 
@@ -1711,13 +1757,6 @@
         } else { showToast(data.message); }
       } catch(e) { showToast("Recharge order submitted for approval."); }
       finally { btn.innerText = "Confirm Recharge"; btn.disabled = false; }
-    }
-
-    function openAddMoneyModal() {
-      document.getElementById('wDate').valueAsDate = new Date();
-      document.getElementById('uUpiText').innerText = liveSettings.upiId;
-      document.getElementById('uQrImg').src = liveSettings.qrUrl;
-      toggleModal('addMoneyModal', true);
     }
 
     async function submitDeposit() {

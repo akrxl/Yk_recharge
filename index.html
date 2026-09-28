@@ -121,7 +121,7 @@
     .table-responsive {
       overflow-x: auto;
       overflow-y: auto;
-      max-height: 270px;
+      max-height: 290px;
       border: 1.5px solid var(--border);
       border-radius: 10px;
       scrollbar-width: thin;
@@ -144,7 +144,7 @@
     .search-input:focus { border-color: #38bdf8; }
 
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; padding: 14px; z-index: 100; }
-    .modal-body { background: var(--card-bg); border-radius: 18px; width: 100%; max-width: 430px; padding: 20px; box-shadow: 0 20px 45px rgba(0,0,0,0.3); border: 1px solid var(--border); }
+    .modal-body { background: var(--card-bg); border-radius: 18px; width: 100%; max-width: 480px; padding: 20px; box-shadow: 0 20px 45px rgba(0,0,0,0.3); border: 1px solid var(--border); max-height: 90vh; overflow-y: auto; }
     #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); opacity: 0; z-index: 200; background: #1e293b; color: #fff; padding: 10px 18px; border-radius: 30px; font-size: 12px; font-weight: 600; transition: 0.3s; pointer-events: none; }
     #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
   </style>
@@ -178,8 +178,8 @@
           <rect width="200" height="200" rx="45" fill="url(#headerBgGrad)"/>
           <circle cx="100" cy="100" r="88" fill="none" stroke="#38bdf8" stroke-width="4" opacity="0.4" stroke-dasharray="8 6"/>
           <path d="M108 24 L60 102 L98 102 L92 176 L144 94 L104 94 Z" fill="url(#headerBoltGrad)"/>
-          <text x="100" y="142" font-family="system-ui, sans-serif" font-size="38" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="1">YK</text>
-          <text x="100" y="170" font-family="system-ui, sans-serif" font-size="15" font-weight="800" fill="#38bdf8" text-anchor="middle" letter-spacing="2">RECHARGE</text>
+          <text x="100" y="142" font-family="system-ui, -apple-system, sans-serif" font-size="38" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="1">YK</text>
+          <text x="100" y="170" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="800" fill="#38bdf8" text-anchor="middle" letter-spacing="2">RECHARGE</text>
         </svg>
         <span class="brand-title">YK RECHARGE</span>
       </div>
@@ -335,24 +335,10 @@
           <div>
             <label style="margin-bottom:2px;">Available Tariff Plans</label>
             <div class="filter-header-label">📅 Validity Duration</div>
-            <div class="plan-filter-row" id="daysFilterRow">
-              <div class="filter-pill active" onclick="setValidityFilter('all', this)">All</div>
-              <div class="filter-pill" onclick="setValidityFilter('28', this)">28 Days</div>
-              <div class="filter-pill" onclick="setValidityFilter('56', this)">56 Days</div>
-              <div class="filter-pill" onclick="setValidityFilter('84', this)">84 Days</div>
-              <div class="filter-pill" onclick="setValidityFilter('365', this)">Annual (365D)</div>
-              <div class="filter-pill" onclick="setValidityFilter('other', this)">Short / Others</div>
-            </div>
+            <div class="plan-filter-row" id="daysFilterRow"></div>
 
             <div class="filter-header-label">📶 Daily Data Allowance</div>
-            <div class="plan-filter-row" id="dataFilterRow">
-              <div class="filter-pill active" onclick="setDataFilter('all', this)">All</div>
-              <div class="filter-pill" onclick="setDataFilter('1gb', this)">1 GB/Day</div>
-              <div class="filter-pill" onclick="setDataFilter('1.5gb', this)">1.5 GB/Day</div>
-              <div class="filter-pill" onclick="setDataFilter('2gb', this)">2 GB/Day</div>
-              <div class="filter-pill" onclick="setDataFilter('3gb', this)">3 GB/Day</div>
-              <div class="filter-pill" onclick="setDataFilter('addon', this)">Data Booster</div>
-            </div>
+            <div class="plan-filter-row" id="dataFilterRow"></div>
 
             <div id="plansList" style="max-height: 230px; overflow-y: auto; margin-top: 6px;">
               <p style="font-size:11.5px; color:var(--text-muted); padding:10px;">Loading tariff plans...</p>
@@ -521,30 +507,64 @@
       <div id="adminControlPanel" class="hidden">
         <div class="glass-box" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
           <div>
-            <span class="badge badge-success">Administrator Session Active</span>
+            <span class="badge badge-success">Administrator Session Active (30 Days)</span>
             <h3 style="font-weight:800; margin-top:2px;">Logged in as: <span id="adminUserDisplay">admin</span></h3>
           </div>
           <div style="display:flex; gap:6px; flex-wrap:wrap;">
-            <button class="btn btn-purple btn-sm" onclick="openAdminSecurityModal()">🔑 Update Credentials</button>
-            <button class="btn btn-primary btn-sm" onclick="openAdminNoticeModal()">📢 Edit Ticker Notice</button>
-            <button class="btn btn-primary btn-sm" onclick="openAdminQrModal()">💳 Payment QR Settings</button>
+            <button class="btn btn-purple btn-sm" onclick="openAdminSecurityModal()">🔑 Update Password</button>
+            <button class="btn btn-primary btn-sm" onclick="openAdminNoticeModal()">📢 Ticker Notice</button>
+            <button class="btn btn-primary btn-sm" onclick="openAdminQrModal()">💳 Payment QR</button>
+            <button class="btn btn-primary btn-sm" onclick="openCategoryManagerModal()">🏷️ Manage Categories</button>
             <button class="btn btn-primary btn-sm" onclick="fetchAdminData()">🔄 Refresh</button>
             <button class="btn btn-danger btn-sm" onclick="adminLogoutAction()">Sign Out</button>
           </div>
         </div>
 
-        <!-- 1. MANAGE RECHARGE PLANS -->
+        <!-- 1. MANAGE RECHARGE PLANS (WITH EXPLICIT CATEGORIES & LIVE EDIT) -->
         <div class="glass-box">
-          <h3 style="font-size:14px; font-weight:800; margin-bottom:10px; color:#38bdf8;">1. Tariff Plan Management</h3>
-          <form onsubmit="event.preventDefault(); adminAddPlan();" style="display:flex; gap:6px; margin-bottom:12px; flex-wrap:wrap;">
-            <select id="apOp" style="flex:1; min-width:80px;"><option>Jio</option><option>Airtel</option><option>Vi</option><option>BSNL</option></select>
-            <input type="number" id="apAmt" placeholder="Amount (₹)" style="flex:1; min-width:70px;" required/>
-            <input type="text" id="apVal" placeholder="Validity (e.g., 28 Days)" style="flex:1; min-width:80px;" required/>
-            <input type="text" id="apDesc" placeholder="Description (e.g., 1.5GB/Day, Voice)" style="flex:2; min-width:120px;" required/>
-            <button type="submit" class="btn btn-primary btn-sm" id="btnPlanAdd">Add Tariff Plan</button>
+          <h3 style="font-size:14px; font-weight:800; margin-bottom:10px; color:#38bdf8;">1. Tariff Plan Management & Categorisation</h3>
+          
+          <form onsubmit="event.preventDefault(); adminAddPlan();" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:8px; margin-bottom:14px;">
+            <div>
+              <label>Operator</label>
+              <select id="apOp"><option>Jio</option><option>Airtel</option><option>Vi</option><option>BSNL</option></select>
+            </div>
+            <div>
+              <label>Amount (₹)</label>
+              <input type="number" id="apAmt" placeholder="e.g. 299" required/>
+            </div>
+            <div>
+              <label>Validity Text</label>
+              <input type="text" id="apVal" placeholder="e.g. 28 Days" required/>
+            </div>
+            <div>
+              <label>Validity Category</label>
+              <select id="apValCat"></select>
+            </div>
+            <div>
+              <label>Data Category</label>
+              <select id="apDataCat"></select>
+            </div>
+            <div style="grid-column: 1 / -1; display:flex; gap:8px;">
+              <input type="text" id="apDesc" placeholder="Plan Description (e.g. 1.5 GB/Day, Unlimited Voice, 100 SMS/Day)" style="flex:1;" required/>
+              <button type="submit" class="btn btn-primary btn-sm" id="btnPlanAdd" style="white-space:nowrap; padding:0 18px;">+ Add Tariff Plan</button>
+            </div>
           </form>
+
           <div class="table-responsive">
-            <table><thead><tr><th>Operator</th><th>Amount</th><th>Validity</th><th>Description</th><th>Action</th></tr></thead><tbody id="adminPlanRows"></tbody></table>
+            <table>
+              <thead>
+                <tr>
+                  <th>Operator</th>
+                  <th>Amount</th>
+                  <th>Validity</th>
+                  <th>Description</th>
+                  <th>Filter Tags</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminPlanRows"></tbody>
+            </table>
           </div>
         </div>
 
@@ -576,6 +596,90 @@
       </div>
     </div>
   </main>
+
+  <!-- ADMIN EDIT TARIFF PLAN MODAL -->
+  <div id="adminEditPlanModal" class="modal-overlay hidden">
+    <form class="modal-body" onsubmit="event.preventDefault(); submitAdminEditPlan();">
+      <h3 style="font-weight: 800; font-size: 15px; margin-bottom: 8px; color:#38bdf8;">✏️ Edit Tariff Plan</h3>
+      <input type="hidden" id="epPlanRow" />
+      <input type="hidden" id="epOldOp" />
+      <input type="hidden" id="epOldAmt" />
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+        <div class="form-group">
+          <label>Operator</label>
+          <select id="epOp"><option>Jio</option><option>Airtel</option><option>Vi</option><option>BSNL</option></select>
+        </div>
+        <div class="form-group">
+          <label>Amount (₹)</label>
+          <input type="number" id="epAmt" required />
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+        <div class="form-group">
+          <label>Validity Text</label>
+          <input type="text" id="epVal" placeholder="e.g. 28 Days" required />
+        </div>
+        <div class="form-group">
+          <label>Validity Category</label>
+          <select id="epValCat"></select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Daily Data Category</label>
+        <select id="epDataCat"></select>
+      </div>
+
+      <div class="form-group">
+        <label>Plan Description</label>
+        <input type="text" id="epDesc" placeholder="e.g. 1.5 GB/Day, Unlimited Voice" required />
+      </div>
+
+      <div style="display:flex; gap:6px; margin-top:12px;">
+        <button type="button" class="btn" style="background:var(--chip-bg); color:var(--text);" onclick="toggleModal('adminEditPlanModal', false)">Cancel</button>
+        <button type="submit" class="btn btn-success" id="btnSaveEditPlan">Save Changes</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- ADMIN MANAGE FILTER CATEGORIES MODAL -->
+  <div id="adminCategoryModal" class="modal-overlay hidden">
+    <div class="modal-body">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
+        <h3 style="font-weight: 800; font-size: 15px; color:#38bdf8;">🏷️ Manage Filter Categories</h3>
+        <button onclick="toggleModal('adminCategoryModal', false)" style="border:none; background:none; font-size:16px; cursor:pointer; color:var(--text);">✕</button>
+      </div>
+
+      <!-- ADD CATEGORY FORM -->
+      <form onsubmit="event.preventDefault(); submitAdminAddCategory();" style="background:var(--chip-bg); padding:10px; border-radius:10px; margin-bottom:14px; border:1px solid var(--border);">
+        <label style="margin-bottom:6px; display:block;">Add New Category</label>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px; margin-bottom:6px;">
+          <select id="newCatType">
+            <option value="validity">Validity Duration</option>
+            <option value="data">Daily Data Allowance</option>
+          </select>
+          <input type="text" id="newCatKey" placeholder="Identifier (e.g. 24, 2.5gb)" required />
+        </div>
+        <div style="display:flex; gap:6px;">
+          <input type="text" id="newCatLabel" placeholder="Display Text (e.g. 24 Days, 2.5 GB/Day)" style="flex:1;" required />
+          <button type="submit" class="btn btn-primary btn-sm" id="btnAddCatBtn">+ Add</button>
+        </div>
+      </form>
+
+      <!-- EXISTING CATEGORIES LIST -->
+      <label style="margin-bottom:6px; display:block;">Active Categories</label>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr><th>Type</th><th>Key</th><th>Display Label</th><th>Action</th></tr>
+          </thead>
+          <tbody id="catTableRows"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 
   <!-- ADMIN CHANGE CREDENTIALS MODAL -->
   <div id="adminSecurityModal" class="modal-overlay hidden">
@@ -801,11 +905,19 @@
 
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw9qV8JLqn4jBZsUBLR0YSF5i4rbuXFyAbgpcEmjmd4XJYxED9kvsKd_XLpNROkJxPqSg/exec";
-    
     const BRAND_LOGO_DATA_URL = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cdefs%3E%3ClinearGradient id='bgGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%231e1b4b'/%3E%3Cstop offset='50%25' stop-color='%23312e81'/%3E%3Cstop offset='100%25' stop-color='%234338ca'/%3E%3C/defs%3E%3ClinearGradient id='boltGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23facc15'/%3E%3Cstop offset='100%25' stop-color='%23ea580c'/%3E%3C/defs%3E%3Crect width='200' height='200' rx='45' fill='url(%23bgGrad)'/%3E%3Ccircle cx='100' cy='100' r='88' fill='none' stroke='%2338bdf8' stroke-width='4' opacity='0.4' stroke-dasharray='8 6'/%3E%3Cpath d='M108 24 L60 102 L98 102 L92 176 L144 94 L104 94 Z' fill='url(%23boltGrad)' filter='drop-shadow(0 4px 10px rgba(245, 158, 11, 0.6))'/%3E%3Ctext x='100' y='142' font-family='system-ui, -apple-system, sans-serif' font-size='38' font-weight='900' fill='%23ffffff' text-anchor='middle' letter-spacing='1'%3EYK%3C/text%3E%3Ctext x='100' y='170' font-family='system-ui, -apple-system, sans-serif' font-size='15' font-weight='800' fill='%2338bdf8' text-anchor='middle' letter-spacing='2'%3ERECHARGE%3C/text%3E%3C/svg%3E";
 
     let currentUser = JSON.parse(localStorage.getItem("yk_user_session") || "null");
-    let adminToken = sessionStorage.getItem("yk_admin_token") || null;
+    
+    // --- 30 DAYS PERSISTENT ADMIN SESSION MANAGEMENT ---
+    let adminAuthObj = JSON.parse(localStorage.getItem("yk_admin_auth") || "null");
+    let adminToken = null;
+    if (adminAuthObj && adminAuthObj.token && adminAuthObj.expiresAt > Date.now()) {
+      adminToken = adminAuthObj.token;
+    } else {
+      localStorage.removeItem("yk_admin_auth");
+    }
+
     let selectedPlanDesc = "Custom Plan";
     let userHistoryData = { recharges: [], deposits: [] };
     let pendingApprovalTxn = null;
@@ -821,6 +933,7 @@
 
     let adminCachedWallets = [];
     let adminCachedRecharges = [];
+    let adminCachedPlans = [];
 
     let activeValidityFilter = 'all';
     let activeDataFilter = 'all';
@@ -828,13 +941,14 @@
     let pendingRegData = null;
     let pendingChangeNewEmail = "";
 
-    // Live Server Synced Settings (Fallback to stored if offline)
+    // Live Settings from Backend
     let liveSettings = {
       upiId: localStorage.getItem("yk_live_upi") || "9939311744@ybl",
       qrUrl: localStorage.getItem("yk_live_qr") || "https://lh3.googleusercontent.com/d/1rALRSeljalViLvILLe8fRb_STRPJ_ucW"
     };
 
     let livePlans = [];
+    let dynamicCategories = { validity: [], data: [] };
 
     function isValidGmailFormat(email) {
       return /^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(String(email).trim().toLowerCase());
@@ -954,6 +1068,21 @@
         document.getElementById('authView').classList.add('hidden');
         document.getElementById('userDash').classList.add('hidden');
       }
+
+      if (tab === 'admin') {
+        if (adminToken) {
+          document.getElementById('adminAuthBox').classList.add('hidden');
+          document.getElementById('adminControlPanel').classList.remove('hidden');
+          if (adminAuthObj && adminAuthObj.username) {
+            document.getElementById('adminUserDisplay').innerText = adminAuthObj.username;
+          }
+          fetchAdminData();
+          startAdminPolling();
+        } else {
+          document.getElementById('adminAuthBox').classList.remove('hidden');
+          document.getElementById('adminControlPanel').classList.add('hidden');
+        }
+      }
     }
 
     function toggleAuth(mode) {
@@ -982,7 +1111,7 @@
       startLiveBalancePolling();
     }
 
-    // --- FETCH LIVE PLANS & BACKEND SETTINGS ---
+    // --- FETCH LIVE PLANS, SETTINGS & CATEGORIES ---
     async function fetchLivePlans() {
       try {
         const res = await fetch(SCRIPT_URL, { 
@@ -998,12 +1127,46 @@
             localStorage.setItem("yk_live_upi", liveSettings.upiId);
             localStorage.setItem("yk_live_qr", liveSettings.qrUrl);
           }
+          if (data.categories) {
+            dynamicCategories = data.categories;
+            renderDynamicCategoriesUI();
+          }
           const currentOp = document.getElementById('recOp').value || 'Jio';
           renderFilteredPlans(currentOp);
         }
-      } catch(e) {
-        console.log("Plans fetch notice:", e);
-      }
+      } catch(e) {}
+    }
+
+    // --- RENDER DYNAMIC FILTER PILLS ON USER SCREEN & SELECT OPTIONS IN ADMIN ---
+    function renderDynamicCategoriesUI() {
+      const daysRow = document.getElementById('daysFilterRow');
+      const dataRow = document.getElementById('dataFilterRow');
+      const apValCat = document.getElementById('apValCat');
+      const apDataCat = document.getElementById('apDataCat');
+      const epValCat = document.getElementById('epValCat');
+      const epDataCat = document.getElementById('epDataCat');
+
+      // User screen validity pills
+      let daysHtml = `<div class="filter-pill ${activeValidityFilter==='all'?'active':''}" onclick="setValidityFilter('all', this)">All</div>`;
+      let apValOpts = `<option value="all">Auto / General</option>`;
+      dynamicCategories.validity?.forEach(c => {
+        daysHtml += `<div class="filter-pill ${activeValidityFilter===c.key?'active':''}" onclick="setValidityFilter('${c.key}', this)">${c.label}</div>`;
+        apValOpts += `<option value="${c.key}">${c.label}</option>`;
+      });
+      daysRow.innerHTML = daysHtml;
+      if (apValCat) apValCat.innerHTML = apValOpts;
+      if (epValCat) epValCat.innerHTML = apValOpts;
+
+      // User screen data pills
+      let dataHtml = `<div class="filter-pill ${activeDataFilter==='all'?'active':''}" onclick="setDataFilter('all', this)">All</div>`;
+      let apDataOpts = `<option value="all">Auto / General</option>`;
+      dynamicCategories.data?.forEach(c => {
+        dataHtml += `<div class="filter-pill ${activeDataFilter===c.key?'active':''}" onclick="setDataFilter('${c.key}', this)">${c.label}</div>`;
+        apDataOpts += `<option value="${c.key}">${c.label}</option>`;
+      });
+      dataRow.innerHTML = dataHtml;
+      if (apDataCat) apDataCat.innerHTML = apDataOpts;
+      if (epDataCat) epDataCat.innerHTML = apDataOpts;
     }
 
     // --- REGISTRATION STEP 1: REQUEST OTP ---
@@ -1298,6 +1461,7 @@
       }
     }
 
+    // --- REAL TIME BALANCE & PLANS SYNC FOR ALL USERS ---
     async function syncBalanceLive() {
       if (!currentUser || !currentUser.userId) return;
       try {
@@ -1335,6 +1499,7 @@
           }
         }
 
+        // Live Recharges Check
         const hRes = await fetch(SCRIPT_URL, {
           method: "POST",
           body: JSON.stringify({ action: "get_user_history", userId: currentUser.userId, mobile: currentUser.mobile })
@@ -1433,25 +1598,17 @@
 
       if (activeValidityFilter !== 'all') {
         filtered = filtered.filter(p => {
+          if (p.valCat && p.valCat !== 'all') return p.valCat === activeValidityFilter;
           const valText = (p.validity || "").toLowerCase();
-          if (activeValidityFilter === '28') return valText.includes('28');
-          if (activeValidityFilter === '56') return valText.includes('56');
-          if (activeValidityFilter === '84') return valText.includes('84');
-          if (activeValidityFilter === '365') return valText.includes('365') || valText.includes('annual') || valText.includes('1 year');
-          if (activeValidityFilter === 'other') return !valText.includes('28') && !valText.includes('56') && !valText.includes('84') && !valText.includes('365');
-          return true;
+          return valText.includes(activeValidityFilter.toLowerCase());
         });
       }
 
       if (activeDataFilter !== 'all') {
         filtered = filtered.filter(p => {
+          if (p.dataCat && p.dataCat !== 'all') return p.dataCat === activeDataFilter;
           const text = ((p.desc || "") + " " + (p.validity || "")).toLowerCase().replace(/\s+/g, '');
-          if (activeDataFilter === '1gb') return text.includes('1gb') && !text.includes('1.5gb');
-          if (activeDataFilter === '1.5gb') return text.includes('1.5gb');
-          if (activeDataFilter === '2gb') return text.includes('2gb') || text.includes('2.5gb');
-          if (activeDataFilter === '3gb') return text.includes('3gb');
-          if (activeDataFilter === 'addon') return text.includes('booster') || text.includes('add-on') || text.includes('dataonly');
-          return true;
+          return text.includes(activeDataFilter.toLowerCase());
         });
       }
 
@@ -1650,7 +1807,7 @@
       setTimeout(() => { pWin.print(); pWin.close(); }, 500);
     }
 
-    // --- ADMIN HUB ACTIONS ---
+    // --- ADMIN AUTHENTICATION (30 DAYS PERSISTENT SESSION) ---
     async function adminLoginAction() {
       const u = document.getElementById('adminUser').value.trim();
       const p = document.getElementById('adminPass').value.trim();
@@ -1663,13 +1820,16 @@
         const data = await res.json();
         if (data.success) {
           adminToken = data.adminToken;
-          sessionStorage.setItem("yk_admin_token", adminToken);
+          // Save session for 30 days
+          const expiresAt = Date.now() + (30 * 24 * 60 * 60 * 1000);
+          localStorage.setItem("yk_admin_auth", JSON.stringify({ token: adminToken, username: data.currentUsername || u, expiresAt: expiresAt }));
+          
           document.getElementById('adminAuthBox').classList.add('hidden');
           document.getElementById('adminControlPanel').classList.remove('hidden');
           document.getElementById('adminUserDisplay').innerText = data.currentUsername || u;
           fetchAdminData();
           startAdminPolling();
-          showToast("Administrator session authenticated.");
+          showToast("Administrator session active (30 Days).");
         } else { showToast(data.message || "Invalid administrator credentials."); }
       } catch(e) { showToast("Authentication failed."); } 
       finally { btn.innerText = "Access Admin Hub"; btn.disabled = false; }
@@ -1752,31 +1912,199 @@
       }, 5000);
     }
 
+    // --- ADD PLAN ACTION (WITH CATEGORIES) ---
     async function adminAddPlan() {
       const operator = document.getElementById('apOp').value;
       const amount = document.getElementById('apAmt').value;
       const validity = document.getElementById('apVal').value;
       const desc = document.getElementById('apDesc').value;
+      const valCat = document.getElementById('apValCat').value;
+      const dataCat = document.getElementById('apDataCat').value;
 
       const btn = document.getElementById('btnPlanAdd');
       btn.innerText = "..."; btn.disabled = true;
 
       try {
-        await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_add_plan", operator, amount, validity, desc, adminToken }) });
-        showToast("Tariff plan added successfully.");
-        document.getElementById('apAmt').value = ""; document.getElementById('apVal').value = ""; document.getElementById('apDesc').value = "";
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            action: "admin_add_plan",
+            operator,
+            amount,
+            validity,
+            desc,
+            valCat,
+            dataCat,
+            adminToken
+          })
+        });
+        const data = await res.json();
+        showToast(data.message || "Tariff plan added successfully.");
+        document.getElementById('apAmt').value = "";
+        document.getElementById('apVal').value = "";
+        document.getElementById('apDesc').value = "";
         fetchAdminData();
         fetchLivePlans();
-      } catch(e) {}
-      finally { btn.innerText = "Add Tariff Plan"; btn.disabled = false; }
+      } catch(e) {
+        showToast("Error adding plan.");
+      } finally {
+        btn.innerText = "+ Add Tariff Plan"; btn.disabled = false;
+      }
     }
 
-    async function adminDeletePlan(operator, amount) {
+    // --- OPEN EDIT PLAN MODAL ---
+    function openEditPlanModal(rowIdx, op, amt, val, desc, valCat, dataCat) {
+      document.getElementById('epPlanRow').value = rowIdx;
+      document.getElementById('epOldOp').value = op;
+      document.getElementById('epOldAmt').value = amt;
+      document.getElementById('epOp').value = op;
+      document.getElementById('epAmt').value = amt;
+      document.getElementById('epVal').value = val;
+      document.getElementById('epDesc').value = desc;
+      document.getElementById('epValCat').value = valCat || 'all';
+      document.getElementById('epDataCat').value = dataCat || 'all';
+      toggleModal('adminEditPlanModal', true);
+    }
+
+    // --- SUBMIT EDIT PLAN ACTION ---
+    async function submitAdminEditPlan() {
+      const planRow = document.getElementById('epPlanRow').value;
+      const oldOperator = document.getElementById('epOldOp').value;
+      const oldAmount = document.getElementById('epOldAmt').value;
+      const operator = document.getElementById('epOp').value;
+      const amount = document.getElementById('epAmt').value;
+      const validity = document.getElementById('epVal').value;
+      const desc = document.getElementById('epDesc').value;
+      const valCat = document.getElementById('epValCat').value;
+      const dataCat = document.getElementById('epDataCat').value;
+
+      const btn = document.getElementById('btnSaveEditPlan');
+      btn.innerText = "Saving..."; btn.disabled = true;
+
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            action: "admin_edit_plan",
+            planRow,
+            oldOperator,
+            oldAmount,
+            operator,
+            amount,
+            validity,
+            desc,
+            valCat,
+            dataCat,
+            adminToken
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(data.message || "Plan updated!");
+          toggleModal('adminEditPlanModal', false);
+          fetchAdminData();
+          fetchLivePlans();
+        } else {
+          showToast(data.message || "Failed to update plan.");
+        }
+      } catch(e) {
+        showToast("Error updating tariff plan.");
+      } finally {
+        btn.innerText = "Save Changes"; btn.disabled = false;
+      }
+    }
+
+    async function adminDeletePlan(rowIdx, operator, amount) {
       if (!confirm(`Confirm removal of ${operator} ₹${amount} plan?`)) return;
-      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "admin_delete_plan", operator, amount, adminToken }) });
+      await fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({
+          action: "admin_delete_plan",
+          planRow: rowIdx,
+          operator,
+          amount,
+          adminToken
+        })
+      });
       showToast("Tariff plan removed.");
       fetchAdminData();
       fetchLivePlans();
+    }
+
+    // --- DYNAMIC CATEGORY CREATION & REMOVAL ACTIONS ---
+    function openCategoryManagerModal() {
+      renderCategoryTableRows();
+      toggleModal('adminCategoryModal', true);
+    }
+
+    function renderCategoryTableRows() {
+      const tbody = document.getElementById('catTableRows');
+      let html = "";
+      dynamicCategories.validity?.forEach(c => {
+        html += `<tr><td><b>Validity</b></td><td><code>${c.key}</code></td><td>${c.label}</td><td><button class="btn-sm btn-danger" onclick="deleteCategoryAction('validity', '${c.key}')">Delete</button></td></tr>`;
+      });
+      dynamicCategories.data?.forEach(c => {
+        html += `<tr><td><b>Data</b></td><td><code>${c.key}</code></td><td>${c.label}</td><td><button class="btn-sm btn-danger" onclick="deleteCategoryAction('data', '${c.key}')">Delete</button></td></tr>`;
+      });
+      tbody.innerHTML = html || `<tr><td colspan="4" style="text-align:center;">No custom categories found.</td></tr>`;
+    }
+
+    async function submitAdminAddCategory() {
+      const type = document.getElementById('newCatType').value;
+      const key = document.getElementById('newCatKey').value.trim();
+      const label = document.getElementById('newCatLabel').value.trim();
+
+      if (!type || !key || !label) return showToast("All category fields are required.");
+
+      const btn = document.getElementById('btnAddCatBtn');
+      btn.innerText = "..."; btn.disabled = true;
+
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            action: "admin_add_category",
+            type, key, label, adminToken
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(data.message);
+          document.getElementById('newCatKey').value = "";
+          document.getElementById('newCatLabel').value = "";
+          await fetchLivePlans();
+          renderCategoryTableRows();
+        } else {
+          showToast(data.message || "Failed to add category.");
+        }
+      } catch(e) {
+        showToast("Error adding category.");
+      } finally {
+        btn.innerText = "+ Add"; btn.disabled = false;
+      }
+    }
+
+    async function deleteCategoryAction(type, key) {
+      if (!confirm(`Delete category "${key}"?`)) return;
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            action: "admin_delete_category",
+            type, key, adminToken
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(data.message);
+          await fetchLivePlans();
+          renderCategoryTableRows();
+        } else {
+          showToast(data.message || "Failed to delete category.");
+        }
+      } catch(e) {
+        showToast("Error deleting category.");
+      }
     }
 
     function promptDeclineWallet(requestId) {
@@ -1841,12 +2169,39 @@
           localStorage.setItem("yk_live_qr", liveSettings.qrUrl);
         }
 
+        if (data.categories) {
+          dynamicCategories = data.categories;
+          renderDynamicCategoriesUI();
+        }
+
+        // Render Plans with Edit & Delete actions
+        adminCachedPlans = data.plans || [];
         const pBody = document.getElementById('adminPlanRows');
-        pBody.innerHTML = (data.plans && data.plans.length) ? "" : "<tr><td colspan='5'>No tariff plans configured yet.</td></tr>";
-        data.plans?.forEach(p => {
-          pBody.innerHTML += `<tr><td><b>${p.op}</b></td><td>₹${p.amt}</td><td>${p.val}</td><td>${p.desc}</td><td><button class="btn-sm btn-danger" onclick="adminDeletePlan('${p.op}', ${p.amt})">Delete</button></td></tr>`;
+        pBody.innerHTML = (adminCachedPlans.length) ? "" : "<tr><td colspan='6'>No tariff plans configured yet.</td></tr>";
+        
+        adminCachedPlans.forEach(p => {
+          const valTag = p.valCat && p.valCat !== 'all' ? p.valCat : 'Auto';
+          const dataTag = p.dataCat && p.dataCat !== 'all' ? p.dataCat : 'Auto';
+          const cleanDesc = (p.desc || '').replace(/'/g, "\\'");
+          const cleanVal = (p.val || '').replace(/'/g, "\\'");
+
+          pBody.innerHTML += `
+            <tr>
+              <td><b>${p.op}</b></td>
+              <td><b style="color:#10b981;">₹${p.amt}</b></td>
+              <td>${p.val}</td>
+              <td style="max-width:200px; white-space:normal; font-size:11px;">${p.desc}</td>
+              <td><span class="badge" style="background:#e0e7ff; color:#4338ca;">${valTag} | ${dataTag}</span></td>
+              <td>
+                <div style="display:flex; gap:4px;">
+                  <button class="btn-sm btn-primary" onclick="openEditPlanModal(${p.id}, '${p.op}', ${p.amt}, '${cleanVal}', '${cleanDesc}', '${p.valCat || 'all'}', '${p.dataCat || 'all'}')">✏️ Edit</button>
+                  <button class="btn-sm btn-danger" onclick="adminDeletePlan(${p.id}, '${p.op}', ${p.amt})">Delete</button>
+                </div>
+              </td>
+            </tr>`;
         });
 
+        // Users Table
         const uBody = document.getElementById('adminUserRows');
         uBody.innerHTML = (data.users && data.users.length) ? "" : "<tr><td colspan='7'>No registered user accounts found.</td></tr>";
         data.users?.forEach(u => {
@@ -2108,9 +2463,10 @@
     function adminLogoutAction() {
       if (adminPollingTimer) clearInterval(adminPollingTimer);
       adminToken = null;
-      sessionStorage.removeItem("yk_admin_token");
+      localStorage.removeItem("yk_admin_auth");
       document.getElementById('adminControlPanel').classList.add('hidden');
       document.getElementById('adminAuthBox').classList.remove('hidden');
+      showToast("Signed out from admin session.");
     }
 
     window.addEventListener("DOMContentLoaded", () => {

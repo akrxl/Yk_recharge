@@ -354,7 +354,9 @@
               <div class="filter-pill" onclick="setDataFilter('addon', this)">Data Booster</div>
             </div>
 
-            <div id="plansList" style="max-height: 230px; overflow-y: auto; margin-top: 6px;"></div>
+            <div id="plansList" style="max-height: 230px; overflow-y: auto; margin-top: 6px;">
+              <p style="font-size:11.5px; color:var(--text-muted); padding:10px;">Loading tariff plans...</p>
+            </div>
           </div>
         </div>
       </div>
@@ -373,7 +375,6 @@
           User ID: <b id="uEmailUserIdDisplay" style="color:#4f46e5;">-</b> | Current: <b id="uEmailCurrentDisplay" style="color:var(--text);">-</b>
         </p>
 
-        <!-- STEP 1: PASSWORD & NEW GMAIL -->
         <form id="chgEmailStep1" onsubmit="event.preventDefault(); sendEmailChangeOtpAction();">
           <div class="form-group">
             <label>Current Password <span style="color:#ef4444;">*</span></label>
@@ -394,7 +395,6 @@
           </div>
         </form>
 
-        <!-- STEP 2: VERIFY OTP ON NEW GMAIL -->
         <form id="chgEmailStep2" class="hidden" onsubmit="event.preventDefault(); confirmEmailChangeWithOtp();">
           <div style="background: rgba(56,189,248,0.12); border: 1px solid #38bdf8; border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; font-size: 11.5px; line-height: 1.4;">
             Verification code dispatched to: <b id="chgEmailNewDisplay" style="color:#38bdf8;">-</b>
@@ -419,7 +419,6 @@
         <h3 style="font-weight: 800; font-size: 15px; margin-bottom: 6px; color:#38bdf8;">🔐 Password Recovery</h3>
         <p style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 12px;">Reset your password using a verified email authorization code.</p>
 
-        <!-- STEP 1: ENTER MOBILE NUMBER -->
         <form id="forgotStep1" onsubmit="event.preventDefault(); sendForgotOtpAction();">
           <div class="form-group">
             <label>Registered Mobile Number (10 Digits)</label>
@@ -431,7 +430,6 @@
           </div>
         </form>
 
-        <!-- STEP 2: ENTER OTP & NEW PASSWORD -->
         <form id="forgotStep2" class="hidden" onsubmit="event.preventDefault(); resetForgotPassAction();">
           <div style="background: rgba(79,70,229,0.15); border: 1px solid #4f46e5; border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; font-size: 11.5px; line-height: 1.4;">
             Verification code sent to: <b id="fpMaskedEmailText" style="color:#38bdf8;">-</b>
@@ -742,7 +740,7 @@
       <h3 style="font-weight: 800; font-size: 15px; text-align: center; margin-bottom: 8px;">Scan Official UPI QR to Add Funds</h3>
       <div style="text-align: center; margin-bottom: 10px;">
         <img id="uQrImg" src="" style="width:150px; height:150px; border:1px solid var(--border); border-radius:10px; background:#fff; padding:4px; object-fit:contain;" />
-        <p style="font-size: 12px; margin-top: 6px;">Official Merchant UPI ID: <b id="uUpiText" style="color:#38bdf8;">9939311744@ybl</b></p>
+        <p style="font-size: 12px; margin-top: 6px;">Official Merchant UPI ID: <b id="uUpiText" style="color:#38bdf8;">-</b></p>
       </div>
       <div class="form-group"><label>Amount Transferred (₹)</label><input type="number" id="wAmt" placeholder="500" enterkeyhint="next" required/></div>
       <div class="form-group"><label>12-Digit Bank UTR / Transaction Reference</label><input type="text" id="wUtr" maxlength="12" placeholder="12-digit UTR" enterkeyhint="next" required/></div>
@@ -758,7 +756,7 @@
   <div id="adminQrModal" class="modal-overlay hidden">
     <form class="modal-body" onsubmit="event.preventDefault(); saveAdminQrAction();">
       <h3 style="font-weight:800; font-size:15px; margin-bottom:12px;">Configure Payment Gateway QR & UPI</h3>
-      <div class="form-group"><label>Merchant UPI ID</label><input type="text" id="setAdminUpi" placeholder="9939311744@ybl" enterkeyhint="next" required /></div>
+      <div class="form-group"><label>Merchant UPI ID</label><input type="text" id="setAdminUpi" placeholder="e.g. 9939311744@ybl" enterkeyhint="next" required /></div>
       <div class="form-group"><label>Direct Image URL for Payment QR</label><input type="text" id="setAdminQrUrl" placeholder="https://lh3.googleusercontent.com/..." enterkeyhint="go" required /></div>
       <div style="display:flex; gap:6px; margin-top:12px;">
         <button type="button" class="btn" style="background:var(--chip-bg); color:var(--text);" onclick="toggleModal('adminQrModal', false)">Cancel</button>
@@ -830,10 +828,10 @@
     let pendingRegData = null;
     let pendingChangeNewEmail = "";
 
-    localStorage.setItem("yk_upi", "9939311744@ybl");
-    let liveQR = {
-      upiId: "9939311744@ybl",
-      qrUrl: localStorage.getItem("yk_qr") || "https://lh3.googleusercontent.com/d/1rALRSeljalViLvILLe8fRb_STRPJ_ucW"
+    // Live Server Synced Settings (Fallback to stored if offline)
+    let liveSettings = {
+      upiId: localStorage.getItem("yk_live_upi") || "9939311744@ybl",
+      qrUrl: localStorage.getItem("yk_live_qr") || "https://lh3.googleusercontent.com/d/1rALRSeljalViLvILLe8fRb_STRPJ_ucW"
     };
 
     let livePlans = [];
@@ -984,6 +982,30 @@
       startLiveBalancePolling();
     }
 
+    // --- FETCH LIVE PLANS & BACKEND SETTINGS ---
+    async function fetchLivePlans() {
+      try {
+        const res = await fetch(SCRIPT_URL, { 
+          method: "POST", 
+          body: JSON.stringify({ action: "get_plans" }) 
+        });
+        const data = await res.json();
+        if (data.success) {
+          livePlans = data.plans || [];
+          if (data.settings) {
+            liveSettings.upiId = data.settings.upiId;
+            liveSettings.qrUrl = data.settings.qrUrl;
+            localStorage.setItem("yk_live_upi", liveSettings.upiId);
+            localStorage.setItem("yk_live_qr", liveSettings.qrUrl);
+          }
+          const currentOp = document.getElementById('recOp').value || 'Jio';
+          renderFilteredPlans(currentOp);
+        }
+      } catch(e) {
+        console.log("Plans fetch notice:", e);
+      }
+    }
+
     // --- REGISTRATION STEP 1: REQUEST OTP ---
     async function requestRegisterOtp() {
       const name = document.getElementById('rName').value.trim();
@@ -1027,7 +1049,7 @@
       }
     }
 
-    // --- REGISTRATION STEP 2: VERIFY OTP & ACTIVATE ACCOUNT ---
+    // --- REGISTRATION STEP 2: VERIFY OTP -> INSERT TO SHEET -> TRIGGER CONFIRMATION EMAIL ---
     async function confirmRegisterWithOtp() {
       if (!pendingRegData) return;
       const otp = document.getElementById('regInputOtp').value.trim();
@@ -1276,18 +1298,6 @@
       }
     }
 
-    async function fetchLivePlans() {
-      try {
-        const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "get_plans" }) });
-        const data = await res.json();
-        if (data.success) {
-          livePlans = data.plans || [];
-          const currentOp = document.getElementById('recOp').value || 'Jio';
-          renderFilteredPlans(currentOp);
-        }
-      } catch(e) {}
-    }
-
     async function syncBalanceLive() {
       if (!currentUser || !currentUser.userId) return;
       try {
@@ -1496,8 +1506,8 @@
 
     function openAddMoneyModal() {
       document.getElementById('wDate').valueAsDate = new Date();
-      document.getElementById('uUpiText').innerText = "9939311744@ybl";
-      document.getElementById('uQrImg').src = liveQR.qrUrl;
+      document.getElementById('uUpiText').innerText = liveSettings.upiId;
+      document.getElementById('uQrImg').src = liveSettings.qrUrl;
       toggleModal('addMoneyModal', true);
     }
 
@@ -1824,6 +1834,13 @@
           document.getElementById('adminUserDisplay').innerText = data.adminUsername;
         }
 
+        if (data.settings) {
+          liveSettings.upiId = data.settings.upiId;
+          liveSettings.qrUrl = data.settings.qrUrl;
+          localStorage.setItem("yk_live_upi", liveSettings.upiId);
+          localStorage.setItem("yk_live_qr", liveSettings.qrUrl);
+        }
+
         const pBody = document.getElementById('adminPlanRows');
         pBody.innerHTML = (data.plans && data.plans.length) ? "" : "<tr><td colspan='5'>No tariff plans configured yet.</td></tr>";
         data.plans?.forEach(p => {
@@ -2047,20 +2064,45 @@
     }
 
     function openAdminQrModal() {
-      document.getElementById('setAdminUpi').value = "9939311744@ybl";
-      document.getElementById('setAdminQrUrl').value = liveQR.qrUrl;
+      document.getElementById('setAdminUpi').value = liveSettings.upiId;
+      document.getElementById('setAdminQrUrl').value = liveSettings.qrUrl;
       toggleModal('adminQrModal', true);
     }
-    function saveAdminQrAction() {
+    
+    async function saveAdminQrAction() {
       const upi = document.getElementById('setAdminUpi').value.trim();
       const qr = document.getElementById('setAdminQrUrl').value.trim();
       if (!upi || !qr) return showToast("Both UPI ID and QR Image URL are required.");
 
-      liveQR = { upiId: upi, qrUrl: qr };
-      localStorage.setItem("yk_upi", upi);
-      localStorage.setItem("yk_qr", qr);
-      toggleModal('adminQrModal', false);
-      showToast("Payment Gateway QR settings updated.");
+      const btn = document.getElementById('btnSaveQr');
+      btn.innerText = "Saving to Server..."; btn.disabled = true;
+
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            action: "admin_update_settings",
+            upiId: upi,
+            qrUrl: qr,
+            adminToken: adminToken
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          liveSettings.upiId = upi;
+          liveSettings.qrUrl = qr;
+          localStorage.setItem("yk_live_upi", upi);
+          localStorage.setItem("yk_live_qr", qr);
+          toggleModal('adminQrModal', false);
+          showToast("Payment Gateway QR & UPI saved to database live!");
+        } else {
+          showToast(data.message || "Failed to update payment settings.");
+        }
+      } catch (err) {
+        showToast("Error updating settings. Please try again.");
+      } finally {
+        btn.innerText = "Save Configuration"; btn.disabled = false;
+      }
     }
 
     function adminLogoutAction() {

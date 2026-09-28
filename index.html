@@ -267,7 +267,7 @@
       </form>
     </div>
 
-    <!-- REGISTRATION OTP MODAL (WITH 120s COLOR TRANSITION TIMER) -->
+    <!-- REGISTRATION OTP MODAL (WITH 120s TIMER) -->
     <div id="regOtpModal" class="modal-overlay hidden">
       <form class="modal-body" onsubmit="event.preventDefault(); confirmRegisterWithOtp();">
         <h3 style="font-weight: 800; font-size: 15px; margin-bottom: 6px; color:#4f46e5;">📩 Verify Email Address</h3>
@@ -408,7 +408,7 @@
       </div>
     </div>
 
-    <!-- FORGOT PASSWORD MODAL (INSTANT BOX OPEN + 120s TIMER) -->
+    <!-- FORGOT PASSWORD MODAL (STRICT REGISTERED CHECK + 120s TIMER) -->
     <div id="forgotPasswordModal" class="modal-overlay hidden">
       <div class="modal-body">
         <h3 style="font-weight: 800; font-size: 15px; margin-bottom: 6px; color:#38bdf8;">🔐 Password Recovery</h3>
@@ -426,7 +426,7 @@
           </div>
         </form>
 
-        <!-- STEP 2: INSTANT FILLING BOX + 120s TIMER -->
+        <!-- STEP 2: VERIFICATION & RESET -->
         <form id="forgotStep2" class="hidden" onsubmit="event.preventDefault(); resetForgotPassAction();">
           <div style="background: rgba(79,70,229,0.15); border: 1px solid #4f46e5; border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; font-size: 11.5px; line-height: 1.4;">
             Verification code dispatched to: <b id="fpMaskedEmailText" style="color:#38bdf8;">your registered email</b>
@@ -850,15 +850,16 @@
     </form>
   </div>
 
-  <!-- ADD MONEY MODAL (SAFE UPI QR AUTO-FALLBACK) -->
+  <!-- ADD MONEY MODAL (DYNAMIC MERCHANT NAME QR GENERATION) -->
   <div id="addMoneyModal" class="modal-overlay hidden">
     <form class="modal-body" onsubmit="event.preventDefault(); submitDeposit();">
       <h3 style="font-weight: 800; font-size: 15px; text-align: center; margin-bottom: 8px;">Scan Official UPI QR to Add Funds</h3>
       <div style="text-align: center; margin-bottom: 10px;">
-        <div style="width:150px; height:150px; margin: 0 auto; border:1.5px solid var(--border); border-radius:12px; background:#ffffff; padding:6px; display:flex; align-items:center; justify-content:center;">
+        <div style="width:160px; height:160px; margin: 0 auto; border:1.5px solid var(--border); border-radius:12px; background:#ffffff; padding:6px; display:flex; align-items:center; justify-content:center;">
           <img id="uQrImg" src="" alt="Payment QR" onerror="fallbackGenerateQr(this)" style="width:100%; height:100%; object-fit:contain; border-radius:8px;" />
         </div>
         <p style="font-size: 12px; margin-top: 6px;">Official Merchant UPI ID: <b id="uUpiText" style="color:#38bdf8;">-</b></p>
+        <p style="font-size: 11px; color:#10b981; font-weight:700; margin-top:2px;">Verified Name: YK RECHARGE PORTAL</p>
       </div>
       <div class="form-group"><label>Amount Transferred (₹)</label><input type="number" id="wAmt" placeholder="500" enterkeyhint="next" required/></div>
       <div class="form-group"><label>12-Digit Bank UTR / Transaction Reference</label><input type="text" id="wUtr" maxlength="12" placeholder="12-digit UTR" enterkeyhint="next" required/></div>
@@ -1134,7 +1135,6 @@
       let remaining = durationSeconds;
       resendBtnEl.disabled = true;
 
-      // Start state: Warning Yellow
       timerTextEl.classList.remove('expired');
       timerTextEl.style.color = '#f59e0b';
 
@@ -1149,7 +1149,6 @@
         remaining--;
         if (remaining <= 0) {
           clearInterval(interval);
-          // Expired state: Transition to Fresh Green
           timerTextEl.classList.add('expired');
           timerTextEl.style.color = '#10b981';
           timerTextEl.innerHTML = `<span style="color:#10b981; font-weight:800;">Code expired. You can resend now.</span>`;
@@ -1162,7 +1161,7 @@
       intervalRefSetter(interval);
     }
 
-    // --- UPI QR FALLBACK & SANITIZATION HANDLER ---
+    // --- DYNAMIC MERCHANT NAME & UPI QR GENERATOR ---
     function sanitizeQrUrl(url) {
       if (!url) return "";
       let trimmed = url.trim();
@@ -1177,8 +1176,9 @@
 
     function fallbackGenerateQr(imgEl) {
       const upiId = (liveSettings.upiId || "9939311744@ybl").trim();
-      const upiString = encodeURIComponent(`upi://pay?pa=${upiId}&pn=YK%20RECHARGE%20PORTAL&cu=INR`);
-      imgEl.onerror = null; // Prevent recursion
+      const merchantName = encodeURIComponent("YK RECHARGE PORTAL");
+      const upiString = encodeURIComponent(`upi://pay?pa=${upiId}&pn=${merchantName}&cu=INR`);
+      imgEl.onerror = null; 
       imgEl.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${upiString}`;
     }
 
@@ -1254,7 +1254,7 @@
       if (epDataCat) epDataCat.innerHTML = apDataOpts;
     }
 
-    // --- REGISTRATION STEP 1: REQUEST OTP (WITH INSTANT BOX & 120s TIMER) ---
+    // --- REGISTRATION STEP 1: REQUEST OTP ---
     async function requestRegisterOtp() {
       const name = document.getElementById('rName').value.trim();
       const mobile = document.getElementById('rMobile').value.trim();
@@ -1274,7 +1274,6 @@
       document.getElementById('regInputOtp').value = "";
       toggleModal('regOtpModal', true);
 
-      // Start 120-second timer with color switch
       if (regCooldownInterval) clearInterval(regCooldownInterval);
       startTimerCountdown(120, document.getElementById('regTimerText'), document.getElementById('btnResendRegOtp'), (i) => regCooldownInterval = i);
 
@@ -1421,7 +1420,7 @@
       }
     }
 
-    // --- FORGOT PASSWORD ACTIONS (INSTANT BOX OPEN + 120s TIMER) ---
+    // --- FORGOT PASSWORD ACTIONS (STRICT REGISTERED CHECK + 120s TIMER) ---
     function openForgotModal() {
       forgotMobileStored = "";
       document.getElementById('fpMobile').value = "";
@@ -1437,19 +1436,9 @@
       const mobile = document.getElementById('fpMobile').value.trim();
       if (mobile.length !== 10) return showToast("Please enter a valid 10-digit mobile number.");
 
-      forgotMobileStored = mobile;
+      const btn = document.getElementById('btnSendOtp');
+      btn.innerText = "Checking..."; btn.disabled = true;
 
-      // 1. INSTANTLY OPEN THE FILLING BOX
-      document.getElementById('forgotStep1').classList.add('hidden');
-      document.getElementById('forgotStep2').classList.remove('hidden');
-      document.getElementById('fpMaskedEmailText').innerText = "your registered email";
-      document.getElementById('fpOtp').value = "";
-
-      // 2. START 120-SECOND LIVE TIMER WITH COLOR SWITCH
-      if (fpCooldownInterval) clearInterval(fpCooldownInterval);
-      startTimerCountdown(120, document.getElementById('fpTimerText'), document.getElementById('btnResendFpOtp'), (i) => fpCooldownInterval = i);
-
-      // 3. DISPATCH IN BACKGROUND FAST
       try {
         const res = await fetch(SCRIPT_URL, {
           method: "POST",
@@ -1457,13 +1446,22 @@
         });
         const data = await res.json();
         if (data.success) {
+          forgotMobileStored = mobile;
           document.getElementById('fpMaskedEmailText').innerText = data.maskedEmail;
+          document.getElementById('forgotStep1').classList.add('hidden');
+          document.getElementById('forgotStep2').classList.remove('hidden');
+
+          if (fpCooldownInterval) clearInterval(fpCooldownInterval);
+          startTimerCountdown(120, document.getElementById('fpTimerText'), document.getElementById('btnResendFpOtp'), (i) => fpCooldownInterval = i);
+          
           showToast("Verification code dispatched to your registered email.");
         } else {
-          showToast(data.message || "Code dispatched.");
+          showToast(data.message || "No registered account found with this mobile number.");
         }
       } catch(e) {
-        showToast("Verification code dispatched. Please check your Gmail.");
+        showToast("Error verifying mobile number.");
+      } finally {
+        btn.innerText = "Send Code"; btn.disabled = false;
       }
     }
 
